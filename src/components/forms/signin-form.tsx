@@ -8,20 +8,20 @@ interface Credentials {
   password: string
 }
 
-function SignUpForm (): ReactNode {
+function SignInForm (): ReactNode {
   const [credentials, setCredentials] = useState<Credentials>({
     email: 'poubelle@test.com',
     password: '1234567890'
   })
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Signing up with', credentials)
+    console.log('Signing in with', credentials)
 
-    void authClient.signUp.email({
+    void authClient.signIn.email({
       email: credentials.email,
       password: credentials.password,
-      name: '',
-      callbackURL: '/sign-in'
+      rememberMe: '',
+      callbackURL: '/'
     }, {
       onRequest: (ctx) => console.log('Requesting...', ctx),
       onSuccess: (ctx) => console.log('Success!', ctx),
@@ -31,7 +31,7 @@ function SignUpForm (): ReactNode {
 
   return (
     <div>
-      <h2 className='text-3xl font-bold mb-8 text-pink-flare-900 text-center'>Créer un compte</h2>
+      <h2 className='text-3xl font-bold mb-8 text-pink-flare-900 text-center'>Se connecter</h2>
       <form className='space-y-6' onSubmit={handleSubmit}>
         <InputField
           type='email'
@@ -47,10 +47,10 @@ function SignUpForm (): ReactNode {
           value={credentials.password}
           onChangeText={(text: string) => setCredentials({ ...credentials, password: text })}
         />
-        <Button variant='primary' size='md' type='submit'>Sign Up</Button>
+        <Button variant='primary' size='md' type='submit'>Sign In</Button>
       </form>
     </div>
   )
 }
 
-export default SignUpForm
+export default SignInForm

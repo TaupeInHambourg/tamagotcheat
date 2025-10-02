@@ -2,6 +2,16 @@
 
 import type { ReactNode } from 'react'
 
+interface ButtonProps {
+  children: ReactNode
+  onClick?: () => void
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'link' | 'outline'
+  disabled?: boolean
+  className?: string
+  type?: 'button' | 'submit' | 'reset'
+}
+
 function getSize (size: 'sm' | 'md' | 'lg' | 'xl'): string {
   switch (size) {
     case 'sm': return 'px-2 py-1 text-sm rounded-sm'
@@ -27,20 +37,14 @@ function Button ({
   size = 'md',
   variant = 'primary',
   disabled = false,
-  type
-}: {
-  children: ReactNode
-  onClick?: () => void
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  variant?: 'primary' | 'secondary' | 'ghost' | 'link' | 'outline'
-  disabled?: boolean
-  type?: 'button' | 'submit' | 'reset'
-}): React.ReactNode {
+  className = '',
+  type = 'button'
+}: ButtonProps): ReactNode {
   return (
     <button
-      className={`${disabled ? '' : 'hover:cursor-pointer transition-colors duration-200 active:scale-95'} ${getSize(size)} ${getVariant(variant, disabled)}`}
-      onClick={onClick}
+      className={`${disabled ? '' : 'hover:cursor-pointer transition-colors duration-200 active:scale-95'} ${getSize(size)} ${getVariant(variant, disabled)} ${className}`}
       type={type}
+      onClick={onClick}
     >
       {children}
     </button>
