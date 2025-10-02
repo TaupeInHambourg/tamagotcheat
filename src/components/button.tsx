@@ -26,18 +26,21 @@ function Button ({
   onClick,
   size = 'md',
   variant = 'primary',
-  disabled = false
+  disabled = false,
+  type
 }: {
   children: ReactNode
   onClick?: () => void
   size?: 'sm' | 'md' | 'lg' | 'xl'
   variant?: 'primary' | 'secondary' | 'ghost' | 'link' | 'outline'
   disabled?: boolean
+  type?: 'button' | 'submit' | 'reset'
 }): React.ReactNode {
   return (
     <button
       className={`${disabled ? '' : 'hover:cursor-pointer transition-colors duration-200 active:scale-95'} ${getSize(size)} ${getVariant(variant, disabled)}`}
-      onClick={disabled ? undefined : onClick}
+      onClick={onClick}
+      type={type}
     >
       {children}
     </button>
