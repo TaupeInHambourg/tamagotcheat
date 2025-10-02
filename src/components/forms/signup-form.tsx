@@ -8,14 +8,17 @@ interface Credentials {
   password: string
 }
 
-function SignUpForm (): ReactNode {
+function SignUpForm ({ onError }: { onError: (error: string) => void }): React.ReactNode {
   const [credentials, setCredentials] = useState<Credentials>({
     email: 'poubelle@test.com',
     password: '1234567890'
   })
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Signing up with', credentials)
+    setIsLoading(true)
+    onError('')
 
     void authClient.signUp.email({
       email: credentials.email,
@@ -23,9 +26,19 @@ function SignUpForm (): ReactNode {
       name: '',
       callbackURL: '/sign-in'
     }, {
-      onRequest: (ctx) => console.log('Requesting...', ctx),
-      onSuccess: (ctx) => console.log('Success!', ctx),
-      onError: (ctx) => console.error('Error:', ctx)
+      onRequest: (ctx) => {
+        console.log('Signing up...', ctx)
+      },
+      onSuccess: (ctx) => {
+        console.log('User signed up:', ctx)
+        setIsLoading(false)
+        onError('') // Clear error on success
+      },
+      onError: (ctx) => {
+        console.error('Sign up error:', ctx)
+        setIsLoading(false)
+        onError(ctx.error.message)
+      }
     })
   }
 

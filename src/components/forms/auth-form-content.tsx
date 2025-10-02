@@ -7,6 +7,8 @@ import Button from '../Button'
 
 function AuthFormContent (): React.ReactNode {
   const [isSignIn, setIsSignIn] = useState<boolean>(true)
+  const [error, setError] = useState<string>('')
+
   return (
     <div className='w-full max-w-md mx-auto p-8 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-pink-flare-100'>
       {/* Zone d'erreur */}
@@ -16,14 +18,17 @@ function AuthFormContent (): React.ReactNode {
         </div>
       </div>
 
-      {isSignIn ? <SignInForm /> : <SignUpForm />}
+      {isSignIn ? <SignInForm onError={setError} /> : <SignUpForm onError={setError} />}
 
       <div className='mt-6 text-center'>
         <Button
           variant='link'
           size='md'
           type='button'
-          onClick={() => setIsSignIn(!isSignIn)}
+          onClick={() => {
+            setError('')
+            setIsSignIn(!isSignIn)
+          }}
         >
           {isSignIn ? 'Créer un compte' : "J'ai déjà un compte"}
         </Button>

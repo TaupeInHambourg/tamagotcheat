@@ -8,24 +8,35 @@ interface Credentials {
   password: string
 }
 
-function SignInForm (): ReactNode {
+function SignInForm ({ onError }: { onError: (error: string) => void }): React.ReactNode {
   const [credentials, setCredentials] = useState<Credentials>({
     email: 'poubelle@test.com',
     password: '1234567890'
   })
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    console.log('Signing in with', credentials)
+    setIsLoading(true)
+    onError('') // Clear previous errors
 
     void authClient.signIn.email({
       email: credentials.email,
       password: credentials.password,
-      rememberMe: '',
-      callbackURL: '/'
+      callbackURL: '/dashboard'
     }, {
-      onRequest: (ctx) => console.log('Requesting...', ctx),
-      onSuccess: (ctx) => console.log('Success!', ctx),
-      onError: (ctx) => console.error('Error:', ctx)
+      onRequest: (ctx) => {
+        console.log('Signing in...', ctx)
+      },
+      onSuccess: (ctx) => {
+        console.log('User signed in:', ctx)
+        setIsLoading(false)
+      },
+      onError: (ctx) => {
+        console.error('Sign in error:', ctx)
+        setIsLoading(false)
+        onError(ctx.error.message)
+      }
     })
   }
 
@@ -47,7 +58,14 @@ function SignInForm (): ReactNode {
           value={credentials.password}
           onChangeText={(text: string) => setCredentials({ ...credentials, password: text })}
         />
-        <Button variant='primary' size='md' type='submit'>Sign In</Button>
+        <Button
+          variant='primary'
+          size='md'
+          type='submit'
+          disabled={isLoading}
+        >
+          {isLoading ? 'Connexion...' : 'Se connecter'}
+        </Button>
       </form>
     </div>
   )
