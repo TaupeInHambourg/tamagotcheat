@@ -1,3 +1,7 @@
+'use client'
+
+import type { ReactNode } from 'react'
+
 function getSize (size: 'sm' | 'md' | 'lg' | 'xl'): string {
   switch (size) {
     case 'sm': return 'px-2 py-1 text-sm rounded-sm'
@@ -24,16 +28,16 @@ function Button ({
   variant = 'primary',
   disabled = false
 }: {
-  children: React.ReactNode
+  children: ReactNode
   onClick?: () => void
   size?: 'sm' | 'md' | 'lg' | 'xl'
-  varient?: 'primary' | 'secondary' | 'ghost' | 'link' | 'outline'
+  variant?: 'primary' | 'secondary' | 'ghost' | 'link' | 'outline'
   disabled?: boolean
 }): React.ReactNode {
   return (
     <button
       className={`${disabled ? '' : 'hover:cursor-pointer transition-colors duration-200 active:scale-95'} ${getSize(size)} ${getVariant(variant, disabled)}`}
-      onClick={onClick}
+      onClick={disabled ? undefined : onClick}
     >
       {children}
     </button>
