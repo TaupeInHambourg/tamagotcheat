@@ -10,6 +10,42 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-pink-flare-50: #fbf5f5;
+  --color-pink-flare-100: #f8ebed;
+  --color-pink-flare-200: #f1dade;
+  --color-pink-flare-300: #e6c0c7;
+  --color-pink-flare-400: #d597a4;
+  --color-pink-flare-500: #c27184;
+  --color-pink-flare-600: #ab536b;
+  --color-pink-flare-700: #8f4159;
+  --color-pink-flare-800: #78394e;
+  --color-pink-flare-900: #683346;
+  --color-pink-flare-950: #391824;
+
+  --color-maroon-oak-50: #fdf3f3;
+  --color-maroon-oak-100: #fbe9e8;
+  --color-maroon-oak-200: #f8d3d3;
+  --color-maroon-oak-300: #f1b0b0;
+  --color-maroon-oak-400: #e98386;
+  --color-maroon-oak-500: #dc575e;
+  --color-maroon-oak-600: #c73745;
+  --color-maroon-oak-700: #a72939;
+  --color-maroon-oak-800: #8c2534;
+  --color-maroon-oak-900: #792232;
+  --color-maroon-oak-950: #58131e;
+
+  --color-cape-palliser-50: #f7f4ef;
+  --color-cape-palliser-100: #ece2d5;
+  --color-cape-palliser-200: #dbc5ad;
+  --color-cape-palliser-300: #c6a17e;
+  --color-cape-palliser-400: #b5845a;
+  --color-cape-palliser-500: #a7724d;
+  --color-cape-palliser-600: #8e5a40;
+  --color-cape-palliser-700: #724536;
+  --color-cape-palliser-800: #613b32;
+  --color-cape-palliser-900: #54342f;
+  --color-cape-palliser-950: #301a18;
 }
 
 @media (prefers-color-scheme: dark) {
