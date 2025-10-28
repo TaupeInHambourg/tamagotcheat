@@ -7,6 +7,7 @@ export const DEFAULT_MONSTER_LEVEL = 1
 export const DEFAULT_MONSTER_STATE: MonsterState = MONSTER_STATES[0]
 
 export interface Monster {
+  id?: string
   _id?: string
   name: string
   folderPath: string
@@ -14,8 +15,8 @@ export interface Monster {
   colorRange: string[]
   defaultColor: MonsterColor
   state: MonsterState
-  level: number
-  experience: number
+  level?: number
+  experience?: number
   ownerId?: string
   updatedAt?: string
   createdAt?: string
