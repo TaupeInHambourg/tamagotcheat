@@ -35,17 +35,10 @@
   --color-maroon-oak-900: #792232;
   --color-maroon-oak-950: #58131e;
 
-  --color-cape-palliser-50: #f7f4ef;
-  --color-cape-palliser-100: #ece2d5;
-  --color-cape-palliser-200: #dbc5ad;
-  --color-cape-palliser-300: #c6a17e;
-  --color-cape-palliser-400: #b5845a;
-  --color-cape-palliser-500: #a7724d;
-  --color-cape-palliser-600: #8e5a40;
-  --color-cape-palliser-700: #724536;
-  --color-cape-palliser-800: #613b32;
-  --color-cape-palliser-900: #54342f;
-  --color-cape-palliser-950: #301a18;
+  --color-monsters-pink: #ffb5e8;
+  --color-monsters-green: #b5e8d3;
+  --color-monsters-blue: #c5e1ff;
+  --color-monsters-purple: #d4b5ff;
 }
 
 @media (prefers-color-scheme: dark) {

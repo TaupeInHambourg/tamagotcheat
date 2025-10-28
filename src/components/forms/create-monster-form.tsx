@@ -1,17 +1,17 @@
 'use client'
 
 import { useState } from 'react'
-import { CreateMonsterDto } from '@/types/monster.types'
+import { CreateMonsterDto, MonsterTemplates, MonsterTemplate } from '@/types/monster.types'
 import { ValidationError, validateMonsterForm } from '@/utils/monster-form-validator'
 
 import Button from '../Button'
 import InputField from '../Input'
 
 const MONSTER_COLORS = {
-  green: '#48BB78', // Vert émeraude
-  blue: '#4299E1', // Bleu océan
-  pink: '#ED64A6', // Rose vif
-  gold: '#D69E2E' // Doré
+  green: 'var(--color-monsters-green)',
+  blue: 'var(--color-monsters-blue)',
+  pink: 'var(--color-monsters-pink)',
+  purple: 'var(--color-monsters-purple)'
 } as const
 
 type MonsterColorKey = keyof typeof MONSTER_COLORS
@@ -24,12 +24,14 @@ interface CreateMonsterFormProps {
 interface FormData {
   name: string
   colorKey: MonsterColorKey
+  templateId: string
 }
 
 export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonsterFormProps): React.ReactNode {
   const [formData, setFormData] = useState<FormData>({
     name: '',
-    colorKey: 'pink'
+    colorKey: 'pink',
+    templateId: 'chat-cosmique' // Template par défaut
   })
 
   const [error, setError] = useState<string>('')
@@ -39,11 +41,12 @@ export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonster
     setError('')
 
     try {
-      validateMonsterForm({ name: formData.name })
+      validateMonsterForm({ name: formData.name, templateId: formData.templateId })
 
       onSubmit({
         name: formData.name,
-        color: MONSTER_COLORS[formData.colorKey]
+        color: MONSTER_COLORS[formData.colorKey],
+        templateId: formData.templateId
       })
     } catch (err) {
       if (err instanceof ValidationError) {
@@ -54,8 +57,41 @@ export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonster
     }
   }
 
-  const handleColorChange = (colorKey: MonsterColorKey): void => {
-    setFormData({ ...formData, colorKey })
+  const handleTemplateChange = (templateId: string): void => {
+    setFormData({ ...formData, templateId })
+  }
+
+  const getTemplateClasses = (id: string, isSelected: boolean): string => {
+    const baseClasses = 'block w-full p-4 rounded-lg cursor-pointer transition-all duration-200 ease-in-out border-2'
+
+    switch (id) {
+      case 'fairy-monster':
+        return `${baseClasses} ${
+          isSelected
+            ? 'border-2 border-pink-500 bg-[var(--color-monsters-pink)] bg-opacity-50'
+            : 'hover:border-pink-300 bg-[var(--color-monsters-pink)] bg-opacity-20'
+        }`
+      case 'chat-cosmique':
+        return `${baseClasses} ${
+          isSelected
+            ? 'border-2 border-blue-500 bg-[var(--color-monsters-blue)] bg-opacity-50'
+            : 'hover:border-blue-300 bg-[var(--color-monsters-blue)] bg-opacity-20'
+        }`
+      case 'grenouille-etoilee':
+        return `${baseClasses} ${
+          isSelected
+            ? 'border-2 border-purple-500 bg-[var(--color-monsters-purple)] bg-opacity-50'
+            : 'hover:border-purple-300 bg-[var(--color-monsters-purple)] bg-opacity-20'
+        }`
+      case 'dino-nuage':
+        return `${baseClasses} ${
+          isSelected
+            ? 'border-2 border-green-500 bg-[var(--color-monsters-green)] bg-opacity-50'
+            : 'hover:border-green-300 bg-[var(--color-monsters-green)] bg-opacity-20'
+        }`
+      default:
+        return baseClasses
+    }
   }
 
   return (
@@ -88,33 +124,26 @@ export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonster
 
         <div className='space-y-2'>
           <label className='block text-sm font-medium text-pink-flare-800'>
-            Quelle est ta couleur préférée ?
+            Choisi ta couleur préférée :
           </label>
-          <div className='grid grid-cols-4 gap-3'>
-            {(Object.entries(MONSTER_COLORS) as Array<[MonsterColorKey, string]>).map(([key, color]) => (
-              <div key={key} className='relative'>
+          <div className='grid grid-cols-2 gap-3'>
+            {Object.entries(MonsterTemplates).map(([id, template]) => (
+              <div key={id} className='relative'>
                 <input
                   type='radio'
-                  name='monster-color'
-                  id={`color-${key}`}
-                  value={key}
-                  checked={formData.colorKey === key}
-                  onChange={() => handleColorChange(key)}
+                  name='monster-template'
+                  id={`template-${id}`}
+                  value={id}
+                  checked={formData.templateId === id}
+                  onChange={() => handleTemplateChange(id)}
                   className='sr-only peer'
                 />
                 <label
-                  htmlFor={`color-${key}`}
-                  style={{ backgroundColor: color }}
-                  className={`
-                    block w-full aspect-square rounded-lg cursor-pointer
-                    transition-all duration-200 ease-in-out
-                    hover:ring-2 hover:ring-offset-2 hover:ring-${key === 'gold' ? 'yellow' : key}-400
-                    peer-checked:ring-2 peer-checked:ring-offset-2 peer-checked:ring-${key === 'gold' ? 'yellow' : key}-400
-                    peer-checked:brightness-100
-                    brightness-75
-                  `}
-                  aria-label={`Couleur ${key}`}
-                />
+                  htmlFor={`template-${id}`}
+                  className={getTemplateClasses(id, formData.templateId === id)}
+                >
+                  <div className='flex items-center gap-3' />
+                </label>
               </div>
             ))}
           </div>

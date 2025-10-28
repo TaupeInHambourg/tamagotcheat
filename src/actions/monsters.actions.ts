@@ -2,7 +2,8 @@
 
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
-import { CreateMonsterDto } from '@/types/monster.types'
+import { CreateMonsterDto, MonsterTemplates } from '@/types/monster.types'
+import type { Monster as MonsterType } from '@/types/monster.types'
 import Monster from '@/db/models/monster.model'
 import { connectMongooseToDatabase } from '@/db'
 import { Types } from 'mongoose'
@@ -16,10 +17,15 @@ export async function createMonster (monsterData: CreateMonsterDto): Promise<voi
   })
   if (session === null || session === undefined) throw new Error('User not authenticated')
 
+  // On récupère le template correspondant
+  const template = MonsterTemplates[monsterData.templateId]
+  if (template === undefined) throw new Error('Template de monstre invalide')
+
+  // On crée le monstre avec toutes les propriétés requises
   const monster = new Monster({
     ownerId: session.user.id,
     name: monsterData.name,
-    draw: monsterData.draw,
+    draw: template.draw, // On utilise le draw du template
     state: 'happy',
     level: 1
   })
@@ -28,7 +34,7 @@ export async function createMonster (monsterData: CreateMonsterDto): Promise<voi
   revalidatePath('/dashboard')
 }
 
-export async function getMonsters (): Promise<Monster[]> {
+export async function getMonsters (): Promise<MonsterType[]> {
   try {
     await connectMongooseToDatabase()
 
@@ -47,7 +53,7 @@ export async function getMonsters (): Promise<Monster[]> {
   }
 }
 
-export async function getMonsterById (id: string): Promise<Monster | null> {
+export async function getMonsterById (id: string): Promise<MonsterType | null> {
   try {
     await connectMongooseToDatabase()
 
