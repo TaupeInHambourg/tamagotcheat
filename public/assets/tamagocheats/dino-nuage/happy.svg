@@ -1,0 +1,149 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #B5E8D3;
+      --body-shadow: #99D9BF;
+      --eye-white: #FFFFFF;
+      --eye-pupil: #4A4A4A;
+      --eye-shine: #FFFFFF;
+      --mouth: #FF9999;
+      --spike-main: #99D9BF;
+      --spike-light: #D4F5E9;
+      --cheek: #FFD4B5;
+      --belly: #E5F9F0;
+      --feet: #A8E8CF;
+      --wing: #C5F0E0;
+      --tail-tip: #7DD3C0;
+    }
+    
+    /* Animation de flottement */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+    
+    /* Animation de clignement */
+    @keyframes blink {
+      0%, 90%, 100% { opacity: 1; }
+      95% { opacity: 0; }
+    }
+    
+    /* Animation des ailes */
+    @keyframes flap {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      50% { transform: translateY(-1px) scaleY(0.9); }
+    }
+    
+    /* Animation des pics */
+    @keyframes spike-pulse {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(1.1); }
+    }
+    
+    /* Animation de la queue */
+    @keyframes tail-sway {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-10deg); }
+    }
+    
+    .monster-body {
+      animation: float 3s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .eye-group {
+      animation: blink 4.5s ease-in-out infinite;
+    }
+    
+    .wing {
+      animation: flap 1s ease-in-out infinite;
+      transform-origin: right center;
+    }
+    
+    .spike {
+      animation: spike-pulse 2s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    
+    .tail {
+      animation: tail-sway 2s ease-in-out infinite;
+      transform-origin: left center;
+    }
+  </style>
+  
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <!-- Queue avec pointe -->
+    <g class="tail">
+      <rect x="5" y="19" width="3" height="2" fill="var(--body-color)"/>
+      <rect x="4" y="20" width="2" height="1" fill="var(--body-color)"/>
+      <rect x="3" y="19" width="2" height="1" fill="var(--tail-tip)"/>
+      <rect x="2" y="18" width="2" height="1" fill="var(--tail-tip)"/>
+    </g>
+    
+    <!-- Ailes gauche -->
+    <g class="wing" style="animation-delay: 0s;">
+      <rect x="8" y="15" width="2" height="3" fill="var(--wing)"/>
+      <rect x="7" y="16" width="2" height="2" fill="var(--wing)"/>
+    </g>
+    
+    <!-- Pics sur le dos -->
+    <g class="spike" style="animation-delay: 0s;">
+      <rect x="13" y="9" width="2" height="2" fill="var(--spike-main)"/>
+      <rect x="14" y="8" width="1" height="1" fill="var(--spike-light)"/>
+    </g>
+    <g class="spike" style="animation-delay: 0.3s;">
+      <rect x="16" y="9" width="2" height="2" fill="var(--spike-main)"/>
+      <rect x="17" y="8" width="1" height="1" fill="var(--spike-light)"/>
+    </g>
+    <g class="spike" style="animation-delay: 0.6s;">
+      <rect x="19" y="10" width="2" height="2" fill="var(--spike-main)"/>
+      <rect x="20" y="9" width="1" height="1" fill="var(--spike-light)"/>
+    </g>
+    
+    <!-- Corps principal rond -->
+    <rect x="10" y="11" width="14" height="10" fill="var(--body-color)"/>
+    <rect x="9" y="13" width="16" height="6" fill="var(--body-color)"/>
+    <rect x="11" y="10" width="12" height="1" fill="var(--body-color)"/>
+    
+    <!-- Tête -->
+    <rect x="20" y="12" width="5" height="6" fill="var(--body-color)"/>
+    <rect x="24" y="13" width="2" height="4" fill="var(--body-color)"/>
+    
+    <!-- Ombre -->
+    <rect x="10" y="20" width="14" height="1" fill="var(--body-shadow)"/>
+    
+    <!-- Ventre -->
+    <rect x="12" y="15" width="10" height="4" fill="var(--belly)"/>
+    
+    <!-- Yeux -->
+    <g class="eye-group">
+      <!-- Oeil -->
+      <rect x="22" y="14" width="3" height="3" fill="var(--eye-white)"/>
+      <rect x="23" y="15" width="2" height="1" fill="var(--eye-pupil)"/>
+      <rect x="23" y="15" width="1" height="1" fill="var(--eye-shine)"/>
+    </g>
+    
+    <!-- Joue -->
+    <rect x="20" y="17" width="2" height="1" fill="var(--cheek)"/>
+    
+    <!-- Sourire -->
+    <rect x="24" y="16" width="1" height="1" fill="var(--mouth)"/>
+    <rect x="25" y="17" width="1" height="1" fill="var(--mouth)"/>
+    
+    <!-- Pattes courtes -->
+    <rect x="12" y="21" width="3" height="2" fill="var(--feet)"/>
+    <rect x="11" y="23" width="4" height="2" fill="var(--feet)"/>
+    
+    <rect x="18" y="21" width="3" height="2" fill="var(--feet)"/>
+    <rect x="18" y="23" width="4" height="2" fill="var(--feet)"/>
+    
+    <!-- Ailes droite (plus visible) -->
+    <g class="wing" style="animation-delay: 0.5s;">
+      <rect x="22" y="18" width="2" height="3" fill="var(--wing)"/>
+      <rect x="23" y="19" width="2" height="2" fill="var(--wing)"/>
+    </g>
+  </g>
+</svg>

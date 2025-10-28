@@ -1,3 +1,5 @@
+import { time } from 'console'
+
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 const monsterSchema = new Schema({
@@ -27,4 +29,4 @@ const monsterSchema = new Schema({
   }
 })
 
-export default mongoose.model('Monster', monsterSchema) ?? mongoose.models.Monster
+export default mongoose.models.Monster ?? mongoose.model('Monster', monsterSchema)

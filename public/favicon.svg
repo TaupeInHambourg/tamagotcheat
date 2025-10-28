@@ -1,0 +1,249 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1191)"><rect width="1000" height="1000" fill="#ffffff"></rect><g transform="matrix(2.5,0,0,2.5,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="400"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <style>
+    /* Variables CSS pour les couleurs */
+    :root {
+      --primary-color: #FF69B4;
+      --secondary-color: #B5E8FF;
+      --accent-color: #FFD700;
+      --dark-color: #4A4A4A;
+      --light-color: #FFFFFF;
+      --screen-bg: #E8F4FF;
+      --device-body: #FFB5E8;
+      --device-shadow: #FF99D8;
+      --button-color: #FF8FA3;
+      --monster-body: #C5E1FF;
+      --monster-accent: #FFE5B5;
+    }
+  </style>
+  
+  <!-- Fond circulaire -->
+  <circle cx="100" cy="100" r="95" fill="var(--secondary-color)" opacity="0.3"></circle>
+  <circle cx="100" cy="100" r="85" fill="var(--light-color)"></circle>
+  
+  <!-- Étoiles décoratives -->
+  <g>
+    <path d="M 30 40 L 32 42 L 30 44 L 28 42 Z" fill="var(--accent-color)"></path>
+    <circle cx="30" cy="42" r="1" fill="var(--accent-color)"></circle>
+  </g>
+  <g>
+    <path d="M 170 35 L 172 37 L 170 39 L 168 37 Z" fill="var(--primary-color)"></path>
+    <circle cx="170" cy="37" r="1" fill="var(--primary-color)"></circle>
+  </g>
+  <g>
+    <path d="M 165 160 L 167 162 L 165 164 L 163 162 Z" fill="var(--secondary-color)"></path>
+    <circle cx="165" cy="162" r="1" fill="var(--secondary-color)"></circle>
+  </g>
+  <g>
+    <path d="M 35 155 L 37 157 L 35 159 L 33 157 Z" fill="var(--monster-accent)"></path>
+    <circle cx="35" cy="157" r="1" fill="var(--monster-accent)"></circle>
+  </g>
+  
+  <!-- Appareil Tamagotchi stylisé -->
+  <!-- Corps de l'appareil -->
+  <ellipse cx="100" cy="100" rx="55" ry="60" fill="var(--device-body)"></ellipse>
+  <ellipse cx="100" cy="98" rx="55" ry="60" fill="var(--device-body)"></ellipse>
+  <ellipse cx="100" cy="98" rx="50" ry="55" fill="var(--device-shadow)" opacity="0.3"></ellipse>
+  
+  <!-- Antenne -->
+  <rect x="97" y="40" width="6" height="3" rx="1" fill="var(--device-body)"></rect>
+  <circle cx="100" cy="38" r="4" fill="var(--accent-color)"></circle>
+  <circle cx="100" cy="38" r="2" fill="var(--light-color)" opacity="0.6"></circle>
+  
+  <!-- Écran -->
+  <rect x="65" y="55" width="70" height="55" rx="5" fill="var(--screen-bg)"></rect>
+  <rect x="67" y="57" width="66" height="51" rx="4" fill="var(--light-color)"></rect>
+  
+  <!-- Effet de brillance sur l'écran -->
+  <rect x="68" y="58" width="30" height="20" rx="3" fill="var(--light-color)" opacity="0.5"></rect>
+  
+  <!-- Mini monstre sur l'écran -->
+  <g>
+    <!-- Corps -->
+    <ellipse cx="100" cy="83" rx="14" ry="12" fill="var(--monster-body)"></ellipse>
+    
+    <!-- Oreilles -->
+    <ellipse cx="90" cy="74" rx="4" ry="6" fill="var(--monster-body)"></ellipse>
+    <ellipse cx="110" cy="74" rx="4" ry="6" fill="var(--monster-body)"></ellipse>
+    
+    <!-- Yeux -->
+    <circle cx="95" cy="81" r="3" fill="var(--light-color)"></circle>
+    <circle cx="105" cy="81" r="3" fill="var(--light-color)"></circle>
+    <circle cx="95.5" cy="81.5" r="2" fill="var(--dark-color)"></circle>
+    <circle cx="105.5" cy="81.5" r="2" fill="var(--dark-color)"></circle>
+    <circle cx="95" cy="81" r="1" fill="var(--light-color)"></circle>
+    <circle cx="105" cy="81" r="1" fill="var(--light-color)"></circle>
+    
+    <!-- Bouche -->
+    <path d="M 97 87 Q 100 89 103 87" stroke="var(--primary-color)" stroke-width="1.5" fill="none" stroke-linecap="round"></path>
+    
+    <!-- Joues -->
+    <circle cx="89" cy="85" r="2.5" fill="var(--primary-color)" opacity="0.4"></circle>
+    <circle cx="111" cy="85" r="2.5" fill="var(--primary-color)" opacity="0.4"></circle>
+    
+    <!-- Pattes -->
+    <ellipse cx="92" cy="94" rx="3" ry="4" fill="var(--monster-accent)"></ellipse>
+    <ellipse cx="108" cy="94" rx="3" ry="4" fill="var(--monster-accent)"></ellipse>
+  </g>
+  
+  <!-- Cœur flottant -->
+  <g>
+    <path d="M 118 68 Q 118 65 120 65 Q 122 65 122 68 Q 122 65 124 65 Q 126 65 126 68 Q 126 71 122 75 Q 118 71 118 68 Z" fill="var(--primary-color)" opacity="0.8"></path>
+  </g>
+  
+  <!-- Indicateurs de statut (pixels) -->
+  <circle cx="72" cy="100" r="2" fill="var(--primary-color)"></circle>
+  <circle cx="80" cy="100" r="2" fill="var(--accent-color)"></circle>
+  <circle cx="88" cy="100" r="2" fill="var(--secondary-color)"></circle>
+  
+  <!-- Boutons -->
+  <g>
+    <circle cx="78" cy="135" r="7" fill="var(--button-color)"></circle>
+    <circle cx="78" cy="134" r="6" fill="var(--primary-color)"></circle>
+  </g>
+  
+  <g>
+    <circle cx="100" cy="142" r="9" fill="var(--button-color)"></circle>
+    <circle cx="100" cy="141" r="8" fill="var(--accent-color)"></circle>
+  </g>
+  
+  <g>
+    <circle cx="122" cy="135" r="7" fill="var(--button-color)"></circle>
+    <circle cx="122" cy="134" r="6" fill="var(--secondary-color)"></circle>
+  </g>
+  
+  <!-- Bordure décorative -->
+  <circle cx="100" cy="100" r="93" fill="none" stroke="var(--primary-color)" stroke-width="2" opacity="0.3"></circle>
+  <circle cx="100" cy="100" r="88" fill="none" stroke="var(--secondary-color)" stroke-width="1" opacity="0.5"></circle>
+</svg></svg></g></g><defs><clipPath id="SvgjsClipPath1191"><rect width="1000" height="1000" x="0" y="0" rx="500" ry="500"></rect></clipPath></defs></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1192)"><rect width="1000" height="1000" fill="#ffffff"></rect><g transform="matrix(2.5,0,0,2.5,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="400"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <style>
+    /* Variables CSS pour les couleurs */
+    :root {
+      --primary-color: #FF69B4;
+      --secondary-color: #B5E8FF;
+      --accent-color: #FFD700;
+      --dark-color: #4A4A4A;
+      --light-color: #FFFFFF;
+      --screen-bg: #E8F4FF;
+      --device-body: #FFB5E8;
+      --device-shadow: #FF99D8;
+      --button-color: #FF8FA3;
+      --monster-body: #C5E1FF;
+      --monster-accent: #FFE5B5;
+    }
+  </style>
+  
+  <!-- Fond circulaire -->
+  <circle cx="100" cy="100" r="95" fill="var(--secondary-color)" opacity="0.3"></circle>
+  <circle cx="100" cy="100" r="85" fill="var(--light-color)"></circle>
+  
+  <!-- Étoiles décoratives -->
+  <g>
+    <path d="M 30 40 L 32 42 L 30 44 L 28 42 Z" fill="var(--accent-color)"></path>
+    <circle cx="30" cy="42" r="1" fill="var(--accent-color)"></circle>
+  </g>
+  <g>
+    <path d="M 170 35 L 172 37 L 170 39 L 168 37 Z" fill="var(--primary-color)"></path>
+    <circle cx="170" cy="37" r="1" fill="var(--primary-color)"></circle>
+  </g>
+  <g>
+    <path d="M 165 160 L 167 162 L 165 164 L 163 162 Z" fill="var(--secondary-color)"></path>
+    <circle cx="165" cy="162" r="1" fill="var(--secondary-color)"></circle>
+  </g>
+  <g>
+    <path d="M 35 155 L 37 157 L 35 159 L 33 157 Z" fill="var(--monster-accent)"></path>
+    <circle cx="35" cy="157" r="1" fill="var(--monster-accent)"></circle>
+  </g>
+  
+  <!-- Appareil Tamagotchi stylisé -->
+  <!-- Corps de l'appareil -->
+  <ellipse cx="100" cy="100" rx="55" ry="60" fill="var(--device-body)"></ellipse>
+  <ellipse cx="100" cy="98" rx="55" ry="60" fill="var(--device-body)"></ellipse>
+  <ellipse cx="100" cy="98" rx="50" ry="55" fill="var(--device-shadow)" opacity="0.3"></ellipse>
+  
+  <!-- Antenne -->
+  <rect x="97" y="40" width="6" height="3" rx="1" fill="var(--device-body)"></rect>
+  <circle cx="100" cy="38" r="4" fill="var(--accent-color)"></circle>
+  <circle cx="100" cy="38" r="2" fill="var(--light-color)" opacity="0.6"></circle>
+  
+  <!-- Écran -->
+  <rect x="65" y="55" width="70" height="55" rx="5" fill="var(--screen-bg)"></rect>
+  <rect x="67" y="57" width="66" height="51" rx="4" fill="var(--light-color)"></rect>
+  
+  <!-- Effet de brillance sur l'écran -->
+  <rect x="68" y="58" width="30" height="20" rx="3" fill="var(--light-color)" opacity="0.5"></rect>
+  
+  <!-- Mini monstre sur l'écran -->
+  <g>
+    <!-- Corps -->
+    <ellipse cx="100" cy="83" rx="14" ry="12" fill="var(--monster-body)"></ellipse>
+    
+    <!-- Oreilles -->
+    <ellipse cx="90" cy="74" rx="4" ry="6" fill="var(--monster-body)"></ellipse>
+    <ellipse cx="110" cy="74" rx="4" ry="6" fill="var(--monster-body)"></ellipse>
+    
+    <!-- Yeux -->
+    <circle cx="95" cy="81" r="3" fill="var(--light-color)"></circle>
+    <circle cx="105" cy="81" r="3" fill="var(--light-color)"></circle>
+    <circle cx="95.5" cy="81.5" r="2" fill="var(--dark-color)"></circle>
+    <circle cx="105.5" cy="81.5" r="2" fill="var(--dark-color)"></circle>
+    <circle cx="95" cy="81" r="1" fill="var(--light-color)"></circle>
+    <circle cx="105" cy="81" r="1" fill="var(--light-color)"></circle>
+    
+    <!-- Bouche -->
+    <path d="M 97 87 Q 100 89 103 87" stroke="var(--primary-color)" stroke-width="1.5" fill="none" stroke-linecap="round"></path>
+    
+    <!-- Joues -->
+    <circle cx="89" cy="85" r="2.5" fill="var(--primary-color)" opacity="0.4"></circle>
+    <circle cx="111" cy="85" r="2.5" fill="var(--primary-color)" opacity="0.4"></circle>
+    
+    <!-- Pattes -->
+    <ellipse cx="92" cy="94" rx="3" ry="4" fill="var(--monster-accent)"></ellipse>
+    <ellipse cx="108" cy="94" rx="3" ry="4" fill="var(--monster-accent)"></ellipse>
+  </g>
+  
+  <!-- Cœur flottant -->
+  <g>
+    <path d="M 118 68 Q 118 65 120 65 Q 122 65 122 68 Q 122 65 124 65 Q 126 65 126 68 Q 126 71 122 75 Q 118 71 118 68 Z" fill="var(--primary-color)" opacity="0.8"></path>
+  </g>
+  
+  <!-- Indicateurs de statut (pixels) -->
+  <circle cx="72" cy="100" r="2" fill="var(--primary-color)"></circle>
+  <circle cx="80" cy="100" r="2" fill="var(--accent-color)"></circle>
+  <circle cx="88" cy="100" r="2" fill="var(--secondary-color)"></circle>
+  
+  <!-- Boutons -->
+  <g>
+    <circle cx="78" cy="135" r="7" fill="var(--button-color)"></circle>
+    <circle cx="78" cy="134" r="6" fill="var(--primary-color)"></circle>
+  </g>
+  
+  <g>
+    <circle cx="100" cy="142" r="9" fill="var(--button-color)"></circle>
+    <circle cx="100" cy="141" r="8" fill="var(--accent-color)"></circle>
+  </g>
+  
+  <g>
+    <circle cx="122" cy="135" r="7" fill="var(--button-color)"></circle>
+    <circle cx="122" cy="134" r="6" fill="var(--secondary-color)"></circle>
+  </g>
+  
+  <!-- Bordure décorative -->
+  <circle cx="100" cy="100" r="93" fill="none" stroke="var(--primary-color)" stroke-width="2" opacity="0.3"></circle>
+  <circle cx="100" cy="100" r="88" fill="none" stroke="var(--secondary-color)" stroke-width="1" opacity="0.5"></circle>
+</svg></svg></g></g><defs><clipPath id="SvgjsClipPath1192"><rect width="1000" height="1000" x="0" y="0" rx="500" ry="500"></rect></clipPath></defs></svg></g></svg>

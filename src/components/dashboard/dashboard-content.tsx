@@ -1,67 +1,218 @@
 'use client'
-import { useState } from 'react'
+
+import { useState, useMemo } from 'react'
 import Button from '../Button'
 import { authClient } from '@/lib/auth-client'
 import CreateMonsterModal from '../modals/create-monster-modal'
-import { CreateMonsterDto } from '@/types/monster.types'
+import type { Monster } from '@/types/monster.types'
+import type { CreateMonsterFormValues } from '@/types/forms/create-monster-form'
+import { createMonster } from '@/actions/monsters.actions'
+import MonstersList from '../monsters/monsters-list'
 
 type Session = typeof authClient.$Infer.Session
 
-function DashboardContent ({ session }: { session: Session }): React.ReactNode {
+const MOOD_LABELS: Record<string, string> = {
+  happy: 'Heureux',
+  sad: 'Triste',
+  angry: 'Fâché',
+  hungry: 'Affamé',
+  sleepy: 'Somnolent'
+}
+
+const deriveDisplayName = (session: Session): string => {
+  const rawName = session.user?.name
+  if (typeof rawName === 'string' && rawName.trim().length > 0) {
+    return rawName.trim().split(' ')[0]
+  }
+
+  const fallbackEmail = session.user?.email
+  if (typeof fallbackEmail === 'string' && fallbackEmail.includes('@')) {
+    return fallbackEmail.split('@')[0]
+  }
+
+  return 'Gardien.ne'
+}
+
+interface DashboardContentProps {
+  session: Session
+  monsters: Monster[]
+}
+
+function DashboardContent ({ session, monsters }: DashboardContentProps): React.ReactNode {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+  const displayName = useMemo(() => deriveDisplayName(session), [session])
+  const sessionEmail = session.user?.email ?? 'gardien.ne@Tamagocheat.app'
+  const firstLetter = displayName.charAt(0).toUpperCase()
+  const userInitial = firstLetter === '' ? 'G' : firstLetter
+
+  const stats = useMemo(() => {
+    if (!Array.isArray(monsters) || monsters.length === 0) {
+      return {
+        totalMonsters: 0,
+        highestLevel: 1,
+        latestAdoption: null as Date | null,
+        favoriteMood: null as string | null,
+        moodVariety: 0
+      }
+    }
+
+    let highestLevel = 1
+    let latestAdoption: Date | null = null
+    const moodCounter: Record<string, number> = {}
+    const moodSet = new Set<string>()
+
+    monsters.forEach((monster) => {
+      const level = monster.level ?? 1
+      if (level > highestLevel) {
+        highestLevel = level
+      }
+
+      const rawDate = monster.updatedAt ?? monster.createdAt
+      if (rawDate !== undefined) {
+        const parsed = new Date(rawDate)
+        if (!Number.isNaN(parsed.getTime()) && (latestAdoption === null || parsed > latestAdoption)) {
+          latestAdoption = parsed
+        }
+      }
+
+      const mood = monster.state as string
+      if (Object.keys(MOOD_LABELS).includes(mood)) {
+        moodCounter[mood] = (moodCounter[mood] ?? 0) + 1
+        moodSet.add(mood)
+      }
+    })
+
+    const favoriteMood = Object.entries(moodCounter)
+      .sort((a, b) => b[1] - a[1])[0]?.[0] ?? null
+
+    return {
+      totalMonsters: monsters.length,
+      highestLevel,
+      latestAdoption,
+      favoriteMood,
+      moodVariety: moodSet.size
+    }
+  }, [monsters])
+
+  const latestAdoptionLabel = useMemo(() => {
+    if (stats.latestAdoption === null) {
+      return 'À toi de créer ton premier compagnon ✨'
+    }
+
+    return new Intl.DateTimeFormat('fr-FR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    }).format(stats.latestAdoption)
+  }, [stats.latestAdoption])
+
+  const favoriteMoodLabel = stats.favoriteMood !== null ? (MOOD_LABELS[stats.favoriteMood] ?? stats.favoriteMood) : null
+
+  const favoriteMoodMessage = useMemo(() => {
+    if (stats.totalMonsters === 0) {
+      return 'Pas encore de vibe détectée. Crée ton premier monstre pour lancer la fête !'
+    }
+
+    if (favoriteMoodLabel === null) {
+      return 'Tes créatures attendent encore de montrer leur humeur préférée. Essaie de les cajoler ou de leur donner un snack !'
+    }
+
+    return `Aujourd'hui, ta bande est plutôt ${favoriteMoodLabel.toLowerCase()}. Prévois une activité assortie pour maintenir la bonne humeur !`
+  }, [favoriteMoodLabel, stats.totalMonsters])
 
   const handleLogout = (): void => {
     void authClient.signOut()
     window.location.href = '/sign-in'
   }
 
-  const handleCreateCreature = (): void => {
+  const handleCreateMonster = (): void => {
     setIsModalOpen(true)
   }
 
-  const handleSubmitMonster = (monsterData: CreateMonsterDto): void => {
-    void (async () => {
-      try {
-        const response = await fetch('/api/monsters', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...monsterData,
-            level: 1,
-            state: 'happy',
-            ownerId: session.user.id
-          })
-        })
-
-        if (!response.ok) {
-          throw new Error('Failed to create monster')
-        }
-
-        setIsModalOpen(false)
-        // TODO: Ajouter une notification de succès ou rafraîchir la liste des monstres
-      } catch (error) {
-        console.error('Error creating monster:', error)
-        // TODO: Ajouter une notification d'erreur
-      }
-    })()
+  const handleCloseModal = (): void => {
+    setIsModalOpen(false)
   }
+
+  const handleMonsterSubmit = (values: CreateMonsterFormValues): void => {
+    void createMonster(values).then(() => {
+      window.location.reload()
+    })
+  }
+
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen py-2'>
-      <h1 className='text-4xl font-bold mb-4'>Bienvenue {session.user.email} sur votre tableau de bord</h1>
-      <Button onClick={handleCreateCreature}>
-        Créer une créature
-      </Button>
-      <p className='text-lg text-gray-600'>Ici, vous pouvez gérer vos créatures et suivre votre progression.</p>
-      <Button onClick={handleLogout}>
-        Se déconnecter
-      </Button>
+    <div className='relative min-h-screen overflow-hidden bg-gradient-to-br from-moccaccino-100 via-white to-fuchsia-blue-100'>
+      <div className='pointer-events-none absolute -right-32 top-24 h-72 w-72 rounded-full bg-fuchsia-blue-200/40 blur-3xl' aria-hidden='true' />
+      <div className='pointer-events-none absolute -left-32 bottom-24 h-80 w-80 rounded-full bg-lochinvar-200/50 blur-3xl' aria-hidden='true' />
+
+      <main className='relative z-10 mx-auto w-full max-w-6xl px-4 pb-24 pt-20 sm:px-6 lg:px-8'>
+        <section className='relative overflow-hidden rounded-3xl bg-white/80 px-6 py-10 shadow-[0_20px_60px_rgba(15,23,42,0.18)] ring-1 ring-white/60 sm:px-10'>
+          <div className='pointer-events-none absolute -right-28 -top-16 h-64 w-64 rounded-full bg-gradient-to-br from-moccaccino-200/70 via-fuchsia-blue-200/50 to-white/40 blur-3xl' aria-hidden='true' />
+          <div className='pointer-events-none absolute -left-32 bottom-0 h-64 w-64 translate-y-1/2 rounded-full bg-gradient-to-tr from-lochinvar-200/60 via-white/30 to-fuchsia-blue-100/60 blur-3xl' aria-hidden='true' />
+
+          <div className='relative flex flex-col gap-10 lg:flex-row lg:items-center'>
+            <div className='max-w-xl space-y-6'>
+              <div className='inline-flex items-center gap-3 rounded-full border border-moccaccino-200/80 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-moccaccino-500'>
+                <span aria-hidden='true'>🌈</span>
+                <span>Hey {displayName}</span>
+              </div>
+              <h1 className='text-4xl font-black text-slate-900 sm:text-5xl'>Bienvenue dans ton QG Tamagocheat</h1>
+              <p className='text-base text-slate-600 sm:text-lg'>Dompte des créatures adorables, surveille leur humeur et transforme chaque journée en mini-aventure numérique.</p>
+              <div className='flex flex-wrap items-center gap-3'>
+                <Button size='lg' onClick={handleCreateMonster}>
+                  Créer une créature
+                </Button>
+                <Button size='lg' variant='ghost' onClick={handleLogout}>
+                  Se déconnecter
+                </Button>
+              </div>
+            </div>
+
+            <div className='flex flex-1 flex-col gap-4 rounded-3xl bg-gradient-to-br from-lochinvar-100/80 via-white to-fuchsia-blue-100/70 p-6 ring-1 ring-white/70 backdrop-blur'>
+              <div className='flex items-center gap-4'>
+                <div className='flex h-14 w-14 items-center justify-center rounded-2xl bg-white/80 text-2xl font-bold text-moccaccino-500 shadow-inner'>
+                  {userInitial}
+                </div>
+                <div>
+                  <p className='text-xs uppercase tracking-[0.25em] text-slate-500'>Gardien.ne</p>
+                  <p className='text-lg font-semibold text-slate-800'>{sessionEmail}</p>
+                </div>
+              </div>
+
+              <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+                <div className='rounded-2xl bg-white/80 p-4 shadow-[0_12px_30px_rgba(15,23,42,0.08)] ring-1 ring-lochinvar-200/60'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-lochinvar-500'>Compagnons</p>
+                  <p className='mt-2 text-3xl font-black text-slate-900'>{stats.totalMonsters}</p>
+                  <p className='text-xs text-slate-500'>Monstres prêts pour l&apos;aventure</p>
+                </div>
+                <div className='rounded-2xl bg-white/80 p-4 shadow-[0_12px_30px_rgba(15,23,42,0.08)] ring-1 ring-fuchsia-blue-200/60'>
+                  <p className='text-xs font-semibold uppercase tracking-wide text-fuchsia-blue-500'>Niveau max</p>
+                  <p className='mt-2 text-3xl font-black text-slate-900'>{stats.highestLevel}</p>
+                  <p className='text-xs text-slate-500'>Ton monstre le plus expérimenté</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className='mt-12 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]'>
+          <div>
+            <MonstersList monsters={monsters} className='mt-0' />
+          </div>
+          <aside className='flex flex-col gap-6'>
+            <div className='rounded-3xl bg-gradient-to-br from-fuchsia-blue-100/90 via-white to-lochinvar-100/80 p-6 shadow-[0_18px_40px_rgba(15,23,42,0.14)] ring-1 ring-white/60 backdrop-blur'>
+              <p className='text-sm font-semibold uppercase tracking-[0.2em] text-fuchsia-blue-500'>Astuce mood</p>
+              <p className='mt-3 text-base font-medium text-slate-800'>{favoriteMoodMessage}</p>
+              <p className='mt-2 text-xs text-slate-600'>Observe tes créatures pour débloquer toutes les humeurs et récolter des surprises.</p>
+            </div>
+          </aside>
+        </section>
+      </main>
 
       <CreateMonsterModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmitMonster}
+        onClose={handleCloseModal}
+        onSubmit={handleMonsterSubmit}
       />
     </div>
   )

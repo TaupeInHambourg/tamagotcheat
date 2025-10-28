@@ -5,7 +5,9 @@ function InputField ({
   value,
   error,
   onChange,
-  onChangeText
+  onChangeText,
+  placeholder,
+  required
 }: {
   type?: string
   name?: string
@@ -14,6 +16,8 @@ function InputField ({
   error?: string
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   onChangeText?: (text: string) => void
+  placeholder?: string
+  required?: boolean
 }): React.ReactNode {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (onChange !== undefined) onChange(e)
@@ -31,6 +35,8 @@ function InputField ({
         name={name}
         value={value}
         onChange={handleChange}
+        placeholder={placeholder}
+        required={required}
         className={`w-full px-4 py-2.5 rounded-lg border
           focus:outline-none focus:ring-2 focus:border-transparent
           placeholder:text-pink-flare-300 bg-white/50 backdrop-blur-sm text-pink-flare-900

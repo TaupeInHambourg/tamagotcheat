@@ -2,5 +2,26 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "standard.vscode-standard"
   },
-  "idf.pythonInstallPath": "C:\\Espressif\\tools\\idf-python\\3.11.2\\python.exe"
+  "idf.pythonInstallPath": "C:\\Espressif\\tools\\idf-python\\3.11.2\\python.exe",
+  "window.autoDetectColorScheme": false,
+  "peacock.color": "a0c494",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#bdd6b5",
+    "activityBar.background": "#bdd6b5",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#6f7faf",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#15202b99",
+    "sash.hoverBorder": "#bdd6b5",
+    "statusBar.background": "#a0c494",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#83b273",
+    "statusBarItem.remoteBackground": "#a0c494",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#a0c494",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#a0c49499",
+    "titleBar.inactiveForeground": "#15202b99"
+  }
 }

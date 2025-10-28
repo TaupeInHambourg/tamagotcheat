@@ -1,11 +1,24 @@
-export type MonsterState = 'happy' | 'angry' | 'sleeping' | 'hungry' | 'sad'
+export const MONSTER_STATES = ['happy', 'sad', 'angry', 'hungry', 'sleepy'] as const
 
+export type MonsterState = typeof MONSTER_STATES[number]
+
+export const DEFAULT_MONSTER_LEVEL = 1
+export const DEFAULT_MONSTER_STATE: MonsterState = MONSTER_STATES[0]
+
+// Pixel Monster Types (from GitHub v0-Tamagocheat)
 export interface Monster {
+  _id?: string
   name: string
   level: number
-  draw: string
+  color: string
   state: MonsterState
-  ownerId: string
+  draw: string
+  ownerId?: string
+  updatedAt?: string
+  createdAt?: string
 }
 
-export type CreateMonsterDto = Omit<Monster, 'level' | 'state' | 'ownerId'>
+export interface CreateMonsterDto {
+  name: string
+  color: string
+}

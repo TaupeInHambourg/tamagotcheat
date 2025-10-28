@@ -1,5 +1,3 @@
-'use client'
-
 import type { ReactNode } from 'react'
 
 interface ButtonProps {
@@ -37,14 +35,20 @@ function Button ({
   size = 'md',
   variant = 'primary',
   disabled = false,
-  className = '',
-  type = 'button'
-}: ButtonProps): ReactNode {
+  type
+}: {
+  children: React.ReactNode
+  onClick?: () => void
+  size?: 'sm' | 'md' | 'lg' | 'xl'
+  variant?: 'primary' | 'ghost' | 'underline' | 'outline'
+  disabled?: boolean
+  type?: 'button' | 'submit' | 'reset'
+}): React.ReactNode {
   return (
     <button
-      className={`${disabled ? '' : 'hover:cursor-pointer transition-colors duration-200 active:scale-95'} ${getSize(size)} ${getVariant(variant, disabled)} ${className}`}
-      type={type}
+      className={`rounded-md  ${disabled ? '' : 'transition-all duration-300 cursor-pointer active:scale-95'} ${getSize(size)} ${getVariant(variant, disabled)}`}
       onClick={onClick}
+      type={type}
     >
       {children}
     </button>

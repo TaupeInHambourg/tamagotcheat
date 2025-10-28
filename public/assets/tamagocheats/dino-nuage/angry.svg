@@ -1,0 +1,198 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #E8B5B5;
+      --body-shadow: #D99999;
+      --eye-white: #FFFFFF;
+      --eye-pupil: #8B0000;
+      --eye-shine: #FFFFFF;
+      --mouth: #B53939;
+      --spike-main: #D99999;
+      --spike-light: #F5D4D4;
+      --cheek: #FF6B6B;
+      --belly: #F9E5E5;
+      --feet: #E8A8A8;
+      --wing: #E8C5C5;
+      --tail-tip: #D37D7D;
+      --steam: #F5E5E5;
+      --vein: #C94D4D;
+      --eyebrow: #8B0000;
+    }
+    
+    /* Animation de tremblement de colère */
+    @keyframes angry-shake {
+      0%, 100% { transform: translateX(0); }
+      10% { transform: translateX(-2px) rotate(-1deg); }
+      20% { transform: translateX(2px) rotate(1deg); }
+      30% { transform: translateX(-2px) rotate(-1deg); }
+      40% { transform: translateX(2px) rotate(1deg); }
+      50% { transform: translateX(-1px); }
+      60% { transform: translateX(1px); }
+      70% { transform: translateX(-1px); }
+      80% { transform: translateX(1px); }
+      90% { transform: translateX(0); }
+    }
+    
+    /* Animation des yeux furieux */
+    @keyframes angry-glare {
+      0%, 85%, 100% { transform: scaleX(1); }
+      90%, 95% { transform: scaleX(1.1); }
+    }
+    
+    /* Animation des ailes tendues */
+    @keyframes wing-tense {
+      0%, 100% { transform: translateY(0) rotate(-10deg); }
+      50% { transform: translateY(-1px) rotate(-15deg); }
+    }
+    
+    /* Animation des pics hérissés */
+    @keyframes spike-bristle {
+      0%, 100% { transform: scaleY(1.15) translateY(-1px); }
+      50% { transform: scaleY(1.2) translateY(-2px); }
+    }
+    
+    /* Animation de la queue qui fouette */
+    @keyframes tail-thrash {
+      0%, 100% { transform: rotate(20deg); }
+      50% { transform: rotate(-20deg); }
+    }
+    
+    /* Animation de la vapeur */
+    @keyframes steam-rise {
+      0% { opacity: 0; transform: translateY(0) scale(0.8); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-6px) scale(1.2); }
+    }
+    
+    /* Animation de respiration agressive */
+    @keyframes angry-breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    /* Animation des veines */
+    @keyframes vein-pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+    
+    .monster-body {
+      animation: angry-shake 0.5s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    
+    .body-tense {
+      animation: angry-breathe 0.8s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .eye-group {
+      animation: angry-glare 2s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .wing {
+      animation: wing-tense 0.6s ease-in-out infinite;
+      transform-origin: right center;
+    }
+    
+    .spike {
+      animation: spike-bristle 0.4s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    
+    .tail {
+      animation: tail-thrash 0.8s ease-in-out infinite;
+      transform-origin: left center;
+    }
+    
+    .steam {
+      animation: steam-rise 2s ease-in-out infinite;
+    }
+    
+    .vein {
+      animation: vein-pulse 0.6s ease-in-out infinite;
+    }
+  </style>
+  
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <!-- Queue qui fouette furieusement -->
+    <g class="tail">
+      <rect x="5" y="18" width="3" height="2" fill="var(--body-color)"/>
+      <rect x="4" y="19" width="2" height="1" fill="var(--body-color)"/>
+      <rect x="3" y="18" width="2" height="1" fill="var(--tail-tip)"/>
+      <rect x="2" y="17" width="2" height="1" fill="var(--tail-tip)"/>
+    </g>
+    
+    <!-- Ailes gauche tendues -->
+    <g class="wing" style="animation-delay: 0s;">
+      <rect x="8" y="14" width="2" height="4" fill="var(--wing)"/>
+      <rect x="7" y="15" width="2" height="3" fill="var(--wing)"/>
+    </g>
+    
+    <g class="body-tense">
+      <!-- Pics hérissés sur le dos -->
+      <g class="spike" style="animation-delay: 0s;">
+        <rect x="13" y="8" width="2" height="3" fill="var(--spike-main)"/>
+        <rect x="14" y="7" width="1" height="1" fill="var(--spike-light)"/>
+      </g>
+      <g class="spike" style="animation-delay: 0.1s;">
+        <rect x="16" y="8" width="2" height="3" fill="var(--spike-main)"/>
+        <rect x="17" y="7" width="1" height="1" fill="var(--spike-light)"/>
+      </g>
+      <g class="spike" style="animation-delay: 0.2s;">
+        <rect x="19" y="9" width="2" height="3" fill="var(--spike-main)"/>
+        <rect x="20" y="8" width="1" height="1" fill="var(--spike-light)"/>
+      </g>
+      
+      <!-- Corps principal tendu -->
+      <rect x="10" y="11" width="14" height="10" fill="var(--body-color)"/>
+      <rect x="9" y="13" width="16" height="6" fill="var(--body-color)"/>
+      <rect x="11" y="10" width="12" height="1" fill="var(--body-color)"/>
+      
+      <!-- Tête en avant (position agressive) -->
+      <rect x="20" y="12" width="5" height="6" fill="var(--body-color)"/>
+      <rect x="24" y="13" width="2" height="4" fill="var(--body-color)"/>
+      
+      <!-- Ombre plus intense -->
+      <rect x="10" y="20" width="14" height="1" fill="var(--body-shadow)"/>
+      
+      <!-- Ventre tendu -->
+      <rect x="12" y="15" width="10" height="4" fill="var(--belly)"/>
+      
+      <!-- Veine sur le corps -->
+      <g class="vein">
+        <rect x="13" y="14" width="1" height="2" fill="var(--vein)"/>
+        <rect x="14" y="13" width="2" height="1" fill="var(--vein)"/>
+      </g>
+      
+      <!-- Sourcils froncés -->
+      <rect x="21" y="13" width="3" height="1" fill="var(--eyebrow)"/>
+      <rect x="22" y="14" width="1" height="1" fill="var(--eyebrow)"/>
+      
+      <!-- Yeux furieux (plissés) -->
+      <g class="eye-group">
+        <!-- Oeil plissé et intense -->
+        <rect x="22" y="14" width="3" height="2" fill="var(--eye-white)"/>
+        <rect x="23" y="14" width="2" height="2" fill="var(--eye-pupil)"/>
+        <rect x="23" y="14" width="1" height="1" fill="var(--eye-shine)"/>
+      </g>
+      
+      <!-- Joues rouges de colère -->
+      <rect x="20" y="16" width="3" height="2" fill="var(--cheek)"/>
+      <rect x="19" y="17" width="1" height="1" fill="var(--cheek)"/>
+      
+      <!-- Bouche ouverte en grognement -->
+      <rect x="24" y="15" width="2" height="3" fill="var(--mouth)"/>
+      <rect x="25" y="16" width="1" height="1" fill="var(--mouth)"/>
+      <rect x="26" y="15" width="1" height="2" fill="var(--mouth)"/>
+      
+      <!-- Dents/crocs -->
+      <rect x="25" y="15" width="1" height="1" fill="var(--eye-white)"/>
+      <rect x="25" y="17" width="1" height="1" fill="var(--eye-white)"/>
+    </g>
+  </g>
+</svg>

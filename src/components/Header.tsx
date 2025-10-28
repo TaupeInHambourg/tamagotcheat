@@ -5,6 +5,10 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 
 export default function Header (): ReactNode {
+  const handleSignin = (): void => {
+    window.location.href = '/sign-in'
+  }
+
   return (
     <header className='fixed w-full top-0 bg-white/80 backdrop-blur-sm border-b border-pink-flare-100 z-50'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -37,6 +41,7 @@ export default function Header (): ReactNode {
             <Button
               variant='primary'
               size='md'
+              onClick={handleSignin}
             >
               Créer mon monstre
             </Button>

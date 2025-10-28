@@ -1,9 +1,10 @@
+import { getMonsters } from '@/actions/monsters.actions'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import DashboardContent from '@/components/dashboard/dashboard-content'
 
-export default async function DashboardPage () {
+export default async function DashboardPage (): Promise<React.ReactNode> {
   const session = await auth.api.getSession({
     headers: await headers()
   })
@@ -12,9 +13,9 @@ export default async function DashboardPage () {
     redirect('/sign-in')
   }
 
+  const monsters = await getMonsters()
+
   return (
-    <div>
-      <DashboardContent session={session} />
-    </div>
+    <DashboardContent session={session} monsters={monsters} />
   )
 }

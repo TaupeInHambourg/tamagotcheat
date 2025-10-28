@@ -18,7 +18,19 @@ function AuthFormContent (): React.ReactNode {
         </div>
       </div>
 
-      {isSignIn ? <SignInForm onError={setError} /> : <SignUpForm onError={setError} />}
+      <div className='transition-all duration-300 ease-in-out'>
+        {isSignIn
+          ? (
+            <div className='animate-in fade-in duration-300'>
+              <SignInForm onError={setError} />
+            </div>
+            )
+          : (
+            <div className='animate-in fade-in duration-300'>
+              <SignUpForm onError={setError} />
+            </div>
+            )}
+      </div>
 
       <div className='mt-6 text-center'>
         <Button
