@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import Image from 'next/image'
-import { type Monster, parseMonsterTraits } from '@/types/monster.types'
+import { type Monster } from '@/types/monster.types'
 
 function getStateStyle (state: string): string {
   switch (state) {
@@ -52,7 +52,6 @@ function formatDate (date: string | undefined): string {
 export default function MonsterPageClient ({ monster }: MonsterPageProps): React.ReactNode {
   const formattedCreationDate = useMemo(() => formatDate(monster.createdAt), [monster.createdAt])
   const moodEmoji = useMemo(() => getMoodEmoji(monster.state), [monster.state])
-  const monsterTraits = useMemo(() => parseMonsterTraits(monster.traits), [monster.traits])
 
   return (
     <div className='w-full max-w-4xl mx-auto px-4 py-8'>
@@ -97,29 +96,6 @@ export default function MonsterPageClient ({ monster }: MonsterPageProps): React
                   {monster.level ?? 1}
                 </p>
               </div>
-              {monsterTraits !== null && (
-                <div className='rounded-2xl bg-monsters-blue/5 p-4'>
-                  <p className='text-sm font-medium text-slate-900'>Caractéristiques</p>
-                  <div className='mt-2 flex flex-wrap gap-2'>
-                    <span className='inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-slate-200'>
-                      {monsterTraits.bodyStyle}
-                    </span>
-                    <span className='inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-slate-200'>
-                      {monsterTraits.eyeStyle}
-                    </span>
-                    {monsterTraits.antennaStyle !== 'none' && (
-                      <span className='inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-slate-200'>
-                        {monsterTraits.antennaStyle}
-                      </span>
-                    )}
-                    {monsterTraits.accessory !== 'none' && (
-                      <span className='inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-700 ring-1 ring-slate-200'>
-                        {monsterTraits.accessory}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
 
             {/* Actions */}

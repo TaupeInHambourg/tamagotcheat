@@ -1,6 +1,6 @@
 'use server'
 import { redirect } from 'next/navigation'
 
-export async function navigateToDashboard (): Promise<void> {
+export async function redirectToDashboard (): Promise<void> {
   redirect('/dashboard')
 }
