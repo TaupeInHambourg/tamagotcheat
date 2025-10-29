@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import MonsterCard from './monster-card'
 import {
   DEFAULT_MONSTER_STATE,
   MONSTER_STATES,
@@ -11,11 +10,10 @@ export interface DashboardMonster {
   id?: string
   ownerId?: string
   name: string
-  level?: number
-  _id?: string
-  name: string
   level?: number | null
+  _id?: string
   state?: MonsterState | string | null
+  draw?: string
   createdAt?: string
   updatedAt?: string
 }
@@ -69,48 +67,48 @@ interface MonstersListProps {
 function MonstersList ({ monsters, className }: MonstersListProps): React.ReactNode {
   if (monsters === null || monsters === undefined || monsters.length === 0) {
     return (
-      <div className={mergeClasses('mt-10 w-full rounded-3xl bg-gradient-to-br from-white/90 via-lochinvar-50/80 to-fuchsia-blue-50/80 p-8 text-center shadow-[0_16px_40px_rgba(15,23,42,0.12)] ring-1 ring-white/70 backdrop-blur', className)}>
-        <h2 className='text-xl font-semibold text-slate-900'>Tu n&apos;as pas encore de compagnon</h2>
-        <p className='mt-2 text-sm text-slate-600'>Clique sur &quot;Créer une créature&quot; pour lancer ta première adoption magique.</p>
+      <div className={mergeClasses('mt-10 w-full rounded-2xl bg-gradient-to-br from-autumn-cream to-autumn-peach/30 p-12 text-center shadow-lg border border-autumn-peach', className)}>
+        <h2 className='text-2xl font-bold text-chestnut-deep mb-3'>Tu n&apos;as pas encore de compagnon</h2>
+        <p className='text-lg text-chestnut-medium'>Clique sur &quot;Créer une créature&quot; pour lancer ta première adoption magique.</p>
       </div>
     )
   }
 
   return (
-    <section className={mergeClasses('mt-12 w-full space-y-8', className)}>
-      <header className='space-y-2'>
-        <h2 className='text-2xl font-bold text-slate-900'>Tes compagnons animés</h2>
-        <p className='text-sm text-slate-600'>Un coup d&apos;oeil rapide sur ta ménagerie digitale pour préparer la prochaine aventure.</p>
+    <section className={mergeClasses('mt-8 w-full space-y-10', className)}>
+      <header className='space-y-3'>
+        <h2 className='text-3xl font-bold text-chestnut-deep'>Tes compagnons animés</h2>
+        <p className='text-lg text-chestnut-medium'>Un coup d&apos;oeil rapide sur ta ménagerie digitale pour préparer la prochaine aventure.</p>
       </header>
 
-      <div className='grid gap-6 sm:grid-cols-2 xl:grid-cols-3'>
+      <div className='grid gap-8 sm:grid-cols-2 xl:grid-cols-3'>
         {monsters.map((monster) => {
           const state = isMonsterState(monster.state) ? monster.state : DEFAULT_MONSTER_STATE
           const adoptionDate = formatAdoptionDate(monster.createdAt ?? monster.updatedAt)
           const cardKey = monster.id ?? monster._id ?? monster.name
           const levelLabel = monster.level ?? 1
+          const monsterHref = `/creatures/${String(monster.id ?? monster._id ?? '')}`
+          const monsterDraw = monster.draw ?? '/placeholder-monster.png'
 
           return (
             <Link
-              href={`/creatures/${monster.id ?? monster._id}`}
-              className={`group block bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${className}`}
+              key={cardKey}
+              href={monsterHref}
+              className='block group'
             >
-              <article
-                key={cardKey}
-                className='group relative flex flex-col overflow-hidden rounded-3xl bg-gradient-to-br from-white/90 via-white to-lochinvar-50/70 p-6 shadow-[0_20px_54px_rgba(15,23,42,0.14)] ring-1 ring-white/70 backdrop-blur transition-transform duration-500 hover:-translate-y-1 hover:shadow-[0_28px_70px_rgba(15,23,42,0.18)]'
-              >
-                <div className='pointer-events-none absolute -right-16 top-20 h-40 w-40 rounded-full bg-fuchsia-blue-100/40 blur-3xl transition-opacity duration-500 group-hover:opacity-60' aria-hidden='true' />
-                <div className='pointer-events-none absolute -left-20 -top-16 h-48 w-48 rounded-full bg-lochinvar-100/40 blur-3xl transition-opacity duration-500 group-hover:opacity-60' aria-hidden='true' />
-
-                <div className='relative flex flex-col gap-5'>
-                  <div className='relative flex items-center justify-center overflow-hidden rounded-3xl bg-slate-50/70 p-4 ring-1 ring-white/70'>
+              <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
+                <div className='relative flex flex-col gap-6'>
+                  <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-6 border border-autumn-peach/30'>
                     <Image
-                      src={monster.draw}
+                      src={monsterDraw}
                       alt={monster.name}
                       width={200}
                       height={200}
+                      className='transition-transform duration-300 group-hover:scale-110'
                     />
-                    <span className={`absolute right-4 top-4 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${STATE_BADGE_CLASSES[state]}`}>
+                    <span
+                      className={`absolute right-3 top-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wide ${STATE_BADGE_CLASSES[state]}`}
+                    >
                       <span aria-hidden='true'>{MONSTER_STATE_EMOJI[state]}</span>
                       {MONSTER_STATE_LABELS[state]}
                     </span>
@@ -118,24 +116,24 @@ function MonstersList ({ monsters, className }: MonstersListProps): React.ReactN
 
                   <div className='flex flex-1 flex-col gap-4'>
                     <div className='flex items-start justify-between gap-3'>
-                      <div className='space-y-1'>
-                        <h3 className='text-lg font-semibold text-slate-900 sm:text-xl'>{monster.name}</h3>
+                      <div className='space-y-2'>
+                        <h3 className='text-xl font-bold text-chestnut-deep'>{monster.name}</h3>
                         {adoptionDate !== null && (
-                          <p className='text-xs text-slate-500'>Arrivé le {adoptionDate}</p>
+                          <p className='text-sm text-chestnut-medium'>Arrivé le {adoptionDate}</p>
                         )}
                       </div>
-                      <span className='inline-flex items-center gap-1 rounded-full bg-moccaccino-100/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-moccaccino-600 shadow-inner'>
+                      <span className='inline-flex items-center gap-1 rounded-full bg-autumn-peach px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-autumn-brown'>
                         <span aria-hidden='true'>⭐</span>
-                        Niveau {levelLabel}
+                        Niv {levelLabel}
                       </span>
                     </div>
 
-                    <div className='flex flex-wrap gap-2 text-xs text-slate-600'>
-                      <span className='inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 font-medium ring-1 ring-inset ring-slate-200'>
+                    <div className='flex flex-wrap gap-2 text-xs'>
+                      <span className='inline-flex items-center gap-1 rounded-full bg-moss-pastel px-3 py-1.5 font-semibold text-moss-deep'>
                         <span aria-hidden='true'>🎨</span>
-                        Pixel art dynamique
+                        Pixel art
                       </span>
-                      <span className='inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 font-medium ring-1 ring-inset ring-slate-200'>
+                      <span className='inline-flex items-center gap-1 rounded-full bg-maple-light px-3 py-1.5 font-semibold text-maple-deep'>
                         <span aria-hidden='true'>{MONSTER_STATE_EMOJI[state]}</span>
                         {MONSTER_STATE_LABELS[state]}
                       </span>

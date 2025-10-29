@@ -32,34 +32,36 @@ export default async function CreaturesPage (): Promise<React.ReactNode> {
 
   return (
     <AppLayout>
-      <div className='section-cozy'>
-        <div className='container-cozy'>
-          <div className='mb-8 animate-fade-in-up'>
-            <h1 className='heading-xl mb-2 text-gradient-autumn'>
+      <div className='py-12 px-6 lg:px-8'>
+        <div className='max-w-7xl mx-auto'>
+          <div className='mb-12'>
+            <h1 className='text-5xl sm:text-6xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent leading-tight mb-4'>
               Mes Créatures 🐾
             </h1>
-            <p className='text-xl text-cozy'>
+            <p className='text-xl text-chestnut-medium leading-relaxed'>
               Retrouve toutes tes créatures adorables ici !
             </p>
           </div>
 
           {monsters.length === 0
             ? (
-              <div className='text-center py-16 card-autumn animate-scale-in'>
-                <div className='text-8xl mb-6 animate-wiggle'>😢</div>
-                <h2 className='heading-md mb-4'>
+              <div className='text-center py-20 bg-gradient-to-br from-autumn-cream to-autumn-peach/30 rounded-2xl shadow-md border border-autumn-peach'>
+                <div className='text-8xl mb-8'>😢</div>
+                <h2 className='text-3xl sm:text-4xl font-bold text-chestnut-deep leading-tight mb-6'>
                   Tu n'as pas encore de créature
                 </h2>
-                <p className='text-xl text-cosy mb-6'>
+                <p className='text-xl text-chestnut-medium leading-relaxed mb-8 max-w-md mx-auto'>
                   Retourne au dashboard pour créer ta première créature !
                 </p>
                 <div className='inline-block'>
-                  <span className='badge-autumn'>🍂 Commence ton aventure</span>
+                  <span className='inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-autumn-peach text-autumn-brown'>
+                    🍂 Commence ton aventure
+                  </span>
                 </div>
               </div>
               )
             : (
-              <div className='animate-fade-in-up'>
+              <div>
                 <MonstersList monsters={monsters} />
               </div>
               )}
