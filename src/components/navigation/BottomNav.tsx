@@ -43,16 +43,16 @@ export default function BottomNav (): React.ReactNode {
   return (
     <>
       {/* Barre de navigation fixée en bas */}
-      <nav className='md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-pink-flare-100 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]'>
+      <nav className='md:hidden fixed bottom-0 left-0 right-0 glass-autumn z-50 border-t-2 border-autumn-peach/50 shadow-cozy-lg'>
         <div className='grid grid-cols-4 gap-1 px-2 py-2 safe-area-inset-bottom'>
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl font-semibold transition-all duration-200 active:scale-95 ${
+              className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl font-semibold transition-all duration-200 active-press ${
                 isActive(item.href)
-                  ? 'bg-pink-flare-100 text-pink-flare-700 shadow-sm'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-gradient-to-br from-autumn-peach to-autumn-coral text-chestnut-deep shadow-cozy animate-bounce-soft'
+                  : 'text-chestnut-medium hover:bg-autumn-cream hover:text-chestnut-deep'
               }`}
             >
               <span className='text-2xl'>{item.icon}</span>
@@ -63,7 +63,7 @@ export default function BottomNav (): React.ReactNode {
           {/* Bouton Quitter */}
           <button
             onClick={() => { setShowLogoutConfirm(true) }}
-            className='flex flex-col items-center justify-center gap-1 py-3 rounded-xl font-semibold text-gray-600 hover:bg-red-50 hover:text-red-600 transition-all duration-200 active:scale-95'
+            className='flex flex-col items-center justify-center gap-1 py-3 rounded-xl font-semibold text-chestnut-medium hover:bg-maple-light hover:text-maple-deep transition-all duration-200 active-press'
           >
             <span className='text-2xl'>🚪</span>
             <span className='text-xs'>Quitter</span>
@@ -74,19 +74,19 @@ export default function BottomNav (): React.ReactNode {
       {/* Modal de confirmation de déconnexion */}
       {showLogoutConfirm && (
         <div
-          className='md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end justify-center animate-fade-in'
+          className='md:hidden fixed inset-0 bg-chestnut-deep/60 backdrop-blur-md z-50 flex items-end justify-center animate-fade-in-up'
           onClick={() => { setShowLogoutConfirm(false) }}
         >
           <div
-            className='bg-white rounded-t-3xl w-full max-w-md p-6 mb-20 shadow-2xl animate-slide-up'
+            className='card-cozy w-full max-w-md mx-4 mb-24 animate-scale-in'
             onClick={(e) => { e.stopPropagation() }}
           >
             <div className='text-center mb-6'>
-              <div className='text-6xl mb-4'>🤔</div>
-              <h3 className='text-2xl font-bold text-gray-900 mb-2'>
+              <div className='text-6xl mb-4 animate-wiggle'>🤔</div>
+              <h3 className='heading-sm mb-2'>
                 Tu pars déjà ?
               </h3>
-              <p className='text-lg text-gray-600'>
+              <p className='text-lg text-cozy'>
                 Tes créatures vont te manquer ! 😢
               </p>
             </div>
@@ -94,7 +94,7 @@ export default function BottomNav (): React.ReactNode {
             <div className='flex flex-col gap-3'>
               <button
                 onClick={handleLogout}
-                className='w-full bg-gradient-to-r from-red-500 to-rose-600 text-white font-bold text-lg py-4 px-6 rounded-xl hover:from-red-600 hover:to-rose-700 transition-all duration-200 transform active:scale-95 shadow-lg'
+                className='btn-maple w-full text-lg py-4'
               >
                 <span className='flex items-center justify-center gap-2'>
                   <span className='text-xl'>🚪</span>
@@ -103,7 +103,7 @@ export default function BottomNav (): React.ReactNode {
               </button>
               <button
                 onClick={() => { setShowLogoutConfirm(false) }}
-                className='w-full bg-gray-200 text-gray-800 font-bold text-lg py-4 px-6 rounded-xl hover:bg-gray-300 transition-all duration-200 transform active:scale-95'
+                className='btn-soft w-full text-lg py-4'
               >
                 <span className='flex items-center justify-center gap-2'>
                   <span className='text-xl'>💖</span>
@@ -114,29 +114,6 @@ export default function BottomNav (): React.ReactNode {
           </div>
         </div>
       )}
-
-      {/* Styles pour les animations */}
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        @keyframes slide-up {
-          from { 
-            transform: translateY(100%);
-            opacity: 0;
-          }
-          to { 
-            transform: translateY(0);
-            opacity: 1;
-          }
-        }
-
-        .animate-fade-in { animation: fade-in 0.2s ease-out; }
-        .animate-slide-up { animation: slide-up 0.3s ease-out; }
-      `}
-      </style>
     </>
   )
 }

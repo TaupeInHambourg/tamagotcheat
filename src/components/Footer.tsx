@@ -1,36 +1,43 @@
 import Link from 'next/link'
-
 import type { ReactNode } from 'react'
 
+/**
+ * Footer - Pied de page
+ *
+ * Responsabilité unique : Afficher les informations et liens du footer
+ */
 export default function Footer (): ReactNode {
   return (
-    <footer className='bg-pink-flare-50'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12'>
-        <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
+    <footer className='bg-gradient-to-br from-chestnut-cream to-autumn-peach/30 border-t-2 border-autumn-peach'>
+      <div className='max-w-7xl mx-auto px-6 lg:px-8 py-16'>
+        <div className='grid grid-cols-1 md:grid-cols-4 gap-12 mb-12'>
           {/* Company Info */}
           <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-pink-flare-900'>TamagoTcheat</h3>
-            <p className='text-pink-flare-600 text-sm'>
+            <h3 className='text-xl font-bold text-chestnut-deep flex items-center gap-2'>
+              <span>🍂</span>
+              <span>TamagoTcheat</span>
+            </h3>
+            <p className='text-chestnut-medium leading-relaxed text-sm'>
               Élevez votre propre monstre virtuel et créez des liens uniques dans notre univers interactif.
             </p>
           </div>
 
           {/* Legal Links */}
           <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-pink-flare-900'>Légal</h3>
-            <ul className='space-y-2'>
+            <h3 className='text-lg font-semibold text-chestnut-deep'>Légal</h3>
+            <ul className='space-y-3'>
               <li>
-                <Link href='/privacy' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
+                <Link href='/privacy' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   Politique de confidentialité
                 </Link>
               </li>
               <li>
-                <Link href='/terms' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
+                <Link href='/terms' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   Conditions d&apos;utilisation
                 </Link>
               </li>
               <li>
-                <Link href='/cookies' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
+                <Link href='/cookies' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   Politique des cookies
                 </Link>
               </li>
@@ -39,20 +46,20 @@ export default function Footer (): ReactNode {
 
           {/* Resources */}
           <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-pink-flare-900'>Ressources</h3>
-            <ul className='space-y-2'>
+            <h3 className='text-lg font-semibold text-chestnut-deep'>Ressources</h3>
+            <ul className='space-y-3'>
               <li>
-                <Link href='/blog' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
+                <Link href='/blog' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href='/faq' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
+                <Link href='/faq' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href='/support' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
+                <Link href='/support' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   Support
                 </Link>
               </li>
@@ -61,30 +68,35 @@ export default function Footer (): ReactNode {
 
           {/* Social */}
           <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-pink-flare-900'>Suivez-nous</h3>
-            <ul className='space-y-2'>
+            <h3 className='text-lg font-semibold text-chestnut-deep'>Suivez-nous</h3>
+            <ul className='space-y-3'>
               <li>
-                <Link href='https://twitter.com' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
-                  Twitter
+                <Link href='https://twitter.com' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200 flex items-center gap-2'>
+                  <span>🐦</span>
+                  <span>Twitter</span>
                 </Link>
               </li>
               <li>
-                <Link href='https://instagram.com' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
-                  Instagram
+                <Link href='https://instagram.com' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200 flex items-center gap-2'>
+                  <span>📸</span>
+                  <span>Instagram</span>
                 </Link>
               </li>
               <li>
-                <Link href='https://discord.com' className='text-pink-flare-600 hover:text-pink-flare-700 text-sm'>
-                  Discord
+                <Link href='https://discord.com' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200 flex items-center gap-2'>
+                  <span>💬</span>
+                  <span>Discord</span>
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className='mt-8 pt-8 border-t border-pink-flare-200'>
-          <p className='text-center text-pink-flare-600 text-sm'>
-            © {new Date().getFullYear()} TamagoTcheat. Tous droits réservés.
+        <div className='mt-12 pt-8 border-t-2 border-autumn-peach/50'>
+          <p className='text-center text-chestnut-medium leading-relaxed text-sm flex items-center justify-center gap-2'>
+            <span>© {new Date().getFullYear()} TamagoTcheat.</span>
+            <span>Tous droits réservés</span>
+            <span>✨</span>
           </p>
         </div>
       </div>

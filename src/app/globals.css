@@ -1,55 +1,174 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================
+   🍂 TAMAGOTCHEAT DESIGN SYSTEM 🍂
+   Inspired by Animal Crossing & Tamagotchi
+   Autumn Cozy Vibes - Pastel Colors
+   
+   NOTE: Tailwind v4 uses @theme inline for custom colors
+   Use classes like: bg-autumn-cream, text-moss-medium, border-maple-warm
+   ============================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* 🍂 Autumn Pastel Palette - Main Colors */
+  --color-autumn-cream: #fef9f5;
+  --color-autumn-peach: #ffd4b8;
+  --color-autumn-coral: #ffb499;
+  --color-autumn-terracotta: #e89b7f;
+  --color-autumn-cinnamon: #c97a5f;
+  --color-autumn-brown: #a65d47;
+  
+  /* 🌿 Nature Greens - Soft & Mossy */
+  --color-moss-light: #e8f3e8;
+  --color-moss-pastel: #c5ddc5;
+  --color-moss-soft: #a8c8a8;
+  --color-moss-medium: #7da87d;
+  --color-moss-deep: #5a8a5a;
+  
+  /* 🍁 Warm Reds - Maple Leaves */
+  --color-maple-blush: #ffe5e5;
+  --color-maple-light: #ffcaca;
+  --color-maple-soft: #ffa5a5;
+  --color-maple-warm: #ff8585;
+  --color-maple-deep: #d96b6b;
+  
+  /* 🌰 Cozy Browns - Chestnuts */
+  --color-chestnut-cream: #f5f0ea;
+  --color-chestnut-light: #e8dfd5;
+  --color-chestnut-soft: #d4c4b0;
+  --color-chestnut-medium: #b39b7f;
+  --color-chestnut-dark: #8b7355;
+  --color-chestnut-deep: #6b5643;
+  
+  /* 🌸 Pastel Accents - Cute & Playful */
+  --color-pastel-lavender: #e8d9ff;
+  --color-pastel-mint: #d9f5e8;
+  --color-pastel-sky: #d9ebff;
+  --color-pastel-lemon: #fff9d9;
+  --color-pastel-rose: #ffd9e8;
+  
+  /* 🎨 Monster Colors - Vibrant but Soft */
+  --color-monster-pink: #ffb5d9;
+  --color-monster-blue: #b5d9ff;
+  --color-monster-green: #b5ffcc;
+  --color-monster-purple: #d9b5ff;
+  --color-monster-orange: #ffd9b5;
+  --color-monster-yellow: #fff9b5;
 
-  --color-pink-flare-50: #fbf5f5;
-  --color-pink-flare-100: #f8ebed;
-  --color-pink-flare-200: #f1dade;
-  --color-pink-flare-300: #e6c0c7;
-  --color-pink-flare-400: #d597a4;
-  --color-pink-flare-500: #c27184;
-  --color-pink-flare-600: #ab536b;
-  --color-pink-flare-700: #8f4159;
-  --color-pink-flare-800: #78394e;
-  --color-pink-flare-900: #683346;
-  --color-pink-flare-950: #391824;
-
-  --color-maroon-oak-50: #fdf3f3;
-  --color-maroon-oak-100: #fbe9e8;
-  --color-maroon-oak-200: #f8d3d3;
-  --color-maroon-oak-300: #f1b0b0;
-  --color-maroon-oak-400: #e98386;
-  --color-maroon-oak-500: #dc575e;
-  --color-maroon-oak-600: #c73745;
-  --color-maroon-oak-700: #a72939;
-  --color-maroon-oak-800: #8c2534;
-  --color-maroon-oak-900: #792232;
-  --color-maroon-oak-950: #58131e;
-
-  --color-monsters-pink: #ffb5e8;
-  --color-monsters-green: #b5e8d3;
-  --color-monsters-blue: #c5e1ff;
-  --color-monsters-purple: #d4b5ff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Pink Flare (legacy support) - mapped to autumn palette */
+  --color-pink-flare-50: #ffe5e5;
+  --color-pink-flare-100: #fef9f5;
+  --color-pink-flare-200: #ffd4b8;
+  --color-pink-flare-300: #ffb499;
+  --color-pink-flare-400: #e89b7f;
+  --color-pink-flare-500: #c97a5f;
+  --color-pink-flare-600: #a65d47;
+  --color-pink-flare-700: #8b7355;
+  --color-pink-flare-800: #6b5643;
+  --color-pink-flare-900: #4a3428;
+  --color-pink-flare-950: #2d1f17;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #fef9f5;
+  color: #4a3428;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #2d1f17;
+    color: #fef9f5;
+  }
+}
+
+/* ============================================
+   ✨ ANIMATIONS - Subtle & Delightful
+   ============================================ */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+@keyframes bounce-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animation Classes */
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-wiggle {
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+.animate-bounce-soft {
+  animation: bounce-soft 2s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out;
 }

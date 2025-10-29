@@ -27,35 +27,50 @@ export default async function WalletPage (): Promise<React.ReactNode> {
 
   return (
     <AppLayout>
-      <div className='container mx-auto px-4 py-8'>
-        <div className='mb-8'>
-          <h1 className='text-4xl font-bold text-gray-900 mb-2'>
-            Mon Wallet 💰
-          </h1>
-          <p className='text-lg text-gray-600'>
-            Gère ta monnaie virtuelle et tes achats
-          </p>
-        </div>
-
-        <div className='max-w-2xl mx-auto'>
-          <div className='bg-gradient-to-br from-pink-flare-100 to-pink-flare-200 rounded-2xl p-8 shadow-lg text-center'>
-            <div className='text-8xl mb-6'>🚧</div>
-            <h2 className='text-3xl font-bold text-gray-900 mb-4'>
-              Page en construction
-            </h2>
-            <p className='text-xl text-gray-700 mb-6'>
-              Le système de wallet arrive bientôt !
+      <div className='section-cozy'>
+        <div className='container-cozy'>
+          <div className='mb-8 animate-fade-in-up'>
+            <h1 className='heading-xl mb-2 text-gradient-autumn'>
+              Mon Wallet 💰
+            </h1>
+            <p className='text-xl text-cosy'>
+              Gère ta monnaie virtuelle et tes achats
             </p>
-            <div className='bg-white/80 rounded-xl p-6'>
-              <p className='text-gray-600 mb-4'>
-                Fonctionnalités à venir :
+          </div>
+
+          <div className='max-w-2xl mx-auto'>
+            <div className='card-autumn p-12 text-center animate-scale-in'>
+              <div className='text-8xl mb-6 animate-float'>🚧</div>
+              <h2 className='heading-lg mb-6'>
+                Page en construction
+              </h2>
+              <p className='text-2xl text-cosy mb-8'>
+                Le système de wallet arrive bientôt !
               </p>
-              <ul className='text-left text-gray-700 space-y-2'>
-                <li>💎 Gestion de ta monnaie virtuelle</li>
-                <li>🛒 Boutique d'items pour tes créatures</li>
-                <li>🎁 Récompenses quotidiennes</li>
-                <li>📊 Historique des transactions</li>
-              </ul>
+
+              <div className='card-cozy p-8 animate-slide-in-right'>
+                <p className='text-lg font-semibold text-chestnut-deep mb-4'>
+                  Fonctionnalités à venir :
+                </p>
+                <ul className='text-left text-cosy space-y-3'>
+                  <li className='flex items-center gap-3'>
+                    <span className='text-2xl'>💎</span>
+                    <span>Gestion de ta monnaie virtuelle</span>
+                  </li>
+                  <li className='flex items-center gap-3'>
+                    <span className='text-2xl'>🛒</span>
+                    <span>Boutique d'items pour tes créatures</span>
+                  </li>
+                  <li className='flex items-center gap-3'>
+                    <span className='text-2xl'>🎁</span>
+                    <span>Récompenses quotidiennes</span>
+                  </li>
+                  <li className='flex items-center gap-3'>
+                    <span className='text-2xl'>📊</span>
+                    <span>Historique des transactions</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

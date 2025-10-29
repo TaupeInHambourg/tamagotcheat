@@ -30,7 +30,7 @@ interface AppLayoutProps {
  */
 export default function AppLayout ({ children }: AppLayoutProps): React.ReactNode {
   return (
-    <div className='min-h-screen flex flex-col bg-gray-50'>
+    <div className='min-h-screen flex flex-col bg-autumn-gradient bg-cozy-pattern'>
       {/* Header desktop (masqué sur mobile) */}
       <AppHeader />
 

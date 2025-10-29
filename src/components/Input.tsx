@@ -1,5 +1,11 @@
+/**
+ * Composant Input - Style Cosy Automnal
+ *
+ * Responsabilité unique : Afficher un champ de saisie avec label et gestion d'erreur
+ * Suit les principes SOLID avec une interface claire
+ */
 function InputField ({
-  type,
+  type = 'text',
   name,
   label,
   value,
@@ -7,7 +13,7 @@ function InputField ({
   onChange,
   onChangeText,
   placeholder,
-  required
+  required = false
 }: {
   type?: string
   name?: string
@@ -26,9 +32,12 @@ function InputField ({
 
   return (
     <div className='space-y-2'>
-      <label htmlFor={name} className='block text-sm font-medium text-pink-flare-800'>
-        {label}
-      </label>
+      {label !== undefined && (
+        <label htmlFor={name} className='block text-sm font-semibold text-chestnut-deep'>
+          {label}
+          {required && <span className='text-maple-warm ml-1'>*</span>}
+        </label>
+      )}
       <input
         type={type}
         id={name}
@@ -37,13 +46,13 @@ function InputField ({
         onChange={handleChange}
         placeholder={placeholder}
         required={required}
-        className={`w-full px-4 py-2.5 rounded-lg border
-          focus:outline-none focus:ring-2 focus:border-transparent
-          placeholder:text-pink-flare-300 bg-white/50 backdrop-blur-sm text-pink-flare-900
-          ${error !== undefined ? 'border-red-500 focus:ring-red-500' : 'border-pink-flare-200 focus:ring-pink-flare-500'}`}
+        className={`input-cozy ${error !== undefined ? 'border-maple-warm focus:ring-maple-warm/20' : ''}`}
       />
       {error !== undefined && (
-        <p className='mt-1 text-sm text-red-500'>{error}</p>
+        <p className='mt-1 text-sm text-maple-warm flex items-center gap-1'>
+          <span>⚠️</span>
+          <span>{error}</span>
+        </p>
       )}
     </div>
   )

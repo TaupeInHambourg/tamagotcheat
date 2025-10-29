@@ -1,7 +1,11 @@
 import { MonsterCard } from '../monsters'
 
-// Single Responsibility: MonstersSection orchestrates the monster gallery
-export default function MonstersSection (): React.ReactNode {
+/**
+ * MonstersShowcase - Galerie des monstres
+ *
+ * Responsabilité unique : Afficher la galerie des créatures disponibles
+ */
+export default function MonstersShowcase (): React.ReactNode {
   const monsters = [
     {
       name: 'Chat Cosmique',
@@ -34,20 +38,22 @@ export default function MonstersSection (): React.ReactNode {
   ] as const
 
   return (
-    <section id='monsters' className='py-20 bg-gray-50'>
-      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+    <section id='monsters' className='py-20 lg:py-28 px-6 lg:px-8 bg-gradient-to-br from-moss-light/30 to-autumn-cream'>
+      <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-16'>
-          <h2 className='text-3xl md:text-4xl font-bold text-gray-900 mb-4'>
-            Rencontrez vos futurs compagnons
+          <h2 className='text-4xl sm:text-5xl font-bold text-chestnut-deep leading-tight mb-6'>
+            Rencontrez vos futurs compagnons 🌟
           </h2>
-          <p className='text-xl text-gray-600 max-w-2xl mx-auto'>
+          <p className='text-xl text-chestnut-medium leading-relaxed max-w-2xl mx-auto'>
             Chaque créature a sa propre personnalité et ses besoins spécifiques
           </p>
         </div>
 
-        <div className='grid md:grid-cols-4 gap-6'>
+        <div className='grid md:grid-cols-4 gap-8'>
           {monsters.map((monster) => (
-            <MonsterCard key={monster.name} monster={monster} />
+            <div key={monster.name}>
+              <MonsterCard monster={monster} />
+            </div>
           ))}
         </div>
       </div>

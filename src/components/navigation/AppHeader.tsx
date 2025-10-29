@@ -39,32 +39,24 @@ export default function AppHeader (): React.ReactNode {
   ]
 
   return (
-    <header className='hidden md:block bg-white/80 backdrop-blur-md border-b border-pink-flare-100 sticky top-0 z-50 shadow-sm'>
-      <nav className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-        <div className='flex justify-between items-center h-16'>
+    <header className='hidden md:block bg-white/90 backdrop-blur-lg sticky top-0 z-50 border-b-2 border-autumn-peach/50 shadow-lg'>
+      <nav className='max-w-7xl mx-auto px-6 lg:px-8'>
+        <div className='flex justify-between items-center h-20'>
           {/* Logo */}
-          <Link href='/dashboard' className='flex-shrink-0 group'>
-            <div className='flex items-center space-x-3 transform transition-transform duration-200 group-hover:scale-105'>
-              <div className='relative'>
-                <div className='absolute inset-0 bg-gradient-to-r from-pink-flare-400 to-pink-flare-500 rounded-full blur-sm opacity-30 group-hover:opacity-50 transition-opacity' />
-                <span className='text-3xl relative'>🎮</span>
-              </div>
-              <span className='text-2xl font-bold text-transparent bg-gradient-to-r from-pink-flare-600 to-pink-flare-800 bg-clip-text'>
-                TamagoTcheat
-              </span>
-            </div>
+          <Link href='/dashboard' className='text-2xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent hover:scale-105 transition-transform duration-200 inline-block'>
+            TamagoTcheat 🍂
           </Link>
 
           {/* Navigation principale */}
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center space-x-3'>
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 transform hover:scale-105 ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 transform hover:scale-105 active:scale-95 ${
                   isActive(item.href)
-                    ? 'bg-pink-flare-100 text-pink-flare-700 shadow-sm'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-autumn-peach to-autumn-coral text-chestnut-deep shadow-md'
+                    : 'text-chestnut-medium hover:bg-autumn-cream hover:text-chestnut-deep'
                 }`}
               >
                 <span className='text-xl'>{item.icon}</span>
@@ -74,10 +66,10 @@ export default function AppHeader (): React.ReactNode {
           </div>
 
           {/* Actions utilisateur */}
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center space-x-3'>
             <button
               onClick={handleLogout}
-              className='flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-all duration-200 transform hover:scale-105'
+              className='flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-maple-light text-maple-deep hover:bg-maple-soft transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md'
             >
               <span className='text-xl'>🚪</span>
               <span>Quitter</span>

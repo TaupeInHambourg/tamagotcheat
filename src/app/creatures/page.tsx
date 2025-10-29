@@ -32,31 +32,38 @@ export default async function CreaturesPage (): Promise<React.ReactNode> {
 
   return (
     <AppLayout>
-      <div className='container mx-auto px-4 py-8'>
-        <div className='mb-8'>
-          <h1 className='text-4xl font-bold text-gray-900 mb-2'>
-            Mes Créatures 🐾
-          </h1>
-          <p className='text-lg text-gray-600'>
-            Retrouve toutes tes créatures adorables ici !
-          </p>
-        </div>
+      <div className='section-cozy'>
+        <div className='container-cozy'>
+          <div className='mb-8 animate-fade-in-up'>
+            <h1 className='heading-xl mb-2 text-gradient-autumn'>
+              Mes Créatures 🐾
+            </h1>
+            <p className='text-xl text-cozy'>
+              Retrouve toutes tes créatures adorables ici !
+            </p>
+          </div>
 
-        {monsters.length === 0
-          ? (
-            <div className='text-center py-16'>
-              <div className='text-6xl mb-4'>😢</div>
-              <h2 className='text-2xl font-bold text-gray-900 mb-2'>
-                Tu n'as pas encore de créature
-              </h2>
-              <p className='text-gray-600'>
-                Retourne au dashboard pour créer ta première créature !
-              </p>
-            </div>
-            )
-          : (
-            <MonstersList monsters={monsters} />
-            )}
+          {monsters.length === 0
+            ? (
+              <div className='text-center py-16 card-autumn animate-scale-in'>
+                <div className='text-8xl mb-6 animate-wiggle'>😢</div>
+                <h2 className='heading-md mb-4'>
+                  Tu n'as pas encore de créature
+                </h2>
+                <p className='text-xl text-cosy mb-6'>
+                  Retourne au dashboard pour créer ta première créature !
+                </p>
+                <div className='inline-block'>
+                  <span className='badge-autumn'>🍂 Commence ton aventure</span>
+                </div>
+              </div>
+              )
+            : (
+              <div className='animate-fade-in-up'>
+                <MonstersList monsters={monsters} />
+              </div>
+              )}
+        </div>
       </div>
     </AppLayout>
   )

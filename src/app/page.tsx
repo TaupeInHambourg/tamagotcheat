@@ -26,13 +26,15 @@ export const metadata: Readonly<Metadata> = {
 
 export default function Home (): React.ReactNode {
   return (
-    <div>
+    <div className='bg-gradient-to-br from-autumn-cream via-autumn-peach/20 to-moss-light min-h-screen'>
       <Header />
-      <HeroSection />
-      <FeaturesSection />
-      <MonstersShowcase />
-      <ActionsSection />
-      <NewsletterSection />
+      <main className='pt-20'>
+        <HeroSection />
+        <FeaturesSection />
+        <MonstersShowcase />
+        <ActionsSection />
+        <NewsletterSection />
+      </main>
       <Footer />
     </div>
   )
