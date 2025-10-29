@@ -62,32 +62,32 @@ export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonster
   }
 
   const getTemplateClasses = (id: string, isSelected: boolean): string => {
-    const baseClasses = 'block w-full p-4 rounded-lg cursor-pointer transition-all duration-200 ease-in-out border-2'
+    const baseClasses = 'block w-full max-w-32 aspect-square rounded-lg cursor-pointer transition-all duration-300 ease-in-out border-4 shadow-md hover:shadow-xl relative mx-auto'
 
     switch (id) {
-      case 'fairy-monster':
+      case 'chat-cosmique': // Soft Blue (#a2bffe)
         return `${baseClasses} ${
           isSelected
-            ? 'border-2 border-pink-500 bg-[var(--color-monsters-pink)] bg-opacity-50'
-            : 'hover:border-pink-300 bg-[var(--color-monsters-pink)] bg-opacity-20'
+            ? 'border-[#7a9ffd] bg-[#a2bffe] shadow-[#a2bffe]/60 scale-110 ring-4 ring-[#d0ddff]'
+            : 'border-[#d0ddff] bg-[#d0ddff] hover:border-[#a2bffe] hover:scale-105'
         }`
-      case 'chat-cosmique':
+      case 'dino-nuage': // Soft Green (lighter)
         return `${baseClasses} ${
           isSelected
-            ? 'border-2 border-blue-500 bg-[var(--color-monsters-blue)] bg-opacity-50'
-            : 'hover:border-blue-300 bg-[var(--color-monsters-blue)] bg-opacity-20'
+            ? 'border-[#9dd6a6] bg-[#bce5c3] shadow-[#bce5c3]/60 scale-110 ring-4 ring-[#e0f4e4]'
+            : 'border-[#e0f4e4] bg-[#e0f4e4] hover:border-[#bce5c3] hover:scale-105'
         }`
-      case 'grenouille-etoilee':
+      case 'fairy-monster': // Soft Pink (#ff1059)
         return `${baseClasses} ${
           isSelected
-            ? 'border-2 border-purple-500 bg-[var(--color-monsters-purple)] bg-opacity-50'
-            : 'hover:border-purple-300 bg-[var(--color-monsters-purple)] bg-opacity-20'
+            ? 'border-[#d90d4a] bg-[#ff1059] shadow-[#ff1059]/60 scale-110 ring-4 ring-[#ff8aad]'
+            : 'border-[#ff8aad] bg-[#ff8aad] hover:border-[#ff1059] hover:scale-105'
         }`
-      case 'dino-nuage':
+      case 'grenouille-etoilee': // Soft Purple (lighter)
         return `${baseClasses} ${
           isSelected
-            ? 'border-2 border-green-500 bg-[var(--color-monsters-green)] bg-opacity-50'
-            : 'hover:border-green-300 bg-[var(--color-monsters-green)] bg-opacity-20'
+            ? 'border-[#bea8e0] bg-[#d5c4ed] shadow-[#d5c4ed]/60 scale-110 ring-4 ring-[#ebe3f5]'
+            : 'border-[#ebe3f5] bg-[#ebe3f5] hover:border-[#d5c4ed] hover:scale-105'
         }`
       default:
         return baseClasses
@@ -95,38 +95,43 @@ export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonster
   }
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-6'>
+    <form onSubmit={handleSubmit} className='space-y-8'>
       {error !== '' && (
-        <div className='bg-red-50 border-l-4 border-red-400 p-4 rounded'>
+        <div className='bg-maple-blush border-l-4 border-maple-warm p-4 rounded-xl shadow-sm'>
           <div className='flex'>
             <div className='flex-shrink-0'>
-              <svg className='h-5 w-5 text-red-400' viewBox='0 0 20 20' fill='currentColor'>
+              <svg className='h-5 w-5 text-maple-warm' viewBox='0 0 20 20' fill='currentColor'>
                 <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z' clipRule='evenodd' />
               </svg>
             </div>
             <div className='ml-3'>
-              <p className='text-sm text-red-700'>{error}</p>
+              <p className='text-sm text-maple-deep font-medium'>{error}</p>
             </div>
           </div>
         </div>
       )}
 
-      <div className='space-y-4'>
-        <div className='space-y-2'>
+      <div className='space-y-6'>
+        <div className='space-y-3'>
+          <label className='block text-base font-bold text-chestnut-deep'>
+            🌟 Donne un nom à ta créature
+          </label>
           <InputField
-            label='Nom de ta créature'
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder='Ex: Fluffy'
+            placeholder='Ex: Fluffy, Piko, Mochi...'
             required
           />
+          <p className='text-xs text-chestnut-medium italic'>
+            Choisis un nom unique et mignon pour ton nouveau compagnon ! 💕
+          </p>
         </div>
 
-        <div className='space-y-2'>
-          <label className='block text-sm font-medium text-pink-flare-800'>
-            Choisi ta couleur préférée :
+        <div className='space-y-4'>
+          <label className='block text-base font-bold text-chestnut-deep'>
+            🎨 Choisis ta couleur préférée
           </label>
-          <div className='grid grid-cols-2 gap-3'>
+          <div className='grid grid-cols-4 gap-4'>
             {Object.entries(MonsterTemplates).map(([id, template]) => (
               <div key={id} className='relative'>
                 <input
@@ -142,20 +147,30 @@ export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonster
                   htmlFor={`template-${id}`}
                   className={getTemplateClasses(id, formData.templateId === id)}
                 >
-                  <div className='flex items-center gap-3' />
+                  {/* Visual-only colored box, no content */}
+                  {formData.templateId === id && (
+                    <div className='absolute inset-0 flex items-center justify-center'>
+                      <svg className='w-12 h-12 text-white drop-shadow-lg' fill='currentColor' viewBox='0 0 20 20'>
+                        <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
+                      </svg>
+                    </div>
+                  )}
                 </label>
               </div>
             ))}
           </div>
+          <p className='text-xs text-chestnut-medium italic'>
+            Chaque créature a sa propre personnalité unique ! 🌈
+          </p>
         </div>
       </div>
 
-      <div className='flex justify-end gap-3'>
-        <Button type='button' variant='ghost' onClick={onCancel}>
+      <div className='flex justify-end gap-4 pt-4 border-t-2 border-autumn-peach/30'>
+        <Button type='button' variant='ghost' onClick={onCancel} size='lg'>
           Annuler
         </Button>
-        <Button type='submit' variant='primary'>
-          Créer
+        <Button type='submit' variant='primary' size='lg'>
+          ✨ Créer ma créature
         </Button>
       </div>
     </form>

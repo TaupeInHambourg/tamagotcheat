@@ -55,6 +55,20 @@
   --color-monster-orange: #ffd9b5;
   --color-monster-yellow: #fff9b5;
 
+  /* 🎨 Creature Selection Colors - Soft & Gentle */
+  --color-creature-green: #bce5c3;
+  --color-creature-green-light: #e0f4e4;
+  --color-creature-green-dark: #9dd6a6;
+  --color-creature-blue: #a2bffe;
+  --color-creature-blue-light: #d0ddff;
+  --color-creature-blue-dark: #7a9ffd;
+  --color-creature-pink: #ff1059;
+  --color-creature-pink-light: #ff8aad;
+  --color-creature-pink-dark: #d90d4a;
+  --color-creature-purple: #d5c4ed;
+  --color-creature-purple-light: #ebe3f5;
+  --color-creature-purple-dark: #bea8e0;
+
   /* Pink Flare (legacy support) - mapped to autumn palette */
   --color-pink-flare-50: #ffe5e5;
   --color-pink-flare-100: #fef9f5;
