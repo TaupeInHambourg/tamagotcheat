@@ -5,11 +5,28 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 
 /**
- * Header de la landing page - Style Cosy Automnal
+ * Landing Page Header Component
  *
- * Responsabilité unique : Navigation de la page d'accueil
+ * Main navigation header for the landing page with autumn/cozy styling.
+ * Provides navigation links and call-to-action button.
+ *
+ * Features:
+ * - Fixed positioning with backdrop blur
+ * - Responsive navigation menu
+ * - Smooth hover animations
+ * - Gradient branding
+ *
+ * Follows Single Responsibility Principle:
+ * - Only handles landing page navigation
+ * - Does not manage authentication state
+ *
+ * @component
  */
 export default function Header (): ReactNode {
+  /**
+   * Handles navigation to sign-in page
+   * Uses client-side navigation for better UX
+   */
   const handleSignin = (): void => {
     window.location.href = '/sign-in'
   }

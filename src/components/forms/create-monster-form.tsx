@@ -1,12 +1,30 @@
+/**
+ * Create Monster Form Component
+ *
+ * Form for creating a new monster with name and template selection.
+ * Follows SOLID principles with separated concerns and proper validation.
+ *
+ * Features:
+ * - Real-time form validation
+ * - Visual template selection with color-coded options
+ * - Error handling and user feedback
+ * - Responsive design
+ *
+ * @component
+ */
+
 'use client'
 
 import { useState } from 'react'
-import { CreateMonsterDto, MonsterTemplates, MonsterTemplate } from '@/types/monster.types'
+import { CreateMonsterDto, MonsterTemplates } from '@/types/monster.types'
 import { ValidationError, validateMonsterForm } from '@/utils/monster-form-validator'
 
 import Button from '../Button'
 import InputField from '../Input'
 
+/**
+ * Monster color constants (legacy - not actively used but kept for compatibility)
+ */
 const MONSTER_COLORS = {
   green: 'var(--color-monsters-green)',
   blue: 'var(--color-monsters-blue)',
@@ -16,11 +34,19 @@ const MONSTER_COLORS = {
 
 type MonsterColorKey = keyof typeof MONSTER_COLORS
 
+/**
+ * Props for the CreateMonsterForm component
+ */
 interface CreateMonsterFormProps {
+  /** Callback invoked when form is successfully submitted */
   onSubmit: (data: CreateMonsterDto) => void
+  /** Callback invoked when user cancels the form */
   onCancel: () => void
 }
 
+/**
+ * Internal form state structure
+ */
 interface FormData {
   name: string
   colorKey: MonsterColorKey
@@ -28,27 +54,35 @@ interface FormData {
 }
 
 export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonsterFormProps): React.ReactNode {
+  // Form state management
   const [formData, setFormData] = useState<FormData>({
     name: '',
     colorKey: 'pink',
-    templateId: 'chat-cosmique' // Template par défaut
+    templateId: 'chat-cosmique' // Default template
   })
 
   const [error, setError] = useState<string>('')
 
+  /**
+   * Handles form submission with validation
+   * @param e - Form event
+   */
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault()
     setError('')
 
     try {
+      // Validate form data
       validateMonsterForm({ name: formData.name, templateId: formData.templateId })
 
+      // Submit valid data
       onSubmit({
         name: formData.name,
         color: MONSTER_COLORS[formData.colorKey],
         templateId: formData.templateId
       })
     } catch (err) {
+      // Handle validation errors
       if (err instanceof ValidationError) {
         setError(err.message)
       } else {
@@ -57,10 +91,22 @@ export default function CreateMonsterForm ({ onSubmit, onCancel }: CreateMonster
     }
   }
 
+  /**
+   * Updates the selected template
+   * @param templateId - The template identifier to select
+   */
   const handleTemplateChange = (templateId: string): void => {
     setFormData({ ...formData, templateId })
   }
 
+  /**
+   * Generates CSS classes for template selection boxes
+   * Uses color-coded styling based on template type
+   *
+   * @param id - Template identifier
+   * @param isSelected - Whether this template is currently selected
+   * @returns CSS class string
+   */
   const getTemplateClasses = (id: string, isSelected: boolean): string => {
     const baseClasses = 'block w-full max-w-32 aspect-square rounded-lg cursor-pointer transition-all duration-300 ease-in-out border-4 shadow-md hover:shadow-xl relative mx-auto'
 

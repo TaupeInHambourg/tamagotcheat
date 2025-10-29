@@ -1,3 +1,20 @@
+/**
+ * Landing Page
+ *
+ * Main entry point for the Tamagotcheat application.
+ * Displays marketing content and directs users to create their first monster.
+ *
+ * Structure:
+ * - Hero section with main CTA
+ * - Features showcase
+ * - Monster templates preview
+ * - Available actions overview
+ * - Newsletter signup
+ *
+ * SEO optimized with comprehensive metadata.
+ *
+ * @page
+ */
 
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -8,6 +25,9 @@ import ActionsSection from '@/components/home/ActionsSection'
 import NewsletterSection from '@/components/home/NewsletterSection'
 import { Metadata } from 'next'
 
+/**
+ * Page metadata for SEO and social sharing
+ */
 export const metadata: Readonly<Metadata> = {
   title: 'Tamagotcheat - Adoptez votre compagnon virtuel unique',
   description: 'Créez, élevez et choyez votre petit monstre dans un univers magique et coloré. Une expérience attachante qui ravira petits et grands !',
