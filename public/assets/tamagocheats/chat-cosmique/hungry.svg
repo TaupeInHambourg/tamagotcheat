@@ -1,0 +1,204 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #C5E1FF;
+      --body-shadow: #A8D0FF;
+      --eye-white: #FFFFFF;
+      --eye-pupil: #FFB5E8;
+      --eye-shine: #FFFFFF;
+      --mouth: #FF6B6B;
+      --ear-main: #E5B8FF;
+      --ear-inner: #F5D9FF;
+      --cheek: #FFD4F0;
+      --belly: #E8F4FF;
+      --belly-rumble: #D4E8FF;
+      --feet: #D4E8FF;
+      --tail: #E5B8FF;
+      --star: #FFF9B5;
+      --drool: #B8E8FF;
+      --tongue: #FF8FA3;
+    }
+    
+    /* Animation de rebond affamé */
+    @keyframes hungry-bounce {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      25% { transform: translateY(-3px) scale(1.02); }
+      50% { transform: translateY(0px) scale(1); }
+      75% { transform: translateY(-2px) scale(1.01); }
+    }
+    
+    /* Animation des yeux affamés */
+    @keyframes hungry-stare {
+      0%, 90%, 100% { transform: scale(1); }
+      95% { transform: scale(0.9, 0.1); }
+    }
+    
+    /* Animation des oreilles excitées */
+    @keyframes ear-excited {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-10deg); }
+    }
+    
+    /* Animation de la queue qui remue vite */
+    @keyframes tail-wag-fast {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-20deg); }
+      75% { transform: rotate(20deg); }
+    }
+    
+    /* Animation du ventre qui gargouille */
+    @keyframes belly-rumble {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+    
+    /* Animation de la bave */
+    @keyframes drool-drop {
+      0% { opacity: 0; transform: translateY(0); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(5px); }
+    }
+    
+    /* Animation des étoiles excitées */
+    @keyframes star-excited {
+      0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      50% { opacity: 0.7; transform: scale(1.2) rotate(10deg); }
+    }
+    
+    .monster-body {
+      animation: hungry-bounce 1s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    
+    .eye-group {
+      animation: hungry-stare 3s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .ear-left {
+      animation: ear-excited 0.8s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    
+    .ear-right {
+      animation: ear-excited 0.8s ease-in-out infinite 0.4s;
+      transform-origin: bottom center;
+    }
+    
+    .tail {
+      animation: tail-wag-fast 0.6s ease-in-out infinite;
+      transform-origin: top left;
+    }
+    
+    .belly-rumble {
+      animation: belly-rumble 1.5s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .drool {
+      animation: drool-drop 2s ease-in-out infinite;
+    }
+    
+    .star {
+      animation: star-excited 1.5s ease-in-out infinite;
+    }
+  </style>
+  
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <!-- Queue qui remue vite -->
+    <g class="tail">
+      <rect x="5" y="18" width="2" height="1" fill="var(--tail)"/>
+      <rect x="4" y="16" width="2" height="2" fill="var(--tail)"/>
+      <rect x="3" y="14" width="2" height="2" fill="var(--tail)"/>
+      <rect x="3" y="12" width="2" height="2" fill="var(--tail)"/>
+    </g>
+    
+    <!-- Oreille gauche excitée -->
+    <g class="ear-left">
+      <rect x="9" y="8" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="9" y="6" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="10" y="7" width="1" height="2" fill="var(--ear-inner)"/>
+    </g>
+    
+    <!-- Oreille droite excitée -->
+    <g class="ear-right">
+      <rect x="20" y="8" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="20" y="6" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="21" y="7" width="1" height="2" fill="var(--ear-inner)"/>
+    </g>
+    
+    <!-- Tête -->
+    <rect x="10" y="10" width="12" height="10" fill="var(--body-color)"/>
+    <rect x="9" y="12" width="14" height="6" fill="var(--body-color)"/>
+    
+    <!-- Corps -->
+    <rect x="11" y="20" width="10" height="4" fill="var(--body-color)"/>
+    <rect x="10" y="21" width="12" height="2" fill="var(--body-color)"/>
+    
+    <!-- Ombre -->
+    <rect x="10" y="19" width="12" height="1" fill="var(--body-shadow)"/>
+    
+    <!-- Ventre qui gargouille -->
+    <g class="belly-rumble">
+      <rect x="13" y="20" width="6" height="3" fill="var(--belly)"/>
+      <rect x="14" y="21" width="2" height="1" fill="var(--belly-rumble)"/>
+      <rect x="16" y="21" width="2" height="1" fill="var(--belly-rumble)"/>
+    </g>
+    
+    <!-- Yeux affamés (très grands) -->
+    <g class="eye-group">
+      <!-- Oeil gauche grand ouvert -->
+      <rect x="11" y="12" width="4" height="4" fill="var(--eye-white)"/>
+      <rect x="12" y="13" width="2" height="3" fill="var(--eye-pupil)"/>
+      <rect x="12" y="13" width="1" height="1" fill="var(--eye-shine)"/>
+      
+      <!-- Oeil droit grand ouvert -->
+      <rect x="17" y="12" width="4" height="4" fill="var(--eye-white)"/>
+      <rect x="18" y="13" width="2" height="3" fill="var(--eye-pupil)"/>
+      <rect x="18" y="13" width="1" height="1" fill="var(--eye-shine)"/>
+    </g>
+    
+    <!-- Joues affamées -->
+    <rect x="9" y="16" width="2" height="2" fill="var(--cheek)"/>
+    <rect x="21" y="16" width="2" height="2" fill="var(--cheek)"/>
+    
+    <!-- Nez -->
+    <rect x="15" y="16" width="2" height="1" fill="var(--mouth)"/>
+    
+    <!-- Bouche grande ouverte avec langue -->
+    <rect x="14" y="17" width="4" height="2" fill="var(--mouth)"/>
+    <rect x="13" y="18" width="1" height="1" fill="var(--mouth)"/>
+    <rect x="18" y="18" width="1" height="1" fill="var(--mouth)"/>
+    <!-- Langue qui sort -->
+    <rect x="15" y="19" width="2" height="1" fill="var(--tongue)"/>
+    
+    <!-- Bave qui coule -->
+    <g class="drool" style="animation-delay: 0s;">
+      <rect x="13" y="19" width="1" height="1" fill="var(--drool)"/>
+    </g>
+    <g class="drool" style="animation-delay: 1s;">
+      <rect x="18" y="19" width="1" height="1" fill="var(--drool)"/>
+    </g>
+    
+    <!-- Pattes qui piétinent -->
+    <rect x="11" y="24" width="3" height="2" fill="var(--feet)"/>
+    <rect x="11" y="26" width="4" height="2" fill="var(--feet)"/>
+    
+    <rect x="18" y="24" width="3" height="2" fill="var(--feet)"/>
+    <rect x="17" y="26" width="4" height="2" fill="var(--feet)"/>
+    
+    <!-- Étoiles excitées -->
+    <g class="star" style="animation-delay: 0s;">
+      <rect x="7" y="11" width="1" height="1" fill="var(--star)"/>
+    </g>
+    <g class="star" style="animation-delay: 0.5s;">
+      <rect x="24" y="14" width="1" height="1" fill="var(--star)"/>
+    </g>
+    <g class="star" style="animation-delay: 1s;">
+      <rect x="6" y="21" width="1" height="1" fill="var(--star)"/>
+    </g>
+  </g>
+</svg>

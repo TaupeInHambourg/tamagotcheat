@@ -1,0 +1,165 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #B8A8D9;
+      --body-shadow: #9B8ABF;
+      --eye-white: #FFFFFF;
+      --eye-pupil: #6B5A8F;
+      --eye-shine: #FFFFFF;
+      --eye-bg: #C9B8E8;
+      --mouth: #D999B8;
+      --belly: #D9C5E8;
+      --feet: #A899C9;
+      --spots: #9B8AB8;
+      --tongue: #D96B8F;
+      --crown: #D9C980;
+      --crown-jewel: #D969A4;
+      --tear: #A8D8E8;
+    }
+    
+    /* Animation d'affaissement */
+    @keyframes slump {
+      0%, 100% { transform: scale(0.98) translateY(2px); }
+      50% { transform: scale(0.97) translateY(3px); }
+    }
+    
+    /* Animation de clignement triste */
+    @keyframes sad-blink {
+      0%, 85%, 100% { opacity: 1; }
+      90%, 95% { opacity: 0; }
+    }
+    
+    /* Animation des larmes */
+    @keyframes tear-fall {
+      0% { opacity: 0; transform: translateY(0); }
+      20% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(5px); }
+    }
+    
+    /* Animation des taches ternes */
+    @keyframes spots-dim {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 0.8; }
+    }
+    
+    /* Animation de la couronne affaissée */
+    @keyframes crown-droop {
+      0%, 100% { transform: rotate(-3deg) translateY(1px); }
+      50% { transform: rotate(-5deg) translateY(2px); }
+    }
+    
+    .monster-body {
+      animation: slump 4s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .eye-group {
+      animation: sad-blink 6s ease-in-out infinite;
+    }
+    
+    .tear {
+      animation: tear-fall 3s ease-in-out infinite;
+    }
+    
+    .spot {
+      animation: spots-dim 4s ease-in-out infinite;
+    }
+    
+    .crown {
+      animation: crown-droop 3s ease-in-out infinite;
+      transform-origin: center center;
+    }
+  </style>
+  
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <!-- Pattes arrière affaissées -->
+    <rect x="8" y="23" width="2" height="3" fill="var(--feet)"/>
+    <rect x="6" y="26" width="5" height="2" fill="var(--feet)"/>
+    <rect x="6" y="28" width="2" height="1" fill="var(--feet)"/>
+    <rect x="9" y="28" width="2" height="1" fill="var(--feet)"/>
+    
+    <rect x="22" y="23" width="2" height="3" fill="var(--feet)"/>
+    <rect x="21" y="26" width="5" height="2" fill="var(--feet)"/>
+    <rect x="21" y="28" width="2" height="1" fill="var(--feet)"/>
+    <rect x="24" y="28" width="2" height="1" fill="var(--feet)"/>
+    
+    <!-- Corps principal affaissé -->
+    <rect x="10" y="15" width="12" height="8" fill="var(--body-color)"/>
+    <rect x="9" y="17" width="14" height="4" fill="var(--body-color)"/>
+    <rect x="11" y="14" width="10" height="1" fill="var(--body-color)"/>
+    <rect x="12" y="13" width="8" height="1" fill="var(--body-color)"/>
+    
+    <!-- Ombre plus marquée -->
+    <rect x="10" y="22" width="12" height="1" fill="var(--body-shadow)"/>
+    
+    <!-- Ventre -->
+    <rect x="12" y="18" width="8" height="4" fill="var(--belly)"/>
+    
+    <!-- Taches ternes sur le corps -->
+    <g class="spot" style="animation-delay: 0s;">
+      <rect x="11" y="16" width="2" height="2" fill="var(--spots)"/>
+    </g>
+    <g class="spot" style="animation-delay: 0.5s;">
+      <rect x="19" y="17" width="2" height="2" fill="var(--spots)"/>
+    </g>
+    <g class="spot" style="animation-delay: 1s;">
+      <rect x="14" y="21" width="2" height="1" fill="var(--spots)"/>
+    </g>
+    
+    <!-- Bras/pattes avant tombantes -->
+    <rect x="8" y="19" width="2" height="3" fill="var(--feet)"/>
+    <rect x="7" y="22" width="3" height="1" fill="var(--feet)"/>
+    
+    <rect x="22" y="19" width="2" height="3" fill="var(--feet)"/>
+    <rect x="22" y="22" width="3" height="1" fill="var(--feet)"/>
+    
+    <!-- Yeux globuleux tristes -->
+    <!-- Oeil gauche base -->
+    <rect x="11" y="11" width="3" height="4" fill="var(--eye-bg)"/>
+    <rect x="10" y="12" width="5" height="2" fill="var(--eye-bg)"/>
+    
+    <!-- Oeil droit base -->
+    <rect x="18" y="11" width="3" height="4" fill="var(--eye-bg)"/>
+    <rect x="17" y="12" width="5" height="2" fill="var(--eye-bg)"/>
+    
+    <!-- Yeux blancs avec paupières tombantes -->
+    <g class="eye-group">
+      <rect x="11" y="12" width="3" height="2" fill="var(--eye-white)"/>
+      <rect x="18" y="12" width="3" height="2" fill="var(--eye-white)"/>
+      <rect x="11" y="12" width="3" height="1" fill="var(--eye-bg)" opacity="0.3"/>
+      <rect x="18" y="12" width="3" height="1" fill="var(--eye-bg)" opacity="0.3"/>
+    </g>
+    
+    <!-- Pupilles baissées -->
+    <rect x="12" y="13" width="2" height="1" fill="var(--eye-pupil)"/>
+    <rect x="12" y="13" width="1" height="1" fill="var(--eye-shine)"/>
+    
+    <rect x="19" y="13" width="2" height="1" fill="var(--eye-pupil)"/>
+    <rect x="19" y="13" width="1" height="1" fill="var(--eye-shine)"/>
+    
+    <!-- Larmes qui tombent -->
+    <g class="tear" style="animation-delay: 0s;">
+      <rect x="12" y="14" width="1" height="1" fill="var(--tear)"/>
+    </g>
+    <g class="tear" style="animation-delay: 1.5s;">
+      <rect x="19" y="14" width="1" height="1" fill="var(--tear)"/>
+    </g>
+    
+    <!-- Petite couronne affaissée -->
+    <g class="crown">
+      <rect x="14" y="9" width="4" height="2" fill="var(--crown)"/>
+      <rect x="14" y="8" width="1" height="1" fill="var(--crown)"/>
+      <rect x="16" y="7" width="1" height="2" fill="var(--crown)"/>
+      <rect x="17" y="8" width="1" height="1" fill="var(--crown)"/>
+      <rect x="16" y="8" width="1" height="1" fill="var(--crown-jewel)" opacity="0.7"/>
+    </g>
+    
+    <!-- Bouche triste (inversée) -->
+    <rect x="13" y="18" width="1" height="1" fill="var(--mouth)"/>
+    <rect x="14" y="19" width="4" height="1" fill="var(--mouth)"/>
+    <rect x="18" y="18" width="1" height="1" fill="var(--mouth)"/>
+  </g>
+</svg>

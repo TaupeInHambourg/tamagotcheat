@@ -14,6 +14,7 @@ import type { IMonsterRepository } from '@/db/repositories/interfaces/monster.re
 import type { IMonsterService, OperationResult } from '../interfaces/monster.service.interface'
 import type { Monster, CreateMonsterDto, MonsterTemplate } from '@/types/monster.types'
 import { MonsterTemplates, MONSTER_STATES } from '@/types/monster.types'
+import { initializeMonsterTiming } from '@/utils/monster-state-decay'
 
 export class MonsterService implements IMonsterService {
   constructor (
@@ -89,13 +90,18 @@ export class MonsterService implements IMonsterService {
         }
       }
 
+      // Initialize timing for individual state changes
+      const timing = initializeMonsterTiming('happy')
+
       // Create monster
       const monster = await this.monsterRepository.create({
         ownerId: userId,
         name: monsterData.name.trim(),
         draw: template.draw,
-        state: 'happy',
-        level: 1
+        state: timing.state,
+        level: 1,
+        lastStateChange: timing.lastStateChange,
+        nextStateChangeAt: timing.nextStateChangeAt
       })
 
       return {

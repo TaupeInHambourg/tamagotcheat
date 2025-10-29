@@ -1,0 +1,194 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #B5D4E8;
+      --body-shadow: #99B8D4;
+      --eye-closed: #99B8D4;
+      --eye-lash: #7A9CB8;
+      --mouth: #C5A8BC;
+      --ear-main: #C5A8D8;
+      --ear-inner: #DFC5E8;
+      --cheek: #D8C9D4;
+      --belly: #D4E4F0;
+      --feet: #B8D4E8;
+      --tail: #C5A8D8;
+      --star: #E8E5C9;
+      --zzz: #D4E8F5;
+      --sleep-bubble: #E8F4F9;
+    }
+    
+    /* Animation de respiration lente */
+    @keyframes sleep-breathe {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      50% { transform: translateY(1px) scaleY(1.03); }
+    }
+    
+    /* Animation des Z qui montent */
+    @keyframes zzz-float {
+      0% { opacity: 0; transform: translateY(0) translateX(0); }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-8px) translateX(2px); }
+    }
+    
+    /* Animation des oreilles au repos */
+    @keyframes ear-rest {
+      0%, 100% { transform: scaleY(0.95); }
+      50% { transform: scaleY(1); }
+    }
+    
+    /* Animation de la queue endormie */
+    @keyframes tail-sleep {
+      0%, 100% { transform: rotate(-2deg); }
+      50% { transform: rotate(2deg); }
+    }
+    
+    /* Animation des étoiles douces */
+    @keyframes star-soft {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.6; }
+    }
+    
+    /* Animation de la bulle de sommeil */
+    @keyframes sleep-bubble {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.2); opacity: 0; }
+    }
+    
+    .monster-body {
+      animation: sleep-breathe 3s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .ear-left {
+      animation: ear-rest 3s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    
+    .ear-right {
+      animation: ear-rest 3s ease-in-out infinite 0.5s;
+      transform-origin: bottom center;
+    }
+    
+    .tail {
+      animation: tail-sleep 4s ease-in-out infinite;
+      transform-origin: top left;
+    }
+    
+    .zzz {
+      animation: zzz-float 3s ease-in-out infinite;
+    }
+    
+    .star {
+      animation: star-soft 4s ease-in-out infinite;
+    }
+    
+    .bubble {
+      animation: sleep-bubble 4s ease-in-out infinite;
+      transform-origin: center center;
+    }
+  </style>
+  
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <!-- Queue détendue -->
+    <g class="tail">
+      <rect x="5" y="20" width="2" height="1" fill="var(--tail)"/>
+      <rect x="4" y="18" width="2" height="2" fill="var(--tail)"/>
+      <rect x="3" y="16" width="2" height="2" fill="var(--tail)"/>
+      <rect x="3" y="14" width="2" height="2" fill="var(--tail)"/>
+    </g>
+    
+    <!-- Oreille gauche au repos -->
+    <g class="ear-left">
+      <rect x="9" y="9" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="9" y="7" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="10" y="8" width="1" height="2" fill="var(--ear-inner)"/>
+    </g>
+    
+    <!-- Oreille droite au repos -->
+    <g class="ear-right">
+      <rect x="20" y="9" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="20" y="7" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="21" y="8" width="1" height="2" fill="var(--ear-inner)"/>
+    </g>
+    
+    <!-- Tête posée -->
+    <rect x="10" y="11" width="12" height="10" fill="var(--body-color)"/>
+    <rect x="9" y="13" width="14" height="6" fill="var(--body-color)"/>
+    
+    <!-- Corps allongé -->
+    <rect x="11" y="21" width="10" height="4" fill="var(--body-color)"/>
+    <rect x="10" y="22" width="12" height="2" fill="var(--body-color)"/>
+    
+    <!-- Ombre -->
+    <rect x="10" y="20" width="12" height="1" fill="var(--body-shadow)"/>
+    
+    <!-- Ventre -->
+    <rect x="13" y="21" width="6" height="3" fill="var(--belly)"/>
+    
+    <!-- Yeux fermés avec cils -->
+    <rect x="12" y="14" width="3" height="1" fill="var(--eye-closed)"/>
+    <rect x="12" y="14" width="1" height="1" fill="var(--eye-lash)"/>
+    <rect x="14" y="14" width="1" height="1" fill="var(--eye-lash)"/>
+    
+    <rect x="17" y="14" width="3" height="1" fill="var(--eye-closed)"/>
+    <rect x="17" y="14" width="1" height="1" fill="var(--eye-lash)"/>
+    <rect x="19" y="14" width="1" height="1" fill="var(--eye-lash)"/>
+    
+    <!-- Joues endormies rosées -->
+    <rect x="10" y="16" width="2" height="2" fill="var(--cheek)"/>
+    <rect x="20" y="16" width="2" height="2" fill="var(--cheek)"/>
+    
+    <!-- Nez -->
+    <rect x="15" y="16" width="2" height="1" fill="var(--mouth)"/>
+    
+    <!-- Petit sourire paisible -->
+    <rect x="15" y="17" width="2" height="1" fill="var(--mouth)"/>
+    
+    <!-- Pattes repliées -->
+    <rect x="11" y="25" width="3" height="2" fill="var(--feet)"/>
+    <rect x="11" y="27" width="4" height="2" fill="var(--feet)"/>
+    
+    <rect x="18" y="25" width="3" height="2" fill="var(--feet)"/>
+    <rect x="17" y="27" width="4" height="2" fill="var(--feet)"/>
+    
+    <!-- Étoiles douces -->
+    <g class="star" style="animation-delay: 0s;">
+      <rect x="7" y="12" width="1" height="1" fill="var(--star)"/>
+    </g>
+    <g class="star" style="animation-delay: 1s;">
+      <rect x="24" y="15" width="1" height="1" fill="var(--star)"/>
+    </g>
+    <g class="star" style="animation-delay: 2s;">
+      <rect x="6" y="22" width="1" height="1" fill="var(--star)"/>
+    </g>
+  </g>
+  
+  <!-- Z qui s'envolent -->
+  <g class="zzz" style="animation-delay: 0s;">
+    <rect x="24" y="11" width="2" height="1" fill="var(--zzz)"/>
+    <rect x="25" y="12" width="1" height="1" fill="var(--zzz)"/>
+    <rect x="24" y="13" width="2" height="1" fill="var(--zzz)"/>
+  </g>
+  
+  <g class="zzz" style="animation-delay: 1s;">
+    <rect x="23" y="8" width="1" height="1" fill="var(--zzz)"/>
+    <rect x="23" y="9" width="1" height="1" fill="var(--zzz)"/>
+  </g>
+  
+  <g class="zzz" style="animation-delay: 2s;">
+    <rect x="25" y="5" width="2" height="1" fill="var(--zzz)"/>
+    <rect x="26" y="6" width="1" height="1" fill="var(--zzz)"/>
+    <rect x="25" y="7" width="2" height="1" fill="var(--zzz)"/>
+  </g>
+  
+  <!-- Bulle de sommeil -->
+  <g class="bubble" style="animation-delay: 0.5s;">
+    <rect x="24" y="17" width="3" height="3" fill="var(--sleep-bubble)" opacity="0.6"/>
+    <rect x="25" y="16" width="1" height="1" fill="var(--sleep-bubble)" opacity="0.6"/>
+  </g>
+</svg>

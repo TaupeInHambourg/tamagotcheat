@@ -1,0 +1,183 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #A8C5E1;
+      --body-shadow: #8BACC8;
+      --eye-white: #FFFFFF;
+      --eye-pupil: #C9A8D8;
+      --eye-shine: #FFFFFF;
+      --mouth: #C9A8D8;
+      --ear-main: #C9A8D8;
+      --ear-inner: #DFC5E8;
+      --cheek: #D4C0D0;
+      --belly: #C8D4E1;
+      --feet: #B8C8D8;
+      --tail: #C9A8D8;
+      --star: #E8E5C9;
+      --tear: #A8D8E8;
+    }
+    
+    /* Animation d'affaissement */
+    @keyframes slump {
+      0%, 100% { transform: translateY(2px); }
+      50% { transform: translateY(3px); }
+    }
+    
+    /* Animation de clignement triste */
+    @keyframes sad-blink {
+      0%, 85%, 100% { opacity: 1; }
+      90%, 95% { opacity: 0; }
+    }
+    
+    /* Animation des oreilles tombantes */
+    @keyframes ear-droop {
+      0%, 100% { transform: rotate(10deg); }
+      50% { transform: rotate(15deg); }
+    }
+    
+    /* Animation de la queue trainante */
+    @keyframes tail-drag {
+      0%, 100% { transform: rotate(-5deg) translateY(1px); }
+      50% { transform: rotate(-8deg) translateY(2px); }
+    }
+    
+    /* Animation des larmes */
+    @keyframes tear-fall {
+      0% { opacity: 0; transform: translateY(0); }
+      20% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(4px); }
+    }
+    
+    /* Animation des étoiles ternes */
+    @keyframes star-dim {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.5; }
+    }
+    
+    .monster-body {
+      animation: slump 4s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    
+    .eye-group {
+      animation: sad-blink 6s ease-in-out infinite;
+    }
+    
+    .ear-left {
+      animation: ear-droop 3s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    
+    .ear-right {
+      animation: ear-droop 3s ease-in-out infinite 0.5s;
+      transform-origin: bottom center;
+    }
+    
+    .tail {
+      animation: tail-drag 3s ease-in-out infinite;
+      transform-origin: top left;
+    }
+    
+    .tear {
+      animation: tear-fall 3s ease-in-out infinite;
+    }
+    
+    .star {
+      animation: star-dim 3s ease-in-out infinite;
+    }
+  </style>
+  
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <!-- Queue qui traîne -->
+    <g class="tail">
+      <rect x="5" y="19" width="2" height="1" fill="var(--tail)"/>
+      <rect x="4" y="17" width="2" height="2" fill="var(--tail)"/>
+      <rect x="3" y="15" width="2" height="2" fill="var(--tail)"/>
+      <rect x="3" y="13" width="2" height="2" fill="var(--tail)"/>
+    </g>
+    
+    <!-- Oreille gauche tombante -->
+    <g class="ear-left">
+      <rect x="9" y="9" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="9" y="7" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="10" y="8" width="1" height="2" fill="var(--ear-inner)"/>
+    </g>
+    
+    <!-- Oreille droite tombante -->
+    <g class="ear-right">
+      <rect x="20" y="9" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="20" y="7" width="3" height="2" fill="var(--ear-main)"/>
+      <rect x="21" y="8" width="1" height="2" fill="var(--ear-inner)"/>
+    </g>
+    
+    <!-- Tête baissée -->
+    <rect x="10" y="11" width="12" height="10" fill="var(--body-color)"/>
+    <rect x="9" y="13" width="14" height="6" fill="var(--body-color)"/>
+    
+    <!-- Corps affaissé -->
+    <rect x="11" y="21" width="10" height="4" fill="var(--body-color)"/>
+    <rect x="10" y="22" width="12" height="2" fill="var(--body-color)"/>
+    
+    <!-- Ombre plus marquée -->
+    <rect x="10" y="20" width="12" height="1" fill="var(--body-shadow)"/>
+    
+    <!-- Ventre -->
+    <rect x="13" y="21" width="6" height="3" fill="var(--belly)"/>
+    
+    <!-- Yeux tristes (semi-fermés avec paupières tombantes) -->
+    <g class="eye-group">
+      <!-- Oeil gauche -->
+      <rect x="12" y="14" width="3" height="2" fill="var(--eye-white)"/>
+      <rect x="13" y="15" width="1" height="1" fill="var(--eye-pupil)"/>
+      <rect x="13" y="15" width="1" height="1" fill="var(--eye-shine)"/>
+      <rect x="12" y="14" width="3" height="1" fill="var(--body-color)" opacity="0.3"/>
+      
+      <!-- Oeil droit -->
+      <rect x="17" y="14" width="3" height="2" fill="var(--eye-white)"/>
+      <rect x="18" y="15" width="1" height="1" fill="var(--eye-pupil)"/>
+      <rect x="18" y="15" width="1" height="1" fill="var(--eye-shine)"/>
+      <rect x="17" y="14" width="3" height="1" fill="var(--body-color)" opacity="0.3"/>
+    </g>
+    
+    <!-- Larmes qui tombent -->
+    <g class="tear" style="animation-delay: 0s;">
+      <rect x="13" y="16" width="1" height="1" fill="var(--tear)"/>
+    </g>
+    <g class="tear" style="animation-delay: 1.5s;">
+      <rect x="18" y="16" width="1" height="1" fill="var(--tear)"/>
+    </g>
+    
+    <!-- Joues pâles -->
+    <rect x="10" y="17" width="2" height="1" fill="var(--cheek)"/>
+    <rect x="20" y="17" width="2" height="1" fill="var(--cheek)"/>
+    
+    <!-- Nez triste -->
+    <rect x="15" y="17" width="2" height="1" fill="var(--mouth)"/>
+    
+    <!-- Bouche triste (inversée) -->
+    <rect x="14" y="18" width="1" height="1" fill="var(--mouth)"/>
+    <rect x="15" y="19" width="2" height="1" fill="var(--mouth)"/>
+    <rect x="17" y="18" width="1" height="1" fill="var(--mouth)"/>
+    
+    <!-- Pattes lourdes -->
+    <rect x="11" y="25" width="3" height="2" fill="var(--feet)"/>
+    <rect x="11" y="27" width="4" height="2" fill="var(--feet)"/>
+    
+    <rect x="18" y="25" width="3" height="2" fill="var(--feet)"/>
+    <rect x="17" y="27" width="4" height="2" fill="var(--feet)"/>
+    
+    <!-- Étoiles ternes -->
+    <g class="star" style="animation-delay: 0s;">
+      <rect x="7" y="12" width="1" height="1" fill="var(--star)"/>
+    </g>
+    <g class="star" style="animation-delay: 0.5s;">
+      <rect x="24" y="15" width="1" height="1" fill="var(--star)"/>
+    </g>
+    <g class="star" style="animation-delay: 1s;">
+      <rect x="6" y="22" width="1" height="1" fill="var(--star)"/>
+    </g>
+  </g>
+</svg>

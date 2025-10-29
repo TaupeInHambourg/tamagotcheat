@@ -20,7 +20,7 @@ const { Schema } = mongoose
  * Monster state enum values
  * Represents the possible emotional/physical states a monster can be in
  */
-const MONSTER_STATES = ['happy', 'angry', 'sleeping', 'hungry', 'sad'] as const
+const MONSTER_STATES = ['happy', 'angry', 'sleepy', 'hungry', 'sad'] as const
 
 const monsterSchema = new Schema({
   name: {
@@ -46,6 +46,19 @@ const monsterSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'user',
     required: true
+  },
+  lastCronUpdate: {
+    type: Date,
+    required: false
+  },
+  lastStateChange: {
+    type: Date,
+    required: false,
+    default: Date.now
+  },
+  nextStateChangeAt: {
+    type: Date,
+    required: false
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt fields

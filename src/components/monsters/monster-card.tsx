@@ -1,10 +1,15 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { type Monster } from '@/types/monster.types'
+import { useMonsterAutoRefresh } from '@/hooks/use-monster-auto-refresh'
 
 export interface MonsterCardProps {
   monster: Monster
   className?: string
+  /** Enable auto-refresh for this card (default: true) */
+  autoRefresh?: boolean
 }
 
 function getStateStyle (state: string): string {
@@ -24,13 +29,22 @@ function getStateStyle (state: string): string {
   }
 }
 
-export default function MonsterCard ({ monster, className = '' }: MonsterCardProps): React.ReactNode {
+export default function MonsterCard ({ monster: initialMonster, className = '', autoRefresh = true }: MonsterCardProps): React.ReactNode {
+  // Auto-refresh when state changes (sans indicateur visuel)
+  const { monster } = useMonsterAutoRefresh({
+    initialMonster,
+    checkInterval: 5000, // Check every 5 seconds
+    enabled: autoRefresh,
+    verbose: false
+  })
+
   const stateStyle = getStateStyle(monster.state)
   const displayName = monster.name.length > 20 ? `${monster.name.slice(0, 20)}...` : monster.name
+  const monsterId = monster.id ?? monster._id ?? ''
 
   return (
     <Link
-      href={`/creatures/${monster.id ?? monster._id}`}
+      href={`/creatures/${monsterId}`}
       className={`group block bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${className}`}
     >
       <div className='relative w-full h-48'>
@@ -48,7 +62,7 @@ export default function MonsterCard ({ monster, className = '' }: MonsterCardPro
         </h3>
         <p className='text-sm text-slate-600'>Niveau {monster.level ?? 1}</p>
         <div className='mt-2'>
-          <span className={`inline-block px-2 py-1 rounded-full text-xs transition-all duration-300 ${stateStyle} group-hover:shadow-sm`}>
+          <span className={`inline-block px-2 py-1 rounded-full text-xs transition-all duration-500 ${stateStyle} group-hover:shadow-sm`}>
             {monster.state.charAt(0).toUpperCase() + monster.state.slice(1)}
           </span>
         </div>

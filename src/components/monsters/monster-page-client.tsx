@@ -1,8 +1,10 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import { type Monster } from '@/types/monster.types'
+import { useMonsterAutoRefresh } from '@/hooks/use-monster-auto-refresh'
+import { StateChangeNotification } from './state-change-notification'
 
 function getStateStyle (state: string): string {
   switch (state) {
@@ -49,70 +51,100 @@ function formatDate (date: string | undefined): string {
   }).format(parsedDate)
 }
 
-export default function MonsterPageClient ({ monster }: MonsterPageProps): React.ReactNode {
+export default function MonsterPageClient ({ monster: initialMonster }: MonsterPageProps): React.ReactNode {
+  // Notification state
+  const [showNotification, setShowNotification] = useState(false)
+  const [stateChange, setStateChange] = useState<{ old: string, new: string } | null>(null)
+
+  // Auto-refresh when state changes
+  const { monster } = useMonsterAutoRefresh({
+    initialMonster,
+    onStateChange: (newState, oldState) => {
+      console.log(`🎉 ${initialMonster.name} changed state: ${oldState} → ${newState}`)
+      setStateChange({ old: oldState, new: newState })
+      setShowNotification(true)
+    },
+    checkInterval: 3000, // Check every 3 seconds
+    enabled: true,
+    verbose: true
+  })
+
   const formattedCreationDate = useMemo(() => formatDate(monster.createdAt), [monster.createdAt])
   const moodEmoji = useMemo(() => getMoodEmoji(monster.state), [monster.state])
 
   return (
-    <div className='w-full max-w-4xl mx-auto px-4 py-8'>
-      <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
-        {/* En-tête avec image */}
-        <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5'>
-          <Image
-            src={monster.draw}
-            alt={monster.name}
-            fill
-            className='object-contain'
-            priority
-          />
-        </div>
+    <>
+      {/* State change notification */}
+      {stateChange != null && (
+        <StateChangeNotification
+          monsterName={monster.name}
+          oldState={stateChange.old}
+          newState={stateChange.new}
+          show={showNotification}
+          onClose={() => { setShowNotification(false) }}
+        />
+      )}
 
-        {/* Contenu */}
-        <div className='p-6 sm:p-8'>
-          <div className='flex flex-col gap-6'>
-            {/* Titre et informations principales */}
-            <div className='flex items-start justify-between'>
-              <div>
-                <h1 className='text-3xl font-bold text-slate-900'>{monster.name}</h1>
-                <p className='mt-1 text-sm text-slate-500'>
-                  Créé le {formattedCreationDate}
-                </p>
-              </div>
-              <div className='flex items-center gap-2'>
-                <span className='text-2xl' role='img' aria-label={`Humeur: ${monster.state}`}>
-                  {moodEmoji}
-                </span>
-                <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${getStateStyle(monster.state)}`}>
-                  {monster.state.charAt(0).toUpperCase() + monster.state.slice(1)}
-                </span>
-              </div>
-            </div>
+      <div className='w-full max-w-4xl mx-auto px-4 py-8'>
+        <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
+          {/* En-tête avec image */}
+          <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5'>
+            <Image
+              src={monster.draw}
+              alt={monster.name}
+              fill
+              className='object-contain'
+              priority
+            />
+          </div>
 
-            {/* Niveau et caractéristiques */}
-            <div className='grid gap-4 sm:grid-cols-2'>
-              <div className='rounded-2xl bg-monsters-pink/5 p-4'>
-                <p className='text-sm font-medium text-slate-900'>Niveau actuel</p>
-                <p className='mt-1 text-2xl font-semibold text-pink-flare-600'>
-                  {monster.level ?? 1}
-                </p>
+          {/* Contenu */}
+          <div className='p-6 sm:p-8'>
+            <div className='flex flex-col gap-6'>
+              {/* Titre et informations principales */}
+              <div className='flex items-start justify-between'>
+                <div>
+                  <h1 className='text-3xl font-bold text-slate-900'>{monster.name}</h1>
+                  <p className='mt-1 text-sm text-slate-500'>
+                    Créé le {formattedCreationDate}
+                  </p>
+                </div>
+                <div className='flex items-center gap-2'>
+                  <span className='text-2xl' role='img' aria-label={`Humeur: ${monster.state}`}>
+                    {moodEmoji}
+                  </span>
+                  <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full transition-all duration-500 ${getStateStyle(monster.state)}`}>
+                    {monster.state.charAt(0).toUpperCase() + monster.state.slice(1)}
+                  </span>
+                </div>
               </div>
-            </div>
 
-            {/* Actions */}
-            <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6'>
-              <button className='inline-flex items-center gap-2 rounded-full bg-monsters-pink/10 px-4 py-2 text-sm font-medium text-pink-flare-600 transition-colors hover:bg-monsters-pink/20'>
-                🍪 Nourrir
-              </button>
-              <button className='inline-flex items-center gap-2 rounded-full bg-monsters-blue/10 px-4 py-2 text-sm font-medium text-blue-600 transition-colors hover:bg-monsters-blue/20'>
-                💤 Mettre au lit
-              </button>
-              <button className='inline-flex items-center gap-2 rounded-full bg-monsters-green/10 px-4 py-2 text-sm font-medium text-green-600 transition-colors hover:bg-monsters-green/20'>
-                🎮 Jouer
-              </button>
+              {/* Niveau et caractéristiques */}
+              <div className='grid gap-4 sm:grid-cols-2'>
+                <div className='rounded-2xl bg-monsters-pink/5 p-4'>
+                  <p className='text-sm font-medium text-slate-900'>Niveau actuel</p>
+                  <p className='mt-1 text-2xl font-semibold text-pink-flare-600'>
+                    {monster.level ?? 1}
+                  </p>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6'>
+                <button className='inline-flex items-center gap-2 rounded-full bg-monsters-pink/10 px-4 py-2 text-sm font-medium text-pink-flare-600 transition-colors hover:bg-monsters-pink/20'>
+                  🍪 Nourrir
+                </button>
+                <button className='inline-flex items-center gap-2 rounded-full bg-monsters-blue/10 px-4 py-2 text-sm font-medium text-blue-600 transition-colors hover:bg-monsters-blue/20'>
+                  💤 Mettre au lit
+                </button>
+                <button className='inline-flex items-center gap-2 rounded-full bg-monsters-green/10 px-4 py-2 text-sm font-medium text-green-600 transition-colors hover:bg-monsters-green/20'>
+                  🎮 Jouer
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

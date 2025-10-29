@@ -1,0 +1,234 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #D9B5B5;
+      --body-shadow: #BF9999;
+      --eye-white: #FFFFFF;
+      --eye-pupil: #8B0000;
+      --eye-shine: #FFFFFF;
+      --eye-bg: #E8C9C9;
+      --mouth: #B53939;
+      --belly: #F0E5E5;
+      --feet: #C9A8A8;
+      --spots: #BF9999;
+      --crown: #D9A860;
+      --crown-jewel: #D9396B;
+      --steam: #F5E5E5;
+      --vein: #C94D4D;
+      --eyebrow: #8B0000;
+    }
+    
+    /* Animation de tremblement de colère */
+    @keyframes angry-shake {
+      0%, 100% { transform: translateX(0); }
+      10% { transform: translateX(-2px) rotate(-1deg); }
+      20% { transform: translateX(2px) rotate(1deg); }
+      30% { transform: translateX(-2px) rotate(-1deg); }
+      40% { transform: translateX(2px) rotate(1deg); }
+      50% { transform: translateX(-1px); }
+      60% { transform: translateX(1px); }
+      70% { transform: translateX(-1px); }
+      80% { transform: translateX(1px); }
+      90% { transform: translateX(0); }
+    }
+    
+    /* Animation des yeux furieux */
+    @keyframes angry-glare {
+      0%, 85%, 100% { transform: scaleX(1); }
+      90%, 95% { transform: scaleX(1.1); }
+    }
+    
+    /* Animation de respiration agressive */
+    @keyframes angry-breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    /* Animation de la vapeur */
+    @keyframes steam-rise {
+      0% { opacity: 0; transform: translateY(0) scale(0.8); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-6px) scale(1.2); }
+    }
+    
+    /* Animation des veines */
+    @keyframes vein-pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+    
+    /* Animation des taches agitées */
+    @keyframes spots-angry {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.1); }
+    }
+    
+    /* Animation de la couronne tremblante */
+    @keyframes crown-shake {
+      0%, 100% { transform: rotate(-2deg); }
+      25% { transform: rotate(2deg); }
+      50% { transform: rotate(-2deg); }
+      75% { transform: rotate(2deg); }
+    }
+    
+    /* Animation des pattes qui piétinent */
+    @keyframes feet-stomp {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(2px); }
+    }
+    
+    .monster-body {
+      animation: angry-shake 0.5s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    
+    .body-tense {
+      animation: angry-breathe 0.8s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .eye-group {
+      animation: angry-glare 2s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .steam {
+      animation: steam-rise 2s ease-in-out infinite;
+    }
+    
+    .vein {
+      animation: vein-pulse 0.6s ease-in-out infinite;
+    }
+    
+    .spot {
+      animation: spots-angry 1s ease-in-out infinite;
+    }
+    
+    .crown {
+      animation: crown-shake 0.4s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .foot {
+      animation: feet-stomp 0.6s ease-in-out infinite;
+    }
+  </style>
+  
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <!-- Pattes arrière qui piétinent fort -->
+    <g class="foot" style="animation-delay: 0s;">
+      <rect x="8" y="22" width="2" height="3" fill="var(--feet)"/>
+      <rect x="6" y="25" width="5" height="2" fill="var(--feet)"/>
+      <rect x="6" y="27" width="2" height="1" fill="var(--feet)"/>
+      <rect x="9" y="27" width="2" height="1" fill="var(--feet)"/>
+    </g>
+    
+    <g class="foot" style="animation-delay: 0.3s;">
+      <rect x="22" y="22" width="2" height="3" fill="var(--feet)"/>
+      <rect x="21" y="25" width="5" height="2" fill="var(--feet)"/>
+      <rect x="21" y="27" width="2" height="1" fill="var(--feet)"/>
+      <rect x="24" y="27" width="2" height="1" fill="var(--feet)"/>
+    </g>
+    
+    <g class="body-tense">
+      <!-- Corps principal tendu -->
+      <rect x="10" y="14" width="12" height="8" fill="var(--body-color)"/>
+      <rect x="9" y="16" width="14" height="4" fill="var(--body-color)"/>
+      <rect x="11" y="13" width="10" height="1" fill="var(--body-color)"/>
+      <rect x="12" y="12" width="8" height="1" fill="var(--body-color)"/>
+      
+      <!-- Ombre intense -->
+      <rect x="10" y="21" width="12" height="1" fill="var(--body-shadow)"/>
+      
+      <!-- Ventre tendu -->
+      <rect x="12" y="17" width="8" height="4" fill="var(--belly)"/>
+      
+      <!-- Veines visibles -->
+      <g class="vein">
+        <rect x="11" y="15" width="1" height="2" fill="var(--vein)"/>
+        <rect x="12" y="14" width="2" height="1" fill="var(--vein)"/>
+      </g>
+      <g class="vein">
+        <rect x="19" y="15" width="1" height="2" fill="var(--vein)"/>
+        <rect x="18" y="14" width="2" height="1" fill="var(--vein)"/>
+      </g>
+      
+      <!-- Taches agitées sur le corps -->
+      <g class="spot" style="animation-delay: 0s;">
+        <rect x="11" y="15" width="2" height="2" fill="var(--spots)"/>
+      </g>
+      <g class="spot" style="animation-delay: 0.2s;">
+        <rect x="19" y="16" width="2" height="2" fill="var(--spots)"/>
+      </g>
+      <g class="spot" style="animation-delay: 0.4s;">
+        <rect x="14" y="20" width="2" height="1" fill="var(--spots)"/>
+      </g>
+      
+      <!-- Bras/pattes avant tendues -->
+      <rect x="8" y="18" width="2" height="3" fill="var(--feet)"/>
+      <rect x="7" y="21" width="3" height="1" fill="var(--feet)"/>
+      
+      <rect x="22" y="18" width="2" height="3" fill="var(--feet)"/>
+      <rect x="22" y="21" width="3" height="1" fill="var(--feet)"/>
+      
+      <!-- Yeux globuleux furieux -->
+      <!-- Oeil gauche base -->
+      <rect x="11" y="10" width="3" height="4" fill="var(--eye-bg)"/>
+      <rect x="10" y="11" width="5" height="2" fill="var(--eye-bg)"/>
+      
+      <!-- Oeil droit base -->
+      <rect x="18" y="10" width="3" height="4" fill="var(--eye-bg)"/>
+      <rect x="17" y="11" width="5" height="2" fill="var(--eye-bg)"/>
+      
+      <!-- Sourcils froncés -->
+      <rect x="10" y="10" width="4" height="1" fill="var(--eyebrow)"/>
+      <rect x="11" y="11" width="1" height="1" fill="var(--eyebrow)"/>
+      
+      <rect x="18" y="10" width="4" height="1" fill="var(--eyebrow)"/>
+      <rect x="20" y="11" width="1" height="1" fill="var(--eyebrow)"/>
+      
+      <!-- Yeux plissés et furieux -->
+      <g class="eye-group">
+        <rect x="11" y="11" width="3" height="2" fill="var(--eye-white)"/>
+        <rect x="12" y="11" width="2" height="2" fill="var(--eye-pupil)"/>
+        <rect x="12" y="11" width="1" height="1" fill="var(--eye-shine)"/>
+        
+        <rect x="18" y="11" width="3" height="2" fill="var(--eye-white)"/>
+        <rect x="19" y="11" width="2" height="2" fill="var(--eye-pupil)"/>
+        <rect x="19" y="11" width="1" height="1" fill="var(--eye-shine)"/>
+      </g>
+      
+      <!-- Couronne tremblante -->
+      <g class="crown">
+        <rect x="14" y="8" width="4" height="2" fill="var(--crown)"/>
+        <rect x="14" y="7" width="1" height="1" fill="var(--crown)"/>
+        <rect x="16" y="6" width="1" height="2" fill="var(--crown)"/>
+        <rect x="17" y="7" width="1" height="1" fill="var(--crown)"/>
+        <rect x="16" y="7" width="1" height="1" fill="var(--crown-jewel)"/>
+      </g>
+      
+      <!-- Bouche en grognement -->
+      <rect x="12" y="17" width="8" height="2" fill="var(--mouth)"/>
+      <rect x="11" y="18" width="1" height="1" fill="var(--mouth)"/>
+      <rect x="20" y="18" width="1" height="1" fill="var(--mouth)"/>
+      
+      <!-- Crocs -->
+      <rect x="13" y="17" width="1" height="1" fill="var(--eye-white)"/>
+      <rect x="18" y="17" width="1" height="1" fill="var(--eye-white)"/>
+    </g>
+  </g>
+  
+  <!-- Vapeur de colère -->
+  <g class="steam" style="animation-delay: 0s;">
+    <rect x="9" y="10" width="2" height="1" fill="var(--steam)"/>
+    <rect x="10" y="9" width="1" height="1" fill="var(--steam)"/>
+  </g>
+  
+  <g class="steam" style="animation-delay: 1s;">
+    <rect x="21" y="10" width="2" height="1" fill="var(--steam)"/>
+    <rect x="21" y="9" width="1" height="1" fill="var(--steam)"/>
+  </g>
+</svg>
