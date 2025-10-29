@@ -3,6 +3,7 @@ import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import DashboardContent from '@/components/dashboard/dashboard-content'
+import { AppLayout } from '@/components/navigation'
 
 export default async function DashboardPage (): Promise<React.ReactNode> {
   const session = await auth.api.getSession({
@@ -16,6 +17,8 @@ export default async function DashboardPage (): Promise<React.ReactNode> {
   const monsters = await getMonsters()
 
   return (
-    <DashboardContent session={session} monsters={monsters} />
+    <AppLayout>
+      <DashboardContent session={session} monsters={monsters} />
+    </AppLayout>
   )
 }

@@ -1,6 +1,7 @@
 import { getMonsterById } from '@/actions/monsters.actions'
 import ErrorClient from '@/components/error-client'
 import MonsterPageClient from '@/components/monsters/monster-page-client'
+import { AppLayout } from '@/components/navigation'
 
 export default async function Page ({ params }: { params: Promise<{ id: string | string[] }> }): Promise<React.ReactNode> {
   // Résolution asynchrone des params (Next.js 15 fournit des params awaités)
@@ -14,12 +15,16 @@ export default async function Page ({ params }: { params: Promise<{ id: string |
   // Gestion du cas où le monstre n'existe pas
   if (monster === null || monster === undefined) {
     return (
-      <ErrorClient error='Creature not found.' />
+      <AppLayout>
+        <ErrorClient error='Creature not found.' />
+      </AppLayout>
     )
   }
 
   // Affichage de la page de détail
   return (
-    <MonsterPageClient monster={monster} />
+    <AppLayout>
+      <MonsterPageClient monster={monster} />
+    </AppLayout>
   )
 }
