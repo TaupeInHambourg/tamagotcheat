@@ -4,11 +4,23 @@
  * Handles the computation of monster states based on elapsed time.
  * Each monster has its own independent timer for state changes.
  *
+ * This implements a LAZY UPDATE pattern inspired by Tamagotcho:
+ * - State changes are computed on-read, not proactively
+ * - Each monster stores a `nextStateChangeAt` timestamp
+ * - When fetching a monster, we check if now >= nextStateChangeAt
+ * - If yes, compute new state and schedule next change
+ * - No cron jobs, no background workers needed
+ *
  * Business Rules:
- * - Each monster changes state randomly between 30 seconds and 5 minutes
+ * - Each monster changes state randomly between 1-3 minutes
  * - State changes are computed lazily (on read) rather than with a background job
  * - Each monster's next change time is random and independent
  * - 'happy' state can only be achieved through user interactions
+ *
+ * Benefits:
+ * - ✅ Scalable: O(1) per monster read, not O(n) for all monsters
+ * - ✅ Simple: No complex scheduling or concurrency
+ * - ✅ Efficient: Updates only active monsters
  *
  * @module monster-state-decay
  */
@@ -16,14 +28,14 @@
 import type { Monster, MonsterState } from '@/types/monster.types'
 
 /**
- * Minimum time before state change (30 seconds in milliseconds)
+ * Minimum time before state change (1 minute in milliseconds)
  */
-const MIN_STATE_CHANGE_INTERVAL = 30 * 1000 // 30 seconds
+const MIN_STATE_CHANGE_INTERVAL = 60 * 1000 // 1 minute
 
 /**
- * Maximum time before state change (5 minutes in milliseconds)
+ * Maximum time before state change (3 minutes in milliseconds)
  */
-const MAX_STATE_CHANGE_INTERVAL = 5 * 60 * 1000 // 5 minutes
+const MAX_STATE_CHANGE_INTERVAL = 3 * 60 * 1000 // 3 minutes
 
 /**
  * Available states for random selection (excluding 'happy')

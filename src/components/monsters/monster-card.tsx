@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { type Monster } from '@/types/monster.types'
-import { useMonsterAutoRefresh } from '@/hooks/use-monster-auto-refresh'
+import { useMonsterPolling } from '@/hooks/use-monster-polling'
 
 export interface MonsterCardProps {
   monster: Monster
@@ -30,10 +30,10 @@ function getStateStyle (state: string): string {
 }
 
 export default function MonsterCard ({ monster: initialMonster, className = '', autoRefresh = true }: MonsterCardProps): React.ReactNode {
-  // Auto-refresh when state changes (sans indicateur visuel)
-  const { monster } = useMonsterAutoRefresh({
+  // Use simplified polling hook
+  const { monster } = useMonsterPolling({
     initialMonster,
-    checkInterval: 5000, // Check every 5 seconds
+    pollingInterval: 3000, // Poll every 3 seconds for cards
     enabled: autoRefresh,
     verbose: false
   })

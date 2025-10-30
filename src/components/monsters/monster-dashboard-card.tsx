@@ -14,7 +14,7 @@
 'use client'
 
 import { type Monster, type MonsterState, DEFAULT_MONSTER_STATE, MONSTER_STATES } from '@/types/monster.types'
-import { useMonsterAutoRefresh } from '@/hooks/use-monster-auto-refresh'
+import { useMonsterPolling } from '@/hooks/use-monster-polling'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -63,10 +63,10 @@ interface MonsterDashboardCardProps {
 }
 
 export function MonsterDashboardCard ({ initialMonster, autoRefresh = true }: MonsterDashboardCardProps): React.ReactNode {
-  // Auto-refresh hook (sans indicateur visuel)
-  const { monster } = useMonsterAutoRefresh({
+  // Use simplified polling hook
+  const { monster } = useMonsterPolling({
     initialMonster,
-    checkInterval: 5000, // Check every 5 seconds
+    pollingInterval: 3000, // Poll every 3 seconds
     enabled: autoRefresh,
     verbose: false
   })

@@ -3,8 +3,9 @@
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import { type Monster } from '@/types/monster.types'
-import { useMonsterAutoRefresh } from '@/hooks/use-monster-auto-refresh'
+import { useMonsterPolling } from '@/hooks/use-monster-polling'
 import { StateChangeNotification } from './state-change-notification'
+import Button from '../Button'
 
 function getStateStyle (state: string): string {
   switch (state) {
@@ -56,17 +57,17 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const [showNotification, setShowNotification] = useState(false)
   const [stateChange, setStateChange] = useState<{ old: string, new: string } | null>(null)
 
-  // Auto-refresh when state changes
-  const { monster } = useMonsterAutoRefresh({
+  // Use simplified polling hook with lazy state computation on backend
+  const { monster } = useMonsterPolling({
     initialMonster,
     onStateChange: (newState, oldState) => {
       console.log(`🎉 ${initialMonster.name} changed state: ${oldState} → ${newState}`)
       setStateChange({ old: oldState, new: newState })
       setShowNotification(true)
     },
-    checkInterval: 3000, // Check every 3 seconds
+    pollingInterval: 2000, // Poll every 2 seconds
     enabled: true,
-    verbose: true
+    verbose: false
   })
 
   const formattedCreationDate = useMemo(() => formatDate(monster.createdAt), [monster.createdAt])
@@ -130,16 +131,19 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
               </div>
 
               {/* Actions */}
-              <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6'>
-                <button className='inline-flex items-center gap-2 rounded-full bg-monsters-pink/10 px-4 py-2 text-sm font-medium text-pink-flare-600 transition-colors hover:bg-monsters-pink/20'>
+              <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6 content-center sm:justify-start'>
+                <Button variant='outline'>
                   🍪 Nourrir
-                </button>
-                <button className='inline-flex items-center gap-2 rounded-full bg-monsters-blue/10 px-4 py-2 text-sm font-medium text-blue-600 transition-colors hover:bg-monsters-blue/20'>
+                </Button>
+                <Button variant='outline'>
                   💤 Mettre au lit
-                </button>
-                <button className='inline-flex items-center gap-2 rounded-full bg-monsters-green/10 px-4 py-2 text-sm font-medium text-green-600 transition-colors hover:bg-monsters-green/20'>
+                </Button>
+                <Button variant='outline'>
                   🎮 Jouer
-                </button>
+                </Button>
+                <Button variant='outline'>
+                  💕 Câliner
+                </Button>
               </div>
             </div>
           </div>

@@ -14,7 +14,7 @@ import type { IMonsterRepository } from '@/db/repositories/interfaces/monster.re
 import type { IMonsterService, OperationResult } from '../interfaces/monster.service.interface'
 import type { Monster, CreateMonsterDto, MonsterTemplate } from '@/types/monster.types'
 import { MonsterTemplates, MONSTER_STATES } from '@/types/monster.types'
-import { initializeMonsterTiming } from '@/utils/monster-state-decay'
+import { initializeMonsterTiming, computeCurrentState } from '@/utils/monster-state-decay'
 
 export class MonsterService implements IMonsterService {
   constructor (
@@ -139,7 +139,18 @@ export class MonsterService implements IMonsterService {
   }
 
   /**
-   * Retrieves a specific monster by ID
+   * Retrieves a specific monster by ID with lazy state decay applied
+   *
+   * This method implements the lazy update pattern:
+   * 1. Fetches the monster from database
+   * 2. Computes current state based on elapsed time (lazy decay)
+   * 3. If state changed, updates the database
+   * 4. Returns the up-to-date monster
+   *
+   * Benefits:
+   * - No cron jobs needed
+   * - State is always accurate when read
+   * - Only updates monsters that are actively viewed
    */
   async getMonsterById (userId: string, monsterId: string): Promise<OperationResult<Monster>> {
     try {
@@ -150,6 +161,28 @@ export class MonsterService implements IMonsterService {
           success: false,
           error: 'Monster not found'
         }
+      }
+
+      // Apply lazy state decay computation
+      const stateResult = computeCurrentState(monster)
+
+      // If state changed, update the database
+      if (stateResult.changed) {
+        const updatedMonster = await this.monsterRepository.update(monsterId, userId, {
+          state: stateResult.state,
+          lastStateChange: stateResult.lastStateChange,
+          nextStateChangeAt: stateResult.nextStateChangeAt
+        })
+
+        if (updatedMonster !== null) {
+          return {
+            success: true,
+            data: updatedMonster
+          }
+        }
+
+        // Fallback if update fails (shouldn't happen)
+        console.warn('State decay update failed, returning original monster with computed state')
       }
 
       return {
