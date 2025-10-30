@@ -3,12 +3,12 @@ import { MonsterTemplate, MONSTER_TEMPLATES } from '@/types/monster-templates.ty
 function hexToRgb (hex: string): { r: number, g: number, b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
   return (result != null)
-? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  }
-: null
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      }
+    : null
 }
 
 function colorDistance (color1: string, color2: string): number {

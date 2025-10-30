@@ -63,7 +63,20 @@ interface MonsterDashboardCardProps {
 }
 
 export function MonsterDashboardCard ({ initialMonster, autoRefresh = true }: MonsterDashboardCardProps): React.ReactNode {
-  // Use simplified polling hook
+  /**
+   * Use simplified polling hook for dashboard cards
+   *
+   * Dashboard-specific configuration:
+   * - Polls every 3 seconds for real-time updates
+   * - Disabled polling optional for performance (set autoRefresh={false})
+   * - Silent operation (no logs) for clean dashboard experience
+   *
+   * Integration with lazy state system:
+   * - Each poll triggers backend state computation
+   * - Backend updates database if state changed
+   * - Card automatically reflects new state
+   * - No manual state management needed
+   */
   const { monster } = useMonsterPolling({
     initialMonster,
     pollingInterval: 3000, // Poll every 3 seconds

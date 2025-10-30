@@ -53,11 +53,24 @@ function formatDate (date: string | undefined): string {
 }
 
 export default function MonsterPageClient ({ monster: initialMonster }: MonsterPageProps): React.ReactNode {
-  // Notification state
+  // Notification state for displaying state change alerts
   const [showNotification, setShowNotification] = useState(false)
   const [stateChange, setStateChange] = useState<{ old: string, new: string } | null>(null)
 
-  // Use simplified polling hook with lazy state computation on backend
+  /**
+   * Use simplified polling hook with lazy state computation on backend
+   *
+   * How it works:
+   * 1. Hook polls /api/monsters/[id] every 2 seconds
+   * 2. Backend (getMonsterById) applies lazy state computation
+   * 3. If state changed, backend updates database automatically
+   * 4. Hook detects state change and triggers notification
+   *
+   * Benefits:
+   * - State computed only when monster is viewed
+   * - Backend handles all state logic (single responsibility)
+   * - Frontend just polls and displays (separation of concerns)
+   */
   const { monster } = useMonsterPolling({
     initialMonster,
     onStateChange: (newState, oldState) => {
@@ -67,7 +80,7 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
     },
     pollingInterval: 2000, // Poll every 2 seconds
     enabled: true,
-    verbose: false
+    verbose: false // Set to true for debugging
   })
 
   const formattedCreationDate = useMemo(() => formatDate(monster.createdAt), [monster.createdAt])

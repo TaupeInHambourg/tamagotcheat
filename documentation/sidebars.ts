@@ -22,6 +22,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'architecture/overview',
         'architecture/solid-principles',
+        'architecture/lazy-state-system',
         'architecture/database-layer'
       ]
     },
@@ -40,7 +41,9 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'api/overview',
-        'api/monsters'
+        'api/monsters',
+        'api/use-monster-polling',
+        'api/monster-state-decay'
       ]
     },
     {
@@ -48,7 +51,8 @@ const sidebars: SidebarsConfig = {
       label: 'Guides',
       collapsed: false,
       items: [
-        'guides/setup'
+        'guides/setup',
+        'guides/migration-to-lazy-state'
       ]
     }
   ]

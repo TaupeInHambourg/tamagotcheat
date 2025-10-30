@@ -15,7 +15,7 @@ import Monster from '@/db/models/monster.model'
 import { connectMongooseToDatabase } from '@/db'
 import { computeCurrentState } from '@/utils/monster-state-decay'
 import type { Monster as MonsterType } from '@/types/monster.types'
-import type { IMonsterRepository, CreateMonsterData, CronFilter, BulkStateUpdate, BulkUpdateResult } from '../interfaces/monster.repository.interface'
+import type { IMonsterRepository, CreateMonsterData } from '../interfaces/monster.repository.interface'
 
 export class MongooseMonsterRepository implements IMonsterRepository {
   /**
@@ -171,72 +171,5 @@ export class MongooseMonsterRepository implements IMonsterRepository {
 
     const result = await Monster.deleteOne({ _id: id, ownerId }).exec()
     return result.deletedCount > 0
-  }
-
-  /**
-   * Finds monsters eligible for cron updates
-   * Can filter by ownerId and apply a limit
-   */
-  async findForCron (filter?: CronFilter): Promise<MonsterType[]> {
-    await this.ensureConnection()
-
-    let query = Monster.find()
-
-    // Apply owner filter if provided
-    if (filter?.ownerId != null) {
-      if (!this.isValidObjectId(filter.ownerId)) {
-        throw new Error(`Invalid owner ID format: ${filter.ownerId}`)
-      }
-      query = query.where('ownerId').equals(filter.ownerId)
-    }
-
-    // Apply limit if provided
-    if (filter?.limit != null && filter.limit > 0) {
-      query = query.limit(filter.limit)
-    }
-
-    const monsters = await query.exec()
-    return monsters.map(doc => this.serialize<MonsterType>(doc))
-  }
-
-  /**
-   * Updates multiple monsters' states in bulk
-   * Uses MongoDB bulkWrite for efficient batch operations
-   */
-  async updateStatesBulk (updates: BulkStateUpdate[]): Promise<BulkUpdateResult> {
-    await this.ensureConnection()
-
-    if (updates.length === 0) {
-      return { matched: 0, modified: 0 }
-    }
-
-    // Validate all IDs before processing
-    for (const update of updates) {
-      if (!this.isValidObjectId(update.id)) {
-        throw new Error(`Invalid monster ID format: ${update.id}`)
-      }
-    }
-
-    // Prepare bulk operations
-    const bulkOps = updates.map(update => ({
-      updateOne: {
-        filter: { _id: update.id },
-        update: {
-          $set: {
-            state: update.state,
-            lastCronUpdate: update.lastCronUpdate,
-            updatedAt: new Date()
-          }
-        }
-      }
-    }))
-
-    // Execute bulk write
-    const result = await Monster.bulkWrite(bulkOps, { ordered: false })
-
-    return {
-      matched: result.matchedCount,
-      modified: result.modifiedCount
-    }
   }
 }

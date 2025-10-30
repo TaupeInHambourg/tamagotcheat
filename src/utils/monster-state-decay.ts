@@ -4,12 +4,12 @@
  * Handles the computation of monster states based on elapsed time.
  * Each monster has its own independent timer for state changes.
  *
- * This implements a LAZY UPDATE pattern inspired by Tamagotcho:
+ * This implements a LAZY UPDATE pattern:
  * - State changes are computed on-read, not proactively
  * - Each monster stores a `nextStateChangeAt` timestamp
  * - When fetching a monster, we check if now >= nextStateChangeAt
  * - If yes, compute new state and schedule next change
- * - No cron jobs, no background workers needed
+ * - No background jobs needed
  *
  * Business Rules:
  * - Each monster changes state randomly between 1-3 minutes

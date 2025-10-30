@@ -47,10 +47,6 @@ const monsterSchema = new Schema({
     ref: 'user',
     required: true
   },
-  lastCronUpdate: {
-    type: Date,
-    required: false
-  },
   lastStateChange: {
     type: Date,
     required: false,

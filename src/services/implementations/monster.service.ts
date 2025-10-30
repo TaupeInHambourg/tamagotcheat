@@ -141,19 +141,34 @@ export class MonsterService implements IMonsterService {
   /**
    * Retrieves a specific monster by ID with lazy state decay applied
    *
-   * This method implements the lazy update pattern:
-   * 1. Fetches the monster from database
-   * 2. Computes current state based on elapsed time (lazy decay)
-   * 3. If state changed, updates the database
-   * 4. Returns the up-to-date monster
+   * This method implements the LAZY UPDATE PATTERN:
+   *
+   * How it works:
+   * - State computed only when monster is fetched
+   * - Low database load: O(1) per read
+   * - Only updates active/viewed monsters
+   * - Simple, elegant, and scalable
+   *
+   * Flow:
+   * 1. Fetch monster from database
+   * 2. Check if now >= nextStateChangeAt
+   * 3. If yes: compute new random state + schedule next change
+   * 4. If yes: update database with new state
+   * 5. Return always up-to-date monster
    *
    * Benefits:
-   * - No cron jobs needed
-   * - State is always accurate when read
-   * - Only updates monsters that are actively viewed
+   * ✅ State is always accurate when read
+   * ✅ Only updates monsters that are actively viewed
+   * ✅ Scales linearly with usage, not with total monsters
+   * ✅ Simpler architecture and easier to maintain
+   *
+   * @param userId - Owner of the monster
+   * @param monsterId - ID of the monster to fetch
+   * @returns Operation result with monster data or error
    */
   async getMonsterById (userId: string, monsterId: string): Promise<OperationResult<Monster>> {
     try {
+      // Step 1: Fetch monster from database
       const monster = await this.monsterRepository.findByIdAndOwner(monsterId, userId)
 
       if (monster === null) {
@@ -163,10 +178,11 @@ export class MonsterService implements IMonsterService {
         }
       }
 
-      // Apply lazy state decay computation
+      // Step 2: Apply lazy state decay computation
+      // This checks if it's time for a state change based on nextStateChangeAt
       const stateResult = computeCurrentState(monster)
 
-      // If state changed, update the database
+      // Step 3: If state changed, persist to database
       if (stateResult.changed) {
         const updatedMonster = await this.monsterRepository.update(monsterId, userId, {
           state: stateResult.state,
@@ -181,10 +197,12 @@ export class MonsterService implements IMonsterService {
           }
         }
 
-        // Fallback if update fails (shouldn't happen)
+        // Fallback: Return original monster if update fails
+        // This should rarely happen, but ensures graceful degradation
         console.warn('State decay update failed, returning original monster with computed state')
       }
 
+      // Step 4: Return monster (either updated or unchanged)
       return {
         success: true,
         data: monster

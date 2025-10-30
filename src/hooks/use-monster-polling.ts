@@ -6,13 +6,13 @@
  *
  * Architecture:
  * - Frontend: Polls every 2 seconds
- * - Backend: Applies lazy state computation on each GET
- * - Result: Always up-to-date monster without cron jobs
+ * - Backend: Applies lazy state computation (computeCurrentState)
+ * - Result: Always up-to-date monster
  *
- * This is much more efficient than the old system because:
- * 1. No global cron updating ALL monsters every minute
- * 2. State is computed only when monster is viewed
- * 3. Simple polling instead of complex state management
+ * Benefits:
+ * - Scalable: Updates only viewed monsters
+ * - Simple polling instead of complex state management
+ * - Backend handles all state logic (single responsibility)
  *
  * @module use-monster-polling
  */
@@ -85,7 +85,11 @@ export function useMonsterPolling (
   const previousStateRef = useRef<string>(initialMonster.state)
 
   /**
-   * Logger with conditional output
+   * Conditional logger for debugging
+   * Only logs when verbose mode is enabled
+   *
+   * @param message - Log message to display
+   * @param data - Optional data to include in log
    */
   const log = useCallback((message: string, data?: unknown): void => {
     if (!verbose) return
@@ -95,10 +99,24 @@ export function useMonsterPolling (
 
   /**
    * Fetches fresh monster data from the API
-   * Backend will apply lazy state computation automatically
+   *
+   * How it works:
+   * 1. Makes GET request to /api/monsters/[id]
+   * 2. Backend applies lazy state computation (computeCurrentState)
+   * 3. If state changed in backend, database is updated
+   * 4. Returns always up-to-date monster data
+   *
+   * Concurrency protection:
+   * - Uses isLoadingRef to prevent overlapping requests
+   * - Essential for high-frequency polling
+   *
+   * State change detection:
+   * - Compares new state with previousStateRef
+   * - Calls onStateChange callback if different
+   * - Allows UI to react to state changes
    */
   const fetchMonster = useCallback(async (): Promise<void> => {
-    // Prevent concurrent fetches
+    // Prevent concurrent fetches (critical for polling)
     if (isLoadingRef.current) {
       log('⏭️ Fetch already in progress, skipping')
       return
@@ -108,6 +126,7 @@ export function useMonsterPolling (
     setIsLoading(true)
 
     try {
+      // Get monster ID (supports both id and _id fields)
       const monsterId = monster.id ?? monster._id
       if (monsterId == null) {
         log('⚠️ No monster ID available')
@@ -116,8 +135,9 @@ export function useMonsterPolling (
 
       log(`🔄 Fetching monster ${monsterId}`)
 
+      // Fetch from API with no-store to bypass Next.js cache
       const response = await fetch(`/api/monsters/${monsterId}`, {
-        cache: 'no-store',
+        cache: 'no-store', // Important: always get fresh data
         headers: {
           'Content-Type': 'application/json'
         }
@@ -130,7 +150,7 @@ export function useMonsterPolling (
 
       const freshMonster = await response.json() as Monster
 
-      // Check if state has changed
+      // Detect state changes for callback notification
       const oldState = previousStateRef.current
       const newState = freshMonster.state
 
@@ -138,7 +158,7 @@ export function useMonsterPolling (
         log(`✨ State changed: ${oldState} → ${newState}`)
         previousStateRef.current = newState
 
-        // Call callback if provided
+        // Notify parent component of state change
         if (onStateChange != null) {
           onStateChange(newState, oldState)
         }
@@ -146,12 +166,13 @@ export function useMonsterPolling (
         log(`✅ State unchanged (${newState})`)
       }
 
-      // Update monster data
+      // Update local state with fresh data
       setMonster(freshMonster)
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       log('💥 Error fetching monster:', errorMessage)
     } finally {
+      // Always cleanup loading state
       isLoadingRef.current = false
       setIsLoading(false)
     }
@@ -159,6 +180,13 @@ export function useMonsterPolling (
 
   /**
    * Manual refresh function
+   * Allows parent components to trigger a refresh on demand
+   *
+   * @example
+   * ```tsx
+   * const { refresh } = useMonsterPolling({ initialMonster })
+   * <button onClick={refresh}>Refresh Now</button>
+   * ```
    */
   const refresh = useCallback(async (): Promise<void> => {
     await fetchMonster()
@@ -166,6 +194,16 @@ export function useMonsterPolling (
 
   /**
    * Setup polling interval
+   *
+   * Lifecycle:
+   * 1. Immediate fetch on mount (if enabled)
+   * 2. Setup interval for periodic fetches
+   * 3. Cleanup interval on unmount or when disabled
+   *
+   * Dependencies:
+   * - enabled: Controls whether polling is active
+   * - pollingInterval: How often to poll
+   * - fetchMonster: The actual fetch function
    */
   useEffect(() => {
     if (!enabled) {
@@ -175,7 +213,7 @@ export function useMonsterPolling (
 
     log(`🚀 Starting polling (every ${pollingInterval}ms)`)
 
-    // Immediate first fetch
+    // Immediate first fetch for instant data
     void fetchMonster()
 
     // Setup interval for periodic fetches
@@ -183,7 +221,7 @@ export function useMonsterPolling (
       void fetchMonster()
     }, pollingInterval)
 
-    // Cleanup on unmount
+    // Cleanup on unmount or when dependencies change
     return () => {
       log('⏹️ Stopping polling')
       if (intervalRef.current != null) {

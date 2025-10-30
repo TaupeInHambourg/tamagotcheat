@@ -66,8 +66,6 @@ export interface Monster {
   updatedAt?: string
   /** Creation timestamp */
   createdAt?: string
-  /** Timestamp of last automated cron update */
-  lastCronUpdate?: Date
   /** Timestamp when the state last changed */
   lastStateChange?: Date
   /** Timestamp when the state should change next */

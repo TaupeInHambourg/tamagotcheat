@@ -27,31 +27,6 @@ export interface CreateMonsterData {
 }
 
 /**
- * Filter criteria for cron updates
- */
-export interface CronFilter {
-  ownerId?: string
-  limit?: number
-}
-
-/**
- * Bulk state update data
- */
-export interface BulkStateUpdate {
-  id: string
-  state: string
-  lastCronUpdate: Date
-}
-
-/**
- * Result of bulk update operation
- */
-export interface BulkUpdateResult {
-  matched: number
-  modified: number
-}
-
-/**
  * Repository interface for monster data operations
  */
 export interface IMonsterRepository {
@@ -94,18 +69,4 @@ export interface IMonsterRepository {
    * @returns Promise resolving to true if deleted, false otherwise
    */
   delete: (id: string, ownerId: string) => Promise<boolean>
-
-  /**
-   * Finds monsters eligible for cron updates
-   * @param filter - Optional filter criteria (ownerId, limit)
-   * @returns Promise resolving to an array of monsters
-   */
-  findForCron: (filter?: CronFilter) => Promise<Monster[]>
-
-  /**
-   * Updates multiple monsters' states in bulk
-   * @param updates - Array of state updates to apply
-   * @returns Promise resolving to the result of bulk operation
-   */
-  updateStatesBulk: (updates: BulkStateUpdate[]) => Promise<BulkUpdateResult>
 }

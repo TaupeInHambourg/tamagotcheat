@@ -30,7 +30,20 @@ function getStateStyle (state: string): string {
 }
 
 export default function MonsterCard ({ monster: initialMonster, className = '', autoRefresh = true }: MonsterCardProps): React.ReactNode {
-  // Use simplified polling hook
+  /**
+   * Use simplified polling hook for card auto-refresh
+   *
+   * Card-specific configuration:
+   * - Polls every 3 seconds (slightly slower than detail page)
+   * - Can be disabled via autoRefresh prop (useful for static lists)
+   * - No verbose logging to keep console clean
+   * - No onStateChange callback (cards don't need notifications)
+   *
+   * Why polling for cards?
+   * - Cards are often displayed in grids/lists
+   * - Users expect to see live updates
+   * - 3s interval balances freshness vs performance
+   */
   const { monster } = useMonsterPolling({
     initialMonster,
     pollingInterval: 3000, // Poll every 3 seconds for cards
