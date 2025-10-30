@@ -15,6 +15,7 @@
 
 import { type Monster, type MonsterState, DEFAULT_MONSTER_STATE, MONSTER_STATES } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
+import { getMonsterAssetPath, extractFolderPath } from '@/utils/monster-asset-resolver'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -88,7 +89,10 @@ export function MonsterDashboardCard ({ initialMonster, autoRefresh = true }: Mo
   const adoptionDate = formatAdoptionDate(monster.createdAt ?? monster.updatedAt)
   const levelLabel = monster.level ?? 1
   const monsterHref = `/creatures/${String(monster.id ?? monster._id ?? '')}`
-  const monsterDraw = monster.draw ?? '/placeholder-monster.png'
+
+  // Get the correct asset path based on current state
+  const folderPath = extractFolderPath(monster.draw)
+  const currentAsset = getMonsterAssetPath(folderPath, state)
 
   return (
     <Link
@@ -99,7 +103,7 @@ export function MonsterDashboardCard ({ initialMonster, autoRefresh = true }: Mo
         <div className='relative flex flex-col gap-6'>
           <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-6 border border-autumn-peach/30'>
             <Image
-              src={monsterDraw}
+              src={currentAsset}
               alt={monster.name}
               width={200}
               height={200}

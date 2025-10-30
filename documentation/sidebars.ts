@@ -52,7 +52,16 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'guides/setup',
-        'guides/migration-to-lazy-state'
+        'guides/migration-to-lazy-state',
+        'guides/toast-notifications'
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Features',
+      collapsed: false,
+      items: [
+        'features/dynamic-monster-assets'
       ]
     }
   ]

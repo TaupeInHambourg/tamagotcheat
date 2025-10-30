@@ -1,0 +1,151 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #D9A8C9;
+      --body-shadow: #BF8FB8;
+      --eye-white: #FFFFFF;
+      --eye-pupil: #6B6B6B;
+      --eye-shine: #FFFFFF;
+      --mouth: #D969A4;
+      --ear-main: #A88FB8;
+      --ear-inner: #C9A8D9;
+      --cheek: #D9B8C9;
+      --belly: #E8D4E5;
+      --feet: #C99BC0;
+      --antenna: #99C5D9;
+      --antenna-tip: #7AA8BF;
+      --tear: #A8D8E8;
+    }
+    
+    /* Animation d'affaissement */
+    @keyframes slump {
+      0%, 100% { transform: translateY(2px); }
+      50% { transform: translateY(3px); }
+    }
+    
+    /* Animation de clignement triste */
+    @keyframes sad-blink {
+      0%, 85%, 100% { opacity: 1; }
+      90%, 95% { opacity: 0; }
+    }
+    
+    /* Animation des antennes tombantes */
+    @keyframes antenna-droop {
+      0%, 100% { transform: rotate(15deg); }
+      50% { transform: rotate(20deg); }
+    }
+    
+    /* Animation des larmes */
+    @keyframes tear-fall {
+      0% { opacity: 0; transform: translateY(0); }
+      20% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(4px); }
+    }
+    
+    .monster-body {
+      animation: slump 4s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    
+    .eye-group {
+      animation: sad-blink 6s ease-in-out infinite;
+    }
+    
+    .antenna {
+      animation: antenna-droop 3s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    
+    .tear {
+      animation: tear-fall 3s ease-in-out infinite;
+    }
+  </style>
+  
+  <!-- Fond pixel transparent -->
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <!-- Oreilles gauche tombantes -->
+    <rect x="6" y="11" width="2" height="2" fill="var(--ear-main)"/>
+    <rect x="6" y="13" width="2" height="3" fill="var(--ear-main)"/>
+    <rect x="7" y="13" width="1" height="2" fill="var(--ear-inner)"/>
+    
+    <!-- Oreilles droite tombantes -->
+    <rect x="24" y="11" width="2" height="2" fill="var(--ear-main)"/>
+    <rect x="24" y="13" width="2" height="3" fill="var(--ear-main)"/>
+    <rect x="24" y="13" width="1" height="2" fill="var(--ear-inner)"/>
+    
+    <!-- Antennes gauche tombantes -->
+    <g class="antenna" style="animation-delay: 0s;">
+      <rect x="10" y="7" width="1" height="3" fill="var(--antenna)"/>
+      <rect x="9" y="6" width="2" height="1" fill="var(--antenna-tip)"/>
+      <rect x="9" y="5" width="2" height="1" fill="var(--antenna-tip)"/>
+    </g>
+    
+    <!-- Antennes droite tombantes -->
+    <g class="antenna" style="animation-delay: 0.3s;">
+      <rect x="21" y="7" width="1" height="3" fill="var(--antenna)"/>
+      <rect x="21" y="6" width="2" height="1" fill="var(--antenna-tip)"/>
+      <rect x="21" y="5" width="2" height="1" fill="var(--antenna-tip)"/>
+    </g>
+    
+    <!-- Corps principal affaissé -->
+    <rect x="8" y="10" width="16" height="13" fill="var(--body-color)"/>
+    <rect x="9" y="23" width="14" height="2" fill="var(--body-color)"/>
+    
+    <!-- Ombre du corps plus marquée -->
+    <rect x="8" y="21" width="16" height="2" fill="var(--body-shadow)"/>
+    
+    <!-- Ventre -->
+    <rect x="11" y="15" width="10" height="6" fill="var(--belly)"/>
+    
+    <!-- Yeux tristes (semi-fermés) -->
+    <g class="eye-group">
+      <!-- Oeil gauche blanc -->
+      <rect x="11" y="12" width="3" height="3" fill="var(--eye-white)"/>
+      <!-- Pupille gauche baissée -->
+      <rect x="12" y="14" width="2" height="1" fill="var(--eye-pupil)"/>
+      <!-- Brillance gauche -->
+      <rect x="12" y="14" width="1" height="1" fill="var(--eye-shine)"/>
+      <!-- Paupière tombante -->
+      <rect x="11" y="12" width="3" height="1" fill="var(--body-color)" opacity="0.3"/>
+    </g>
+    
+    <g class="eye-group">
+      <!-- Oeil droit blanc -->
+      <rect x="18" y="12" width="3" height="3" fill="var(--eye-white)"/>
+      <!-- Pupille droite baissée -->
+      <rect x="19" y="14" width="2" height="1" fill="var(--eye-pupil)"/>
+      <!-- Brillance droite -->
+      <rect x="19" y="14" width="1" height="1" fill="var(--eye-shine)"/>
+      <!-- Paupière tombante -->
+      <rect x="18" y="12" width="3" height="1" fill="var(--body-color)" opacity="0.3"/>
+    </g>
+    
+    <!-- Larmes qui tombent -->
+    <g class="tear" style="animation-delay: 0s;">
+      <rect x="12" y="15" width="1" height="1" fill="var(--tear)"/>
+    </g>
+    <g class="tear" style="animation-delay: 1.5s;">
+      <rect x="19" y="15" width="1" height="1" fill="var(--tear)"/>
+    </g>
+    
+    <!-- Joues pâles -->
+    <rect x="9" y="17" width="2" height="2" fill="var(--cheek)"/>
+    <rect x="21" y="17" width="2" height="2" fill="var(--cheek)"/>
+    
+    <!-- Bouche triste (inversée) -->
+    <rect x="14" y="18" width="1" height="1" fill="var(--mouth)"/>
+    <rect x="15" y="19" width="2" height="1" fill="var(--mouth)"/>
+    <rect x="17" y="18" width="1" height="1" fill="var(--mouth)"/>
+    
+    <!-- Pieds lourds gauche -->
+    <rect x="10" y="25" width="4" height="2" fill="var(--feet)"/>
+    <rect x="9" y="27" width="5" height="2" fill="var(--feet)"/>
+    
+    <!-- Pieds lourds droit -->
+    <rect x="18" y="25" width="4" height="2" fill="var(--feet)"/>
+    <rect x="18" y="27" width="5" height="2" fill="var(--feet)"/>
+  </g>
+</svg>

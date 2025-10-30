@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import Image from 'next/image'
+import { toast, Bounce } from 'react-toastify'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
-import { StateChangeNotification } from './state-change-notification'
 import Button from '../Button'
+import { getMonsterAssetPath, extractFolderPath } from '@/utils/monster-asset-resolver'
 
 function getStateStyle (state: string): string {
   switch (state) {
@@ -39,6 +40,17 @@ function getMoodEmoji (state: string): string {
   return moodEmojis[state] ?? '😶'
 }
 
+function getStateLabelFr (state: string): string {
+  const stateLabels: Record<string, string> = {
+    happy: 'Heureux',
+    sad: 'Triste',
+    angry: 'En colère',
+    hungry: 'Affamé',
+    sleepy: 'Endormi'
+  }
+  return stateLabels[state] ?? state.charAt(0).toUpperCase() + state.slice(1)
+}
+
 function formatDate (date: string | undefined): string {
   if (typeof date !== 'string' || date.trim() === '') return 'Date inconnue'
 
@@ -53,10 +65,6 @@ function formatDate (date: string | undefined): string {
 }
 
 export default function MonsterPageClient ({ monster: initialMonster }: MonsterPageProps): React.ReactNode {
-  // Notification state for displaying state change alerts
-  const [showNotification, setShowNotification] = useState(false)
-  const [stateChange, setStateChange] = useState<{ old: string, new: string } | null>(null)
-
   /**
    * Use simplified polling hook with lazy state computation on backend
    *
@@ -75,8 +83,26 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
     initialMonster,
     onStateChange: (newState, oldState) => {
       console.log(`🎉 ${initialMonster.name} changed state: ${oldState} → ${newState}`)
-      setStateChange({ old: oldState, new: newState })
-      setShowNotification(true)
+
+      // Show toast notification with custom styling
+      const oldEmoji = getMoodEmoji(oldState)
+      const newEmoji = getMoodEmoji(newState)
+      const newLabel = getStateLabelFr(newState)
+
+      toast.info(
+        `${newEmoji} ${initialMonster.name} est maintenant ${newLabel.toLowerCase()} ! (${oldEmoji} → ${newEmoji})`,
+        {
+          position: 'top-right',
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+          transition: Bounce
+        }
+      )
     },
     pollingInterval: 2000, // Poll every 2 seconds
     enabled: true,
@@ -86,82 +112,73 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const formattedCreationDate = useMemo(() => formatDate(monster.createdAt), [monster.createdAt])
   const moodEmoji = useMemo(() => getMoodEmoji(monster.state), [monster.state])
 
+  // Get the correct asset path based on current state
+  const folderPath = useMemo(() => extractFolderPath(monster.draw), [monster.draw])
+  const currentAsset = useMemo(() => getMonsterAssetPath(folderPath, monster.state), [folderPath, monster.state])
+
   return (
-    <>
-      {/* State change notification */}
-      {stateChange != null && (
-        <StateChangeNotification
-          monsterName={monster.name}
-          oldState={stateChange.old}
-          newState={stateChange.new}
-          show={showNotification}
-          onClose={() => { setShowNotification(false) }}
-        />
-      )}
+    <div className='w-full max-w-4xl mx-auto px-4 py-8'>
+      <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
+        {/* En-tête avec image */}
+        <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5'>
+          <Image
+            src={currentAsset}
+            alt={monster.name}
+            fill
+            className='object-contain'
+            priority
+          />
+        </div>
 
-      <div className='w-full max-w-4xl mx-auto px-4 py-8'>
-        <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
-          {/* En-tête avec image */}
-          <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5'>
-            <Image
-              src={monster.draw}
-              alt={monster.name}
-              fill
-              className='object-contain'
-              priority
-            />
-          </div>
-
-          {/* Contenu */}
-          <div className='p-6 sm:p-8'>
-            <div className='flex flex-col gap-6'>
-              {/* Titre et informations principales */}
-              <div className='flex items-start justify-between'>
-                <div>
-                  <h1 className='text-3xl font-bold text-slate-900'>{monster.name}</h1>
-                  <p className='mt-1 text-sm text-slate-500'>
-                    Créé le {formattedCreationDate}
-                  </p>
-                </div>
-                <div className='flex items-center gap-2'>
-                  <span className='text-2xl' role='img' aria-label={`Humeur: ${monster.state}`}>
-                    {moodEmoji}
-                  </span>
-                  <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full transition-all duration-500 ${getStateStyle(monster.state)}`}>
-                    {monster.state.charAt(0).toUpperCase() + monster.state.slice(1)}
-                  </span>
-                </div>
+        {/* Contenu */}
+        <div className='p-6 sm:p-8'>
+          <div className='flex flex-col gap-6'>
+            {/* Titre et informations principales */}
+            <div className='flex items-start justify-between'>
+              <div>
+                <h1 className='text-3xl font-bold text-slate-900'>{monster.name}</h1>
+                <p className='mt-1 text-sm text-slate-500'>
+                  Créé le {formattedCreationDate}
+                </p>
               </div>
-
-              {/* Niveau et caractéristiques */}
-              <div className='grid gap-4 sm:grid-cols-2'>
-                <div className='rounded-2xl bg-monsters-pink/5 p-4'>
-                  <p className='text-sm font-medium text-slate-900'>Niveau actuel</p>
-                  <p className='mt-1 text-2xl font-semibold text-pink-flare-600'>
-                    {monster.level ?? 1}
-                  </p>
-                </div>
+              <div className='flex items-center gap-2'>
+                <span className='text-2xl' role='img' aria-label={`Humeur: ${monster.state}`}>
+                  {moodEmoji}
+                </span>
+                <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full transition-all duration-500 ${getStateStyle(monster.state)}`}>
+                  {getStateLabelFr(monster.state)}
+                </span>
               </div>
+            </div>
 
-              {/* Actions */}
-              <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6 content-center sm:justify-start'>
-                <Button variant='outline'>
-                  🍪 Nourrir
-                </Button>
-                <Button variant='outline'>
-                  💤 Mettre au lit
-                </Button>
-                <Button variant='outline'>
-                  🎮 Jouer
-                </Button>
-                <Button variant='outline'>
-                  💕 Câliner
-                </Button>
+            {/* Niveau et caractéristiques */}
+            <div className='grid gap-4 sm:grid-cols-2'>
+              <div className='rounded-2xl bg-monsters-pink/5 p-4'>
+                <p className='text-sm font-medium text-slate-900'>Niveau actuel</p>
+                <p className='mt-1 text-2xl font-semibold text-pink-flare-600'>
+                  {monster.level ?? 1}
+                </p>
               </div>
+            </div>
+
+            {/* Actions */}
+            <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6 justify-center'>
+              <Button variant='outline'>
+                🍪 Nourrir
+              </Button>
+              <Button variant='outline'>
+                💤 Mettre au lit
+              </Button>
+              <Button variant='outline'>
+                🎮 Jouer
+              </Button>
+              <Button variant='outline'>
+                💕 Câliner
+              </Button>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

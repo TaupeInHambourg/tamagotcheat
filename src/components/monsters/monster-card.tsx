@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
+import { getMonsterAssetPath, extractFolderPath } from '@/utils/monster-asset-resolver'
 
 export interface MonsterCardProps {
   monster: Monster
@@ -55,6 +56,10 @@ export default function MonsterCard ({ monster: initialMonster, className = '', 
   const displayName = monster.name.length > 20 ? `${monster.name.slice(0, 20)}...` : monster.name
   const monsterId = monster.id ?? monster._id ?? ''
 
+  // Get the correct asset path based on current state
+  const folderPath = extractFolderPath(monster.draw)
+  const currentAsset = getMonsterAssetPath(folderPath, monster.state)
+
   return (
     <Link
       href={`/creatures/${monsterId}`}
@@ -63,7 +68,7 @@ export default function MonsterCard ({ monster: initialMonster, className = '', 
       <div className='relative w-full h-48'>
         <div className='absolute inset-0 bg-monsters-pink/5 transition-colors duration-300 group-hover:bg-monsters-pink/10' />
         <Image
-          src={monster.draw}
+          src={currentAsset}
           alt={displayName}
           fill
           className='object-contain transition-transform duration-500 group-hover:scale-105'

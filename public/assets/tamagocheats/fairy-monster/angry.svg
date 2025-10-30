@@ -1,0 +1,204 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" width="320" height="320">
+  <style>
+    /* Variables CSS pour les couleurs - Facile à modifier ! */
+    :root {
+      --body-color: #E8A8A8;
+      --body-shadow: #D98F8F;
+      --eye-white: #FFFFFF;
+      --eye-pupil: #8B0000;
+      --eye-shine: #FFFFFF;
+      --mouth: #B53939;
+      --ear-main: #D98FA8;
+      --ear-inner: #E8A8BF;
+      --cheek: #FF6B6B;
+      --belly: #F0D9D9;
+      --feet: #D99B9B;
+      --antenna: #D98FA8;
+      --antenna-tip: #BF7A8F;
+      --steam: #F5E5E5;
+      --vein: #C94D4D;
+      --eyebrow: #8B0000;
+    }
+    
+    /* Animation de tremblement de colère */
+    @keyframes angry-shake {
+      0%, 100% { transform: translateX(0); }
+      10% { transform: translateX(-2px) rotate(-1deg); }
+      20% { transform: translateX(2px) rotate(1deg); }
+      30% { transform: translateX(-2px) rotate(-1deg); }
+      40% { transform: translateX(2px) rotate(1deg); }
+      50% { transform: translateX(-1px); }
+      60% { transform: translateX(1px); }
+      70% { transform: translateX(-1px); }
+      80% { transform: translateX(1px); }
+      90% { transform: translateX(0); }
+    }
+    
+    /* Animation des yeux furieux */
+    @keyframes angry-glare {
+      0%, 85%, 100% { transform: scaleX(1); }
+      90%, 95% { transform: scaleX(1.1); }
+    }
+    
+    /* Animation des antennes hérissées */
+    @keyframes antenna-bristle {
+      0%, 100% { transform: scaleY(1.1) translateY(-1px); }
+      50% { transform: scaleY(1.15) translateY(-2px); }
+    }
+    
+    /* Animation de la vapeur */
+    @keyframes steam-rise {
+      0% { opacity: 0; transform: translateY(0) scale(0.8); }
+      30% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-6px) scale(1.2); }
+    }
+    
+    /* Animation de respiration agressive */
+    @keyframes angry-breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    /* Animation des veines */
+    @keyframes vein-pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+    
+    .monster-body {
+      animation: angry-shake 0.5s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    
+    .body-tense {
+      animation: angry-breathe 0.8s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .eye-group {
+      animation: angry-glare 2s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    
+    .antenna {
+      animation: antenna-bristle 0.4s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+    
+    .steam {
+      animation: steam-rise 2s ease-in-out infinite;
+    }
+    
+    .vein {
+      animation: vein-pulse 0.6s ease-in-out infinite;
+    }
+  </style>
+  
+  <!-- Fond pixel transparent -->
+  <rect width="32" height="32" fill="transparent"/>
+  
+  <g class="monster-body">
+    <g class="body-tense">
+      <!-- Oreilles gauche hérissées -->
+      <rect x="6" y="9" width="2" height="2" fill="var(--ear-main)"/>
+      <rect x="6" y="11" width="2" height="3" fill="var(--ear-main)"/>
+      <rect x="7" y="11" width="1" height="2" fill="var(--ear-inner)"/>
+      
+      <!-- Oreilles droite hérissées -->
+      <rect x="24" y="9" width="2" height="2" fill="var(--ear-main)"/>
+      <rect x="24" y="11" width="2" height="3" fill="var(--ear-main)"/>
+      <rect x="24" y="11" width="1" height="2" fill="var(--ear-inner)"/>
+      
+      <!-- Antennes gauche hérissées -->
+      <g class="antenna" style="animation-delay: 0s;">
+        <rect x="10" y="5" width="1" height="3" fill="var(--antenna)"/>
+        <rect x="9" y="4" width="2" height="1" fill="var(--antenna-tip)"/>
+        <rect x="9" y="3" width="2" height="1" fill="var(--antenna-tip)"/>
+      </g>
+      
+      <!-- Antennes droite hérissées -->
+      <g class="antenna" style="animation-delay: 0.2s;">
+        <rect x="21" y="5" width="1" height="3" fill="var(--antenna)"/>
+        <rect x="21" y="4" width="2" height="1" fill="var(--antenna-tip)"/>
+        <rect x="21" y="3" width="2" height="1" fill="var(--antenna-tip)"/>
+      </g>
+      
+      <!-- Corps principal tendu -->
+      <rect x="8" y="8" width="16" height="13" fill="var(--body-color)"/>
+      <rect x="9" y="21" width="14" height="2" fill="var(--body-color)"/>
+      
+      <!-- Ombre du corps intense -->
+      <rect x="8" y="19" width="16" height="2" fill="var(--body-shadow)"/>
+      
+      <!-- Ventre tendu -->
+      <rect x="11" y="13" width="10" height="6" fill="var(--belly)"/>
+      
+      <!-- Veines visibles -->
+      <g class="vein">
+        <rect x="9" y="10" width="1" height="2" fill="var(--vein)"/>
+        <rect x="10" y="9" width="2" height="1" fill="var(--vein)"/>
+      </g>
+      
+      <!-- Sourcils froncés -->
+      <rect x="10" y="10" width="4" height="1" fill="var(--eyebrow)"/>
+      <rect x="11" y="11" width="1" height="1" fill="var(--eyebrow)"/>
+      
+      <rect x="18" y="10" width="4" height="1" fill="var(--eyebrow)"/>
+      <rect x="20" y="11" width="1" height="1" fill="var(--eyebrow)"/>
+      
+      <!-- Yeux furieux (plissés) -->
+      <g class="eye-group">
+        <!-- Oeil gauche blanc (plissé) -->
+        <rect x="11" y="11" width="3" height="2" fill="var(--eye-white)"/>
+        <!-- Pupille gauche -->
+        <rect x="12" y="11" width="2" height="2" fill="var(--eye-pupil)"/>
+        <!-- Brillance gauche -->
+        <rect x="12" y="11" width="1" height="1" fill="var(--eye-shine)"/>
+      </g>
+      
+      <g class="eye-group">
+        <!-- Oeil droit blanc (plissé) -->
+        <rect x="18" y="11" width="3" height="2" fill="var(--eye-white)"/>
+        <!-- Pupille droite -->
+        <rect x="19" y="11" width="2" height="2" fill="var(--eye-pupil)"/>
+        <!-- Brillance droite -->
+        <rect x="19" y="11" width="1" height="1" fill="var(--eye-shine)"/>
+      </g>
+      
+      <!-- Joues rouges de colère -->
+      <rect x="8" y="15" width="3" height="3" fill="var(--cheek)"/>
+      <rect x="7" y="16" width="1" height="1" fill="var(--cheek)"/>
+      
+      <rect x="21" y="15" width="3" height="3" fill="var(--cheek)"/>
+      <rect x="24" y="16" width="1" height="1" fill="var(--cheek)"/>
+      
+      <!-- Bouche en grognement -->
+      <rect x="13" y="16" width="6" height="3" fill="var(--mouth)"/>
+      <rect x="12" y="17" width="1" height="1" fill="var(--mouth)"/>
+      <rect x="19" y="17" width="1" height="1" fill="var(--mouth)"/>
+      
+      <!-- Crocs -->
+      <rect x="13" y="16" width="1" height="1" fill="var(--eye-white)"/>
+      <rect x="18" y="16" width="1" height="1" fill="var(--eye-white)"/>
+    </g>
+    
+    <!-- Pieds qui piétinent fort gauche -->
+    <rect x="10" y="23" width="4" height="2" fill="var(--feet)"/>
+    <rect x="9" y="25" width="5" height="2" fill="var(--feet)"/>
+    
+    <!-- Pieds qui piétinent fort droit -->
+    <rect x="18" y="23" width="4" height="2" fill="var(--feet)"/>
+    <rect x="18" y="25" width="5" height="2" fill="var(--feet)"/>
+  </g>
+  
+  <!-- Vapeur de colère -->
+  <g class="steam" style="animation-delay: 0s;">
+    <rect x="8" y="8" width="2" height="1" fill="var(--steam)"/>
+    <rect x="9" y="7" width="1" height="1" fill="var(--steam)"/>
+  </g>
+  
+  <g class="steam" style="animation-delay: 1s;">
+    <rect x="22" y="8" width="2" height="1" fill="var(--steam)"/>
+    <rect x="22" y="7" width="1" height="1" fill="var(--steam)"/>
+  </g>
+</svg>
