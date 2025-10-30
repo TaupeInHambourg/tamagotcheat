@@ -57,4 +57,14 @@ export interface IMonsterService {
    * @returns Result containing the updated monster or error
    */
   updateMonsterState: (userId: string, monsterId: string, state: string) => Promise<OperationResult<Monster>>
+
+  /**
+   * Interacts with a monster using a specific action
+   * Only the correct action for the current state will succeed
+   * @param userId - The ID of the user
+   * @param monsterId - The ID of the monster
+   * @param action - The interaction action ('feed', 'sleep', 'play', 'cuddle')
+   * @returns Result containing the updated monster or error
+   */
+  interactWithMonster: (userId: string, monsterId: string, action: string) => Promise<OperationResult<Monster>>
 }

@@ -12,8 +12,8 @@
 
 import type { IMonsterRepository } from '@/db/repositories/interfaces/monster.repository.interface'
 import type { IMonsterService, OperationResult } from '../interfaces/monster.service.interface'
-import type { Monster, CreateMonsterDto, MonsterTemplate } from '@/types/monster.types'
-import { MonsterTemplates, MONSTER_STATES } from '@/types/monster.types'
+import type { Monster, CreateMonsterDto, MonsterTemplate, MonsterAction, MonsterState } from '@/types/monster.types'
+import { MonsterTemplates, MONSTER_STATES, MONSTER_ACTIONS } from '@/types/monster.types'
 import { initializeMonsterTiming, computeCurrentState } from '@/utils/monster-state-decay'
 
 export class MonsterService implements IMonsterService {
@@ -250,6 +250,102 @@ export class MonsterService implements IMonsterService {
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to update monster'
+      }
+    }
+  }
+
+  /**
+   * Interacts with a monster using a specific action
+   *
+   * Business rule: Only the correct action for the current state succeeds
+   * - hungry → feed
+   * - sleepy → sleep
+   * - sad → play
+   * - angry → cuddle
+   * - happy → no action needed (all actions are ignored)
+   *
+   * If the correct action is used, the monster becomes happy and timing is reset.
+   *
+   * @param userId - The ID of the user performing the action
+   * @param monsterId - The ID of the monster to interact with
+   * @param action - The interaction type ('feed', 'sleep', 'play', 'cuddle')
+   * @returns Result with updated monster or error
+   */
+  async interactWithMonster (userId: string, monsterId: string, action: string): Promise<OperationResult<Monster>> {
+    try {
+      // Step 1: Fetch current monster
+      const monsterResult = await this.getMonsterById(userId, monsterId)
+
+      if (!monsterResult.success || monsterResult.data === undefined) {
+        return {
+          success: false,
+          error: monsterResult.error ?? 'Monster not found'
+        }
+      }
+
+      const monster = monsterResult.data
+
+      // Step 2: Define action-to-state mapping (business rule)
+      const actionStateMap: Record<MonsterAction, MonsterState> = {
+        feed: 'hungry',
+        sleep: 'sleepy',
+        play: 'sad',
+        cuddle: 'angry'
+      }
+
+      // Step 3: Validate action
+      if (!MONSTER_ACTIONS.includes(action as MonsterAction)) {
+        return {
+          success: false,
+          error: `Invalid action. Must be one of: ${MONSTER_ACTIONS.join(', ')}`
+        }
+      }
+
+      const typedAction = action as MonsterAction
+
+      // Step 4: Check if monster is already happy (no action needed)
+      if (monster.state === 'happy') {
+        return {
+          success: false,
+          error: 'Monster is already happy!'
+        }
+      }
+
+      // Step 5: Check if action matches current state
+      const requiredState = actionStateMap[typedAction]
+      if (monster.state !== requiredState) {
+        // Wrong action for current state - do nothing
+        return {
+          success: false,
+          error: `Wrong action! Monster is ${monster.state}, not ${requiredState}`
+        }
+      }
+
+      // Step 6: Action is correct! Update to happy and reset timing
+      const timing = initializeMonsterTiming('happy')
+
+      const updatedMonster = await this.monsterRepository.update(monsterId, userId, {
+        state: timing.state,
+        lastStateChange: timing.lastStateChange,
+        nextStateChangeAt: timing.nextStateChangeAt
+      })
+
+      if (updatedMonster === null) {
+        return {
+          success: false,
+          error: 'Failed to update monster'
+        }
+      }
+
+      return {
+        success: true,
+        data: updatedMonster
+      }
+    } catch (error) {
+      console.error('Error interacting with monster:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to interact with monster'
       }
     }
   }

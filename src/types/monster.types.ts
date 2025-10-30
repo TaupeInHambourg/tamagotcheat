@@ -17,6 +17,12 @@
 export const MONSTER_STATES = ['happy', 'sad', 'angry', 'hungry', 'sleepy'] as const
 
 /**
+ * Available interaction actions
+ * Actions the user can perform to care for their monster
+ */
+export const MONSTER_ACTIONS = ['feed', 'sleep', 'play', 'cuddle'] as const
+
+/**
  * Monster color type
  * Hex color codes used for monster visualization
  */
@@ -26,6 +32,11 @@ export type MonsterColor = '#FF69B4' | '#87CEEB' | '#98FB98' | '#FFD700'
  * Monster state union type
  */
 export type MonsterState = typeof MONSTER_STATES[number]
+
+/**
+ * Monster action union type
+ */
+export type MonsterAction = typeof MONSTER_ACTIONS[number]
 
 /**
  * Default values for monster creation

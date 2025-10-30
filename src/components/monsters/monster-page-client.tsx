@@ -1,10 +1,11 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { toast, Bounce } from 'react-toastify'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
+import { interactWithMonster } from '@/actions/monsters.actions'
 import Button from '../Button'
 import { getMonsterAssetPath, extractFolderPath } from '@/utils/monster-asset-resolver'
 
@@ -64,7 +65,78 @@ function formatDate (date: string | undefined): string {
   }).format(parsedDate)
 }
 
+/**
+ * Safely extracts the monster ID from either id or _id field
+ * The repository should always provide an id field, but we keep _id as fallback
+ * @param monster - Monster object
+ * @returns The monster ID as string
+ */
+function getMonsterId (monster: Monster): string {
+  // Repository normalizes _id to id, so id should always be available
+  // We keep _id as fallback for backward compatibility
+  return monster.id ?? monster._id ?? ''
+}
+
 export default function MonsterPageClient ({ monster: initialMonster }: MonsterPageProps): React.ReactNode {
+  const [isInteracting, setIsInteracting] = useState(false)
+
+  /**
+   * Handles monster interaction with action buttons
+   *
+   * Business logic (enforced by backend):
+   * - hungry → feed
+   * - sleepy → sleep
+   * - sad → play
+   * - angry → cuddle
+   * - happy → no action needed
+   *
+   * If wrong action is clicked, nothing happens (backend returns error silently).
+   * If correct action is clicked, monster becomes happy.
+   */
+  const handleInteraction = useCallback(async (action: string, actionLabel: string) => {
+    if (isInteracting) return
+
+    setIsInteracting(true)
+
+    try {
+      const monsterId = getMonsterId(initialMonster)
+      const result = await interactWithMonster(monsterId, action)
+
+      if (result.success) {
+        // Success: Show success toast
+        toast.success(
+          `✨ ${actionLabel} a fonctionné ! ${initialMonster.name} est maintenant heureux ! 😄`,
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'light',
+            transition: Bounce
+          }
+        )
+      } else {
+        // Wrong action or already happy: Silent fail (no toast)
+        // The backend has already validated and rejected the action
+        console.log(`Action ${action} n'est pas applicable pour l'état actuel`)
+      }
+    } catch (error) {
+      console.error('Error during interaction:', error)
+      toast.error(
+        'Une erreur est survenue lors de l\'interaction',
+        {
+          position: 'top-right',
+          autoClose: 3000,
+          theme: 'light'
+        }
+      )
+    } finally {
+      setIsInteracting(false)
+    }
+  }, [initialMonster, isInteracting])
+
   /**
    * Use simplified polling hook with lazy state computation on backend
    *
@@ -163,16 +235,32 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
 
             {/* Actions */}
             <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6 justify-center'>
-              <Button variant='outline'>
+              <Button
+                variant='outline'
+                onClick={() => { void handleInteraction('feed', 'Nourrir') }}
+                disabled={isInteracting}
+              >
                 🍪 Nourrir
               </Button>
-              <Button variant='outline'>
+              <Button
+                variant='outline'
+                onClick={() => { void handleInteraction('sleep', 'Mettre au lit') }}
+                disabled={isInteracting}
+              >
                 💤 Mettre au lit
               </Button>
-              <Button variant='outline'>
+              <Button
+                variant='outline'
+                onClick={() => { void handleInteraction('play', 'Jouer') }}
+                disabled={isInteracting}
+              >
                 🎮 Jouer
               </Button>
-              <Button variant='outline'>
+              <Button
+                variant='outline'
+                onClick={() => { void handleInteraction('cuddle', 'Câliner') }}
+                disabled={isInteracting}
+              >
                 💕 Câliner
               </Button>
             </div>

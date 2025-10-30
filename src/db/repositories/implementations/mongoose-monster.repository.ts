@@ -28,12 +28,30 @@ export class MongooseMonsterRepository implements IMonsterRepository {
 
   /**
    * Serializes Mongoose document to plain JavaScript object
-   * @param doc - Mongoose document
-   * @returns Plain JavaScript object
+   * @param doc - Mongoose document or array of documents
+   * @returns Plain JavaScript object with normalized id field
    * @private
    */
   private serialize<T>(doc: unknown): T {
-    return JSON.parse(JSON.stringify(doc))
+    const obj = JSON.parse(JSON.stringify(doc))
+
+    // Handle arrays
+    if (Array.isArray(obj)) {
+      return obj.map(item => {
+        if (item._id !== undefined) {
+          item.id = item._id.toString()
+        }
+        return item
+      }) as T
+    }
+
+    // Handle single objects - normalize _id to id for consistency
+    if (obj._id !== undefined) {
+      obj.id = obj._id.toString()
+      // Keep _id for backward compatibility, but id is the primary field
+    }
+
+    return obj
   }
 
   /**

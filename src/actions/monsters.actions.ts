@@ -119,3 +119,44 @@ export async function getMonsterById (id: string): Promise<Monster | null> {
     return null
   }
 }
+
+/**
+ * Interacts with a monster using a specific action
+ * @param monsterId - The monster's unique identifier
+ * @param action - The interaction action ('feed', 'sleep', 'play', 'cuddle')
+ * @returns Result with success status and optional error message
+ */
+export async function interactWithMonster (
+  monsterId: string,
+  action: string
+): Promise<{ success: boolean, error?: string, monster?: Monster }> {
+  try {
+    // Get authenticated user
+    const user = await getAuthenticatedUser()
+
+    // Perform interaction via service
+    const monsterService = createMonsterService()
+    const result = await monsterService.interactWithMonster(user.id, monsterId, action)
+
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error
+      }
+    }
+
+    // Revalidate the monster page to show updated state
+    revalidatePath(`/creatures/${monsterId}`)
+
+    return {
+      success: true,
+      monster: result.data
+    }
+  } catch (error) {
+    console.error('Error in interactWithMonster action:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to interact with monster'
+    }
+  }
+}
