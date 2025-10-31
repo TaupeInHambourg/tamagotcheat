@@ -15,6 +15,7 @@ import type { IMonsterService, OperationResult } from '../interfaces/monster.ser
 import type { Monster, CreateMonsterDto, MonsterTemplate, MonsterAction, MonsterState } from '@/types/monster.types'
 import { MonsterTemplates, MONSTER_STATES, MONSTER_ACTIONS } from '@/types/monster.types'
 import { initializeMonsterTiming, computeCurrentState } from '@/utils/monster-state-decay'
+import { addXP, XP_PER_ACTION } from '@/utils/xp-system'
 
 export class MonsterService implements IMonsterService {
   constructor (
@@ -324,10 +325,18 @@ export class MonsterService implements IMonsterService {
       // Step 6: Action is correct! Update to happy and reset timing
       const timing = initializeMonsterTiming('happy')
 
+      // Step 7: Calculate XP gain
+      const currentTotalXP = monster.totalExperience ?? 0
+      const xpGain = XP_PER_ACTION[typedAction]
+      const xpResult = addXP(currentTotalXP, xpGain)
+
       const updatedMonster = await this.monsterRepository.update(monsterId, userId, {
         state: timing.state,
         lastStateChange: timing.lastStateChange,
-        nextStateChangeAt: timing.nextStateChangeAt
+        nextStateChangeAt: timing.nextStateChangeAt,
+        level: xpResult.newLevel,
+        experience: xpResult.newCurrentXP,
+        totalExperience: xpResult.newTotalXP
       })
 
       if (updatedMonster === null) {

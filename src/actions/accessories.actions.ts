@@ -25,6 +25,8 @@ import {
   getMonsterEquipment
 } from '@/db/models/accessory.model'
 import type { OwnedAccessory } from '@/types/accessory.types'
+import { createMonsterRepository } from '@/db/repositories'
+import { addXP, XP_PER_ACCESSORY } from '@/utils/xp-system'
 
 /**
  * Result type for server actions
@@ -129,19 +131,9 @@ export async function equipAccessory (
 
     // 2. Verify user owns this accessory
     const userAccessories = await getUserAccessories(session.user.id)
-
-    // Debug: Log accessory IDs for comparison
-    console.log('[equipAccessory] Looking for accessoryDbId:', accessoryDbId)
-    console.log('[equipAccessory] Available accessories:', userAccessories.map(acc => ({
-      id: acc._id,
-      accessoryId: acc.accessoryId
-    })))
-
     const accessory = userAccessories.find(acc => acc._id === accessoryDbId)
 
     if (accessory == null) {
-      console.error('[equipAccessory] Accessory not found. Searched for:', accessoryDbId)
-      console.error('[equipAccessory] Available IDs:', userAccessories.map(acc => acc._id))
       return { success: false, error: 'Accessoire introuvable' }
     }
 
@@ -157,6 +149,26 @@ export async function equipAccessory (
 
     // 5. Equip the accessory
     await dbEquipAccessory(accessoryDbId, monsterId, accessoryInfo.category)
+
+    // 6. Award XP for equipping accessory
+    try {
+      const monsterRepository = createMonsterRepository()
+      const monster = await monsterRepository.findByIdAndOwner(monsterId, session.user.id)
+
+      if (monster !== null) {
+        const currentTotalXP = monster.totalExperience ?? 0
+        const xpResult = addXP(currentTotalXP, XP_PER_ACCESSORY)
+
+        await monsterRepository.update(monsterId, session.user.id, {
+          level: xpResult.newLevel,
+          experience: xpResult.newCurrentXP,
+          totalExperience: xpResult.newTotalXP
+        })
+      }
+    } catch (xpError) {
+      // Log XP error but don't fail the entire operation
+      console.error('Error awarding XP for accessory:', xpError)
+    }
 
     return { success: true }
   } catch (error) {

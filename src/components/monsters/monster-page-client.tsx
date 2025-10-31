@@ -10,6 +10,8 @@ import Button from '../Button'
 import { extractFolderPath, getMonsterAssetPath } from '@/utils/monster-asset-resolver'
 import { MonsterWithAccessories } from './MonsterWithAccessories'
 import { AccessoryPanel } from '../accessories'
+import LevelProgressBar from './LevelProgressBar'
+import { calculateLevelFromXP } from '@/utils/xp-system'
 
 function getStateStyle (state: string): string {
   switch (state) {
@@ -247,13 +249,13 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
             </div>
 
             {/* Niveau et caractéristiques */}
-            <div className='grid gap-4 sm:grid-cols-2'>
-              <div className='rounded-2xl bg-monsters-pink/5 p-4'>
-                <p className='text-sm font-medium text-slate-900'>Niveau actuel</p>
-                <p className='mt-1 text-2xl font-semibold text-pink-flare-600'>
-                  {monster.level ?? 1}
-                </p>
-              </div>
+            <div className='grid gap-4'>
+              {/* Barre de progression XP */}
+              <LevelProgressBar
+                level={monster.level ?? 1}
+                currentXP={monster.experience ?? 0}
+                xpForNextLevel={calculateLevelFromXP(monster.totalExperience ?? 0).xpForNextLevel}
+              />
             </div>
 
             {/* Actions */}

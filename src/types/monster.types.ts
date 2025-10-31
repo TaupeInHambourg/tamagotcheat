@@ -69,8 +69,10 @@ export interface Monster {
   state: MonsterState
   /** Current level (experience-based progression) */
   level?: number
-  /** Experience points earned */
+  /** Current experience points within current level (0 to XP needed for next level) */
   experience?: number
+  /** Total accumulated experience points since creation (never decreases) */
+  totalExperience?: number
   /** ID of the user who owns this monster */
   ownerId?: string
   /** Last update timestamp */

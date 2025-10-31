@@ -32,6 +32,16 @@ const monsterSchema = new Schema({
     required: true,
     default: 1
   },
+  experience: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  totalExperience: {
+    type: Number,
+    required: true,
+    default: 0
+  },
   draw: {
     type: String,
     required: true
