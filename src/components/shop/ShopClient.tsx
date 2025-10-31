@@ -1,8 +1,13 @@
 /**
  * Shop Page Client Component
  *
- * Handles the interactive shop interface with filtering and purchasing.
+ * Handles the interactive shop interface with filtering, sorting, and purchasing.
  * Separated from server component to enable client-side interactivity.
+ *
+ * Design Principles:
+ * - Single Responsibility: Orchestrates shop UI and user interactions
+ * - Open/Closed: Filter logic is extensible without modifying this component
+ * - Dependency Inversion: Depends on utility functions for business logic
  *
  * @component
  */
@@ -10,8 +15,9 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import AccessoryCard from '@/components/accessories/AccessoryCard'
+import ShopFilters from './ShopFilters'
 import { purchaseAccessory } from '@/actions/accessories.actions'
 import {
   ACCESSORIES_CATALOG,
@@ -19,6 +25,7 @@ import {
   getAccessoryPrice
 } from '@/config/accessories.config'
 import type { AccessoryCategory } from '@/types/accessory.types'
+import { applyShopFilters, type SortOrder } from '@/utils/shop-filters'
 
 interface CategoryFilter {
   id: AccessoryCategory | 'all'
@@ -38,6 +45,8 @@ export default function ShopClient ({
   ownedAccessoryIds
 }: ShopClientProps): ReactNode {
   const [selectedCategory, setSelectedCategory] = useState<AccessoryCategory | 'all'>('all')
+  const [sortOrder, setSortOrder] = useState<SortOrder>('rarest-first')
+  const [hideOwned, setHideOwned] = useState(false)
   const [purchasingId, setPurchasingId] = useState<string | null>(null)
   const [currentKoins, setCurrentKoins] = useState(userKoins)
   const [ownedIds, setOwnedIds] = useState(ownedAccessoryIds)
@@ -49,9 +58,27 @@ export default function ShopClient ({
     { id: 'shoes', name: CATEGORY_CONFIG.shoes.name, emoji: CATEGORY_CONFIG.shoes.emoji }
   ]
 
-  const filteredAccessories = selectedCategory === 'all'
-    ? ACCESSORIES_CATALOG
-    : ACCESSORIES_CATALOG.filter(accessory => accessory.category === selectedCategory)
+  /**
+   * Apply category filter
+   * Follows Single Responsibility: only filters by category
+   */
+  const categoryFilteredAccessories = useMemo(() => {
+    return selectedCategory === 'all'
+      ? ACCESSORIES_CATALOG
+      : ACCESSORIES_CATALOG.filter(accessory => accessory.category === selectedCategory)
+  }, [selectedCategory])
+
+  /**
+   * Apply sorting and ownership filters
+   * Uses composition of pure functions from shop-filters utility
+   */
+  const filteredAccessories = useMemo(() => {
+    return applyShopFilters(categoryFilteredAccessories, {
+      sortOrder,
+      hideOwned,
+      ownedIds
+    })
+  }, [categoryFilteredAccessories, sortOrder, hideOwned, ownedIds])
 
   const handleCategoryChange = (category: AccessoryCategory | 'all'): void => {
     setSelectedCategory(category)
@@ -121,27 +148,39 @@ export default function ShopClient ({
         </div>
 
         {/* Category Filters */}
-        <div className='flex flex-wrap gap-2 mb-8'>
-          {categoryFilters.map(category => (
-            <button
-              key={category.id}
-              onClick={() => { handleCategoryChange(category.id) }}
-              className={`
-                px-4 py-2 rounded-xl
-                font-semibold text-sm
-                transition-all duration-300
-                flex items-center gap-2
-                hover:-translate-y-0.5
-                ${selectedCategory === category.id
-                  ? 'bg-gradient-to-r from-autumn-coral to-autumn-cinnamon text-white shadow-md ring-2 ring-autumn-cinnamon/30'
-                  : 'bg-white text-chestnut-deep ring-1 ring-chestnut-light hover:ring-2 hover:ring-autumn-coral hover:shadow-md'
-                }
-              `}
-            >
-              <span>{category.emoji}</span>
-              <span>{category.name}</span>
-            </button>
-          ))}
+        <div className='flex flex-wrap items-center justify-between gap-4 mb-8'>
+          {/* Category Buttons */}
+          <div className='flex flex-wrap gap-2'>
+            {categoryFilters.map(category => (
+              <button
+                key={category.id}
+                onClick={() => { handleCategoryChange(category.id) }}
+                className={`
+                  px-4 py-2 rounded-xl
+                  font-semibold text-sm
+                  transition-all duration-300
+                  flex items-center gap-2
+                  hover:-translate-y-0.5
+                  ${selectedCategory === category.id
+                    ? 'bg-gradient-to-r from-autumn-coral to-autumn-cinnamon text-white shadow-md ring-2 ring-autumn-cinnamon/30'
+                    : 'bg-white text-chestnut-deep ring-1 ring-chestnut-light hover:ring-2 hover:ring-autumn-coral hover:shadow-md'
+                  }
+                `}
+              >
+                <span>{category.emoji}</span>
+                <span>{category.name}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Sort and Visibility Filters */}
+          <ShopFilters
+            sortOrder={sortOrder}
+            hideOwned={hideOwned}
+            onSortChange={setSortOrder}
+            onHideOwnedChange={setHideOwned}
+            ownedCount={ownedIds.length}
+          />
         </div>
 
         {/* Accessories Grid */}
