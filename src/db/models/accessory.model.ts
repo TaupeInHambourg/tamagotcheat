@@ -125,18 +125,17 @@ export async function equipAccessory (
 ): Promise<void> {
   const collection = await getAccessoriesCollection()
 
-  // First, unequip all accessories of this category on this monster
-  // Pattern matching: all accessory IDs start with category prefix (e.g., "hat-", "glasses-")
+  // First, unequip any existing accessory of the SAME category on this monster
+  // Pattern matching: all accessory IDs start with category prefix (e.g., "hat-", "glasses-", "shoes-")
+  // We use a regex to match only accessories of the same category
+  const categoryPrefix = `${category}-`
   await collection.updateMany(
     {
-      equippedOnMonsterId: monsterId
+      equippedOnMonsterId: monsterId,
+      accessoryId: { $regex: `^${categoryPrefix}` } // Only match accessories starting with "hat-", "glasses-", etc.
     },
     { $set: { equippedOnMonsterId: null } }
   )
-
-  // Note: We need to check if the accessory being equipped is of the same category
-  // In a more robust implementation, we'd query the accessory first to verify
-  // For now, we trust the category parameter passed from the action layer
 
   // Then equip the new accessory
   const { ObjectId } = await import('mongodb')
