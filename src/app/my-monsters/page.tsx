@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Monster } from '@/types/monster.types'
-import MonsterList from '@/components/monsters/monster-list'
+import { MonstersList } from '@/components/monsters'
 
 export default function MyMonstersPage (): React.ReactNode {
   const [monsters, setMonsters] = useState<Monster[]>([])
@@ -47,7 +47,7 @@ export default function MyMonstersPage (): React.ReactNode {
   return (
     <div className='container mx-auto px-4 py-8'>
       <h1 className='text-3xl font-bold text-pink-flare-900 mb-8'>Mes Monstres</h1>
-      <MonsterList monsters={monsters} />
+      <MonstersList monsters={monsters} />
     </div>
   )
 }

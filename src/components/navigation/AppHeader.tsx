@@ -2,7 +2,9 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { authClient } from '@/lib/auth-client'
+import { WalletDisplay } from './WalletDisplay'
 import type { NavigationItem } from '@/types/navigation.types'
 
 /**
@@ -22,6 +24,18 @@ import type { NavigationItem } from '@/types/navigation.types'
  */
 export default function AppHeader (): React.ReactNode {
   const pathname = usePathname()
+  const [userId, setUserId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchUser = async (): Promise<void> => {
+      const session = await authClient.getSession()
+      if (session?.data?.user?.id != null) {
+        setUserId(session.data.user.id)
+      }
+    }
+
+    void fetchUser()
+  }, [])
 
   const handleLogout = (): void => {
     void authClient.signOut()
@@ -35,8 +49,7 @@ export default function AppHeader (): React.ReactNode {
   const navItems: NavigationItem[] = [
     { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
     { href: '/creatures', label: 'Mes Créatures', icon: '🐾' },
-    { href: '/shop', label: 'Boutique', icon: '🛍️' },
-    { href: '/wallet', label: 'Mon Wallet', icon: '💰' }
+    { href: '/shop', label: 'Boutique', icon: '🛍️' }
   ]
 
   return (
@@ -68,6 +81,10 @@ export default function AppHeader (): React.ReactNode {
 
           {/* Actions utilisateur */}
           <div className='flex items-center space-x-3'>
+            {/* Wallet display */}
+            {userId != null && <WalletDisplay userId={userId} />}
+
+            {/* Logout button */}
             <button
               onClick={handleLogout}
               className='flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-maple-light text-maple-deep hover:bg-maple-soft transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md'

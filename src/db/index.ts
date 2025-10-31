@@ -67,4 +67,23 @@ async function connectToDatabase (): Promise<void> {
   }
 }
 
+/**
+ * Get MongoDB database instance
+ *
+ * Returns the database instance for direct MongoDB operations.
+ * Uses a simple connection check and connects if needed.
+ *
+ * @returns MongoDB database instance
+ */
+export async function getDatabase (): Promise<ReturnType<typeof client.db>> {
+  try {
+    // Test connection with a ping
+    await client.db('admin').command({ ping: 1 })
+  } catch {
+    // If ping fails, reconnect
+    await connectToDatabase()
+  }
+  return client.db(process.env.MONGODB_DB_NAME as string)
+}
+
 export { client, connectToDatabase, connectMongooseToDatabase }
