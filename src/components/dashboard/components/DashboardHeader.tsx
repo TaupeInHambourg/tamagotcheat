@@ -41,7 +41,7 @@ export function DashboardHeader ({ displayName, onCreateMonster, onLogout }: Das
           >
             <span className='mr-2'>✨</span> Créer une créature
           </Button>
-          <Link href='/gallery'>
+          <Link href='/gallery?source=dashboard'>
             <Button
               size='lg'
               variant='secondary'

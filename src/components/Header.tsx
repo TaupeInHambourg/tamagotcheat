@@ -50,7 +50,7 @@ export default function Header (): ReactNode {
             <Link href='#monsters' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
               Monstres
             </Link>
-            <Link href='/gallery' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
+            <Link href='/gallery?source=landing' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
               Galerie 🌍
             </Link>
             <Link href='#actions' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
