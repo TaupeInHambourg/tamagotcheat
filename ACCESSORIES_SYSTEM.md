@@ -4,6 +4,28 @@
 
 Le système d'accessoires a été adapté de [RiusmaX/v0-tamagotcho](https://github.com/RiusmaX/v0-tamagotcho) pour permettre l'équipement d'accessoires en pixel art sur les monstres.
 
+## Règles Métier
+
+### Équipement d'accessoires
+
+**Règle principale : Une créature ne peut équiper qu'un seul accessoire par catégorie**
+
+- ✅ **Autorisé** : Une créature peut avoir un chapeau, des lunettes ET des chaussures en même temps
+- ❌ **Interdit** : Une créature ne peut pas avoir deux chapeaux en même temps
+- ❌ **Interdit** : Une créature ne peut pas avoir deux paires de lunettes en même temps
+- ❌ **Interdit** : Une créature ne peut pas avoir deux paires de chaussures en même temps
+
+**Implémentation** : 
+Lorsqu'un utilisateur équipe un nouvel accessoire d'une catégorie déjà équipée, l'ancien accessoire de cette catégorie est automatiquement déséquipé avant d'équiper le nouveau.
+
+```typescript
+// Exemple dans accessory.model.ts
+// Avant d'équiper un nouveau chapeau, on déséquipe l'ancien chapeau s'il existe
+await equipAccessory(newHatId, monsterId, 'hat')
+// → L'ancien chapeau est automatiquement retiré
+// → Le nouveau chapeau est équipé
+```
+
 ### Architecture
 
 ```

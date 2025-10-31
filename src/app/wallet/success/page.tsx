@@ -108,7 +108,7 @@ export default async function SuccessPage ({
             🛍️ Go Shopping
           </Link>
           <Link
-            href='/my-monsters'
+            href='/creatures'
             className='block text-center bg-white hover:bg-pink-flare-50 text-pink-flare-700 font-semibold py-3 px-6 rounded-xl border-2 border-pink-flare-300 transition-all duration-200 shadow-md hover:shadow-lg active:scale-95'
           >
             🐾 My Monsters

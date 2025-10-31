@@ -13,6 +13,7 @@
  */
 
 import type { AccessoryCategory } from '@/types/accessory.types'
+import { getMonsterAccessoryPositions, percentageToPixels } from '@/config/monster-accessory-positions.config'
 
 /**
  * Get the color for an accessory based on its ID
@@ -577,15 +578,62 @@ export function drawAccessoryCentered (
 }
 
 /**
+ * Calculate animation transform based on frame and animation config
+ *
+ * @param animation - Animation configuration
+ * @param frame - Current frame number
+ * @returns Transform object with rotation, translate, scale
+ */
+function getAnimationTransform (
+  animation: { type: string, duration: number, params: Record<string, number> },
+  frame: number
+): { rotation: number, translateX: number, translateY: number, scaleMultiplier: number } {
+  // Convert frame to time (assuming 60fps)
+  const time = frame / 60
+  const normalizedTime = (time % animation.duration) / animation.duration
+  
+  // Easing function for smooth animation (sine wave)
+  const eased = Math.sin(normalizedTime * Math.PI * 2)
+  
+  const transform = {
+    rotation: 0,
+    translateX: 0,
+    translateY: 0,
+    scaleMultiplier: 1
+  }
+  
+  switch (animation.type) {
+    case 'sway':
+      // Rotation animation
+      transform.rotation = eased * (animation.params.rotationRange ?? 0)
+      break
+    case 'float':
+    case 'bounce':
+      // Vertical translation animation
+      transform.translateY = eased * (animation.params.translateY ?? 0)
+      break
+    case 'breathe': {
+      // Scale animation
+      const scaleRange = animation.params.scaleRange ?? 0
+      transform.scaleMultiplier = 1 + (eased * scaleRange)
+      break
+    }
+  }
+  
+  return transform
+}
+
+/**
  * Draw all equipped accessories on a monster
  *
- * Renders the complete set of accessories in the correct positions.
- * Positions are calculated relative to the monster's body coordinates.
+ * Uses configured positions based on monster type for accurate placement.
+ * Draws in order: shoes -> glasses -> hat (bottom to top) for proper layering.
+ * Applies animation transforms to synchronize with monster animations.
  *
  * @param ctx - Canvas 2D rendering context
- * @param accessories - Object containing equipped accessory IDs
- * @param bodyY - Y coordinate of the monster's body center
- * @param centerX - X coordinate of the monster's center
+ * @param accessories - Map of equipped accessories by category
+ * @param canvasSize - Size of the canvas (width and height, assumed square)
+ * @param monsterAssetPath - Path to the monster SVG for position lookup
  * @param pixelSize - Size of each pixel block
  * @param frame - Current animation frame number
  */
@@ -596,31 +644,65 @@ export function drawEquippedAccessories (
     glasses?: string
     shoes?: string
   },
-  bodyY: number,
-  centerX: number,
+  canvasSize: number,
+  monsterAssetPath: string,
   pixelSize: number,
   frame: number
 ): void {
-  console.log('[drawEquippedAccessories] Called with:', { accessories, bodyY, centerX, pixelSize, frame })
+  // Get configured positions for this monster type
+  const positions = getMonsterAccessoryPositions(monsterAssetPath)
+  
+  // Calculate animation transform
+  const animTransform = getAnimationTransform(positions.animation, frame)
 
   // Draw in order: shoes -> glasses -> hat (bottom to top)
   // This ensures proper layering
 
   if (accessories.shoes != null) {
-    const shoesY = bodyY + 60 // Position at monster's feet
-    console.log('[drawEquippedAccessories] Drawing shoes at:', shoesY)
-    drawAccessory(ctx, accessories.shoes, 'shoes', centerX, shoesY, pixelSize, frame)
+    const shoesX = percentageToPixels(positions.shoes.x, canvasSize)
+    const shoesY = percentageToPixels(positions.shoes.y, canvasSize)
+    const scale = positions.shoes.scale ?? 1.0
+    
+    ctx.save()
+    ctx.translate(shoesX, shoesY)
+    // Apply animation transforms
+    ctx.rotate(animTransform.rotation * Math.PI / 180)
+    ctx.translate(animTransform.translateX, animTransform.translateY)
+    ctx.scale(scale * animTransform.scaleMultiplier, scale * animTransform.scaleMultiplier)
+    ctx.translate(-shoesX, -shoesY)
+    drawAccessory(ctx, accessories.shoes, 'shoes', shoesX, shoesY, pixelSize, frame)
+    ctx.restore()
   }
 
   if (accessories.glasses != null) {
-    const glassesY = bodyY + 24 // Position at monster's eyes
-    console.log('[drawEquippedAccessories] Drawing glasses at:', glassesY)
-    drawAccessory(ctx, accessories.glasses, 'glasses', centerX, glassesY, pixelSize, frame)
+    const glassesX = percentageToPixels(positions.glasses.x, canvasSize)
+    const glassesY = percentageToPixels(positions.glasses.y, canvasSize)
+    const scale = positions.glasses.scale ?? 1.0
+    
+    ctx.save()
+    ctx.translate(glassesX, glassesY)
+    // Apply animation transforms
+    ctx.rotate(animTransform.rotation * Math.PI / 180)
+    ctx.translate(animTransform.translateX, animTransform.translateY)
+    ctx.scale(scale * animTransform.scaleMultiplier, scale * animTransform.scaleMultiplier)
+    ctx.translate(-glassesX, -glassesY)
+    drawAccessory(ctx, accessories.glasses, 'glasses', glassesX, glassesY, pixelSize, frame)
+    ctx.restore()
   }
 
   if (accessories.hat != null) {
-    const hatY = bodyY - 12 // Position above monster's head
-    console.log('[drawEquippedAccessories] Drawing hat at:', hatY)
-    drawAccessory(ctx, accessories.hat, 'hat', centerX, hatY, pixelSize, frame)
+    const hatX = percentageToPixels(positions.hat.x, canvasSize)
+    const hatY = percentageToPixels(positions.hat.y, canvasSize)
+    const scale = positions.hat.scale ?? 1.0
+    
+    ctx.save()
+    ctx.translate(hatX, hatY)
+    // Apply animation transforms
+    ctx.rotate(animTransform.rotation * Math.PI / 180)
+    ctx.translate(animTransform.translateX, animTransform.translateY)
+    ctx.scale(scale * animTransform.scaleMultiplier, scale * animTransform.scaleMultiplier)
+    ctx.translate(-hatX, -hatY)
+    drawAccessory(ctx, accessories.hat, 'hat', hatX, hatY, pixelSize, frame)
+    ctx.restore()
   }
 }

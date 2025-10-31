@@ -407,7 +407,7 @@ Monster data is cached using Next.js automatic caching. Cache is revalidated aft
 ```typescript
 // After create/update
 revalidatePath('/dashboard')
-revalidatePath('/my-monsters')
+revalidatePath('/creatures')
 revalidatePath(`/creatures/${monsterId}`)
 ```
 

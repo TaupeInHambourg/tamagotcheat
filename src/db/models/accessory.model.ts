@@ -1,41 +1,25 @@
 /**
- * Accessory Model
+ * Accessory Database Model
  *
- * Database layer for accessory persistence and retrieval.
- * Implements CRUD operations for the accessories collection.
+ * Manages accessory data in MongoDB.
+ * Handles CRUD operations for user-owned accessories.
  *
  * Architecture:
- * - Single Responsibility: Only handles database operations for accessories
- * - Dependency Inversion: Depends on database abstraction (clientPromise)
- * - Clean Architecture: Infrastructure layer (data persistence)
+ * - Data Access Layer (Clean Architecture)
+ * - Single Responsibility: Database operations for accessories
+ * - Depends on MongoDB connection abstraction
+ *
+ * Business Rules Enforced:
+ * - One accessory per category per monster
+ * - User can own multiple accessories
+ * - Accessories can be equipped/unequipped
  */
 
-import { client } from '@/db'
+import { getDatabase } from '@/db/index'
 import type { OwnedAccessory, AccessoryCategory } from '@/types/accessory.types'
-import type { Collection } from 'mongodb'
+import { ObjectId } from 'mongodb'
 
-/**
- * Get MongoDB accessories collection
- * @returns The accessories collection
- */
-async function getAccessoriesCollection (): Promise<Collection<OwnedAccessory>> {
-  const db = client.db() // Uses database name from connection URI
-  return db.collection<OwnedAccessory>('accessories')
-}
-
-/**
- * Serialize MongoDB document to plain object
- * Converts ObjectId to string and Date to ISO string
- */
-function serializeAccessory (doc: any): OwnedAccessory {
-  return {
-    _id: doc._id.toString(),
-    ownerId: doc.ownerId,
-    accessoryId: doc.accessoryId,
-    equippedOnMonsterId: doc.equippedOnMonsterId,
-    acquiredAt: doc.acquiredAt instanceof Date ? doc.acquiredAt : new Date(doc.acquiredAt)
-  }
-}
+const COLLECTION_NAME = 'accessories'
 
 /**
  * Get all accessories owned by a user
@@ -44,11 +28,19 @@ function serializeAccessory (doc: any): OwnedAccessory {
  * @returns Array of owned accessories
  */
 export async function getUserAccessories (userId: string): Promise<OwnedAccessory[]> {
-  const collection = await getAccessoriesCollection()
-  const docs = await collection
+  const db = await getDatabase()
+  const accessories = await db
+    .collection(COLLECTION_NAME)
     .find({ ownerId: userId })
     .toArray()
-  return docs.map(serializeAccessory)
+
+  return accessories.map(doc => ({
+    _id: doc._id.toString(),
+    ownerId: doc.ownerId,
+    accessoryId: doc.accessoryId,
+    equippedOnMonsterId: doc.equippedOnMonsterId ?? null,
+    acquiredAt: doc.acquiredAt
+  }))
 }
 
 /**
@@ -58,49 +50,98 @@ export async function getUserAccessories (userId: string): Promise<OwnedAccessor
  * @returns Array of equipped accessories
  */
 export async function getMonsterAccessories (monsterId: string): Promise<OwnedAccessory[]> {
-  const collection = await getAccessoriesCollection()
-  const docs = await collection
+  const db = await getDatabase()
+  const accessories = await db
+    .collection(COLLECTION_NAME)
     .find({ equippedOnMonsterId: monsterId })
     .toArray()
-  return docs.map(serializeAccessory)
+
+  return accessories.map(doc => ({
+    _id: doc._id.toString(),
+    ownerId: doc.ownerId,
+    accessoryId: doc.accessoryId,
+    equippedOnMonsterId: doc.equippedOnMonsterId,
+    acquiredAt: doc.acquiredAt
+  }))
+}
+
+/**
+ * Get accessories equipped on a monster, grouped by category
+ *
+ * Returns one accessory per category (hat, glasses, shoes).
+ * This enforces the business rule: one accessory per category per monster.
+ *
+ * @param monsterId - The monster's unique identifier
+ * @returns Object with equipped accessories by category
+ */
+export async function getMonsterEquipment (monsterId: string): Promise<{
+  hat: OwnedAccessory | null
+  glasses: OwnedAccessory | null
+  shoes: OwnedAccessory | null
+}> {
+  const db = await getDatabase()
+
+  // Get all accessories equipped on this monster
+  const accessories = await db
+    .collection(COLLECTION_NAME)
+    .find({ equippedOnMonsterId: monsterId })
+    .toArray()
+
+  const equipment: {
+    hat: OwnedAccessory | null
+    glasses: OwnedAccessory | null
+    shoes: OwnedAccessory | null
+  } = {
+    hat: null,
+    glasses: null,
+    shoes: null
+  }
+
+  // We need to know the category of each accessory
+  // This requires importing the config to get category info
+  const { getAccessoryById } = await import('@/config/accessories.config')
+
+  for (const doc of accessories) {
+    const accessoryInfo = getAccessoryById(doc.accessoryId)
+    if (accessoryInfo != null) {
+      const category = accessoryInfo.category
+      equipment[category] = {
+        _id: doc._id.toString(),
+        ownerId: doc.ownerId,
+        accessoryId: doc.accessoryId,
+        equippedOnMonsterId: doc.equippedOnMonsterId,
+        acquiredAt: doc.acquiredAt
+      }
+    }
+  }
+
+  return equipment
 }
 
 /**
  * Purchase an accessory for a user
  *
  * Creates a new owned accessory record in the database.
- * The accessory starts unequipped (equippedOnMonsterId is null).
+ * Does NOT handle payment - that's the responsibility of the caller.
  *
  * @param userId - The user purchasing the accessory
- * @param accessoryId - The catalog accessory ID (e.g., "hat-cowboy")
+ * @param accessoryId - The catalog accessory ID
  * @returns The newly created owned accessory
- * @throws Error if the accessory already exists for this user
  */
 export async function purchaseAccessory (
   userId: string,
   accessoryId: string
 ): Promise<OwnedAccessory> {
-  const collection = await getAccessoriesCollection()
+  const db = await getDatabase()
 
-  // Check if user already owns this accessory
-  const existing = await collection.findOne({
+  const newAccessory = {
     ownerId: userId,
-    accessoryId
-  })
-
-  if (existing != null) {
-    throw new Error('Accessoire déjà possédé')
-  }
-
-  // Create new accessory
-  const newAccessory: Omit<OwnedAccessory, '_id'> = {
     accessoryId,
-    ownerId: userId,
     equippedOnMonsterId: null,
     acquiredAt: new Date()
   }
 
-  const result = await collection.insertOne(newAccessory as any)
+  const result = await db.collection(COLLECTION_NAME).insertOne(newAccessory)
 
   return {
     _id: result.insertedId.toString(),
@@ -111,37 +152,44 @@ export async function purchaseAccessory (
 /**
  * Equip an accessory on a monster
  *
- * Ensures only one accessory per category is equipped on a monster.
- * Automatically unequips any existing accessory of the same category.
+ * Business Rule: Only one accessory per category per monster.
+ * Before equipping, unequips any other accessory of the same category
+ * that is currently equipped on this monster.
  *
- * @param accessoryDbId - The database ID of the owned accessory (_id)
+ * @param accessoryDbId - The database ID of the owned accessory
  * @param monsterId - The monster to equip the accessory on
- * @param category - The accessory category (hat, glasses, shoes)
+ * @param category - The category of the accessory (hat, glasses, shoes)
  */
 export async function equipAccessory (
   accessoryDbId: string,
   monsterId: string,
   category: AccessoryCategory
 ): Promise<void> {
-  const collection = await getAccessoriesCollection()
+  const db = await getDatabase()
 
-  // First, unequip all accessories of this category on this monster
-  // Pattern matching: all accessory IDs start with category prefix (e.g., "hat-", "glasses-")
-  await collection.updateMany(
-    {
-      equippedOnMonsterId: monsterId
-    },
-    { $set: { equippedOnMonsterId: null } }
-  )
+  // Step 1: Unequip any accessory of the same category currently equipped on this monster
+  // This enforces the "one accessory per category" rule
+  const { getAccessoryById } = await import('@/config/accessories.config')
 
-  // Note: We need to check if the accessory being equipped is of the same category
-  // In a more robust implementation, we'd query the accessory first to verify
-  // For now, we trust the category parameter passed from the action layer
+  const currentlyEquipped = await db
+    .collection(COLLECTION_NAME)
+    .find({ equippedOnMonsterId: monsterId })
+    .toArray()
 
-  // Then equip the new accessory
-  const { ObjectId } = await import('mongodb')
-  await collection.updateOne(
-    { _id: new ObjectId(accessoryDbId) as any },
+  // Find and unequip any accessory of the same category
+  for (const equipped of currentlyEquipped) {
+    const info = getAccessoryById(equipped.accessoryId)
+    if (info != null && info.category === category) {
+      await db.collection(COLLECTION_NAME).updateOne(
+        { _id: equipped._id },
+        { $set: { equippedOnMonsterId: null } }
+      )
+    }
+  }
+
+  // Step 2: Equip the new accessory
+  await db.collection(COLLECTION_NAME).updateOne(
+    { _id: new ObjectId(accessoryDbId) },
     { $set: { equippedOnMonsterId: monsterId } }
   )
 }
@@ -149,50 +197,13 @@ export async function equipAccessory (
 /**
  * Unequip an accessory from its monster
  *
- * @param accessoryDbId - The database ID of the owned accessory (_id)
- */
-export async function unequipAccessory (accessoryDbId: string): Promise<void> {
-  const collection = await getAccessoriesCollection()
-  const { ObjectId } = await import('mongodb')
-
-  await collection.updateOne(
-    { _id: new ObjectId(accessoryDbId) as any },
-    { $set: { equippedOnMonsterId: null } }
-  )
-}
-
-/**
- * Delete an accessory (for testing or admin purposes)
- *
  * @param accessoryDbId - The database ID of the owned accessory
  */
-export async function deleteAccessory (accessoryDbId: string): Promise<void> {
-  const collection = await getAccessoriesCollection()
-  const { ObjectId } = await import('mongodb')
+export async function unequipAccessory (accessoryDbId: string): Promise<void> {
+  const db = await getDatabase()
 
-  await collection.deleteOne({ _id: new ObjectId(accessoryDbId) as any })
-}
-
-/**
- * Get accessories equipped on a monster, grouped by category
- *
- * @param monsterId - The monster's unique identifier
- * @returns Object with equipped accessories by category
- */
-export async function getMonsterEquipment (monsterId: string): Promise<{
-  hat: OwnedAccessory | null
-  glasses: OwnedAccessory | null
-  shoes: OwnedAccessory | null
-}> {
-  const accessories = await getMonsterAccessories(monsterId)
-
-  // We need to check the accessoryId prefix to determine category
-  // since the document doesn't store category directly
-  const equipment = {
-    hat: accessories.find(acc => acc.accessoryId.startsWith('hat-')) ?? null,
-    glasses: accessories.find(acc => acc.accessoryId.startsWith('glasses-')) ?? null,
-    shoes: accessories.find(acc => acc.accessoryId.startsWith('shoes-')) ?? null
-  }
-
-  return equipment
+  await db.collection(COLLECTION_NAME).updateOne(
+    { _id: new ObjectId(accessoryDbId) },
+    { $set: { equippedOnMonsterId: null } }
+  )
 }

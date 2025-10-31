@@ -1,24 +1,25 @@
 /**
  * PixelMonster Component
  *
- * Renders a Tamagotchi-style monster with pixel art on Canvas.
- * Supports dynamic accessories that can be equipped and displayed.
+ * Renders a Tamagotchi-style monster with pixel art accessories integrated into the SVG.
+ * Accessories are injected as <image> elements directly into the monster's SVG DOM.
  *
  * Architecture:
- * - Client component (Canvas API + animations)
+ * - Client component (SVG manipulation + Canvas for pixel art)
  * - Single Responsibility: Monster visual rendering
  * - Integrates with accessory system
  *
  * Adapted from RiusmaX/v0-tamagotcho but simplified for TamagoTcheat.
- * Monsters are rendered from SVG assets, accessories are pixel art overlays.
+ * Monsters are SVG, accessories are pixel art Canvas converted to data URIs.
  *
  * @module components/monsters
  */
 
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { drawEquippedAccessories } from '@/utils/accessory-renderer'
+import { useEffect, useRef, useState } from 'react'
+import { getMonsterAccessoryPositions } from '@/config/monster-accessory-positions.config'
+import { accessoryToDataURI } from '@/utils/accessory-to-data-uri'
 import type { MonsterState } from '@/types/monster.types'
 
 interface PixelMonsterProps {
@@ -37,15 +38,18 @@ interface PixelMonsterProps {
 }
 
 /**
- * PixelMonster - Hybrid SVG + Canvas monster renderer
+ * PixelMonster - SVG-based monster renderer with pixel art accessories
  *
- * This component uses a unique approach:
- * 1. Displays the base monster as an SVG image (existing assets)
- * 2. Overlays a Canvas for pixel art accessories
- * 3. Synchronizes animations between both layers
+ * This component uses a hybrid approach:
+ * 1. Fetches the base monster SVG file
+ * 2. Generates pixel art accessories as Canvas data URIs
+ * 3. Injects accessories as <image> elements into the monster's .monster-body group
+ * 4. Accessories inherit the monster's CSS animations automatically
  *
- * This approach allows us to keep existing monster SVG assets
- * while adding pixel art accessories on top.
+ * This ensures:
+ * - Pixel art style is preserved (Canvas rendering)
+ * - Perfect animation synchronization (SVG integration)
+ * - Monster animations remain unchanged
  *
  * @param props - Component props
  * @returns React component
@@ -68,83 +72,130 @@ export function PixelMonster ({
   accessories,
   size = 160
 }: PixelMonsterProps): React.ReactNode {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const frameRef = useRef(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [svgContent, setSvgContent] = useState<string>('')
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (canvas == null) return
+    // Fetch the original SVG
+    fetch(imageSrc)
+      .then(async response => await response.text())
+      .then(svgText => {
+        // Parse SVG
+        const parser = new DOMParser()
+        const svgDoc = parser.parseFromString(svgText, 'image/svg+xml')
+        const svgElement = svgDoc.querySelector('svg')
 
-    const ctx = canvas.getContext('2d')
-    if (ctx == null) return
+        if (svgElement == null) {
+          console.error('Failed to parse SVG')
+          return
+        }
 
-    canvas.width = size
-    canvas.height = size
+        // Get accessory positions for this monster
+        const positions = getMonsterAccessoryPositions(imageSrc)
 
-    let animationId: number
+        // Create a group for accessories that will be affected by monster animations
+        const accessoriesGroup = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'g')
+        accessoriesGroup.setAttribute('class', 'accessories-layer')
 
-    /**
-     * Animation loop for accessories
-     *
-     * Continuously redraws accessories with animation frames.
-     * The monster SVG remains static underneath.
-     */
-    const animate = (): void => {
-      frameRef.current += 1
+        // Add shoes (bottom layer) - positioned at configured coordinates
+        if (accessories?.shoes != null) {
+          const shoesDataURI = accessoryToDataURI(accessories.shoes, 'shoes', 2)
+          const shoesImage = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'image')
+          
+          const shoesY = (positions.shoes.y / 100) * 32 // Convert percentage to viewBox coordinates (32x32)
+          const shoesX = (positions.shoes.x / 100) * 32
+          
+          // Use natural canvas size: 240x160
+          const canvasWidth = 240
+          const canvasHeight = 160
+          const viewBoxSize = 32
+          const imageWidth = viewBoxSize // Map full canvas width to viewBox
+          const imageHeight = (canvasHeight / canvasWidth) * viewBoxSize // Maintain aspect ratio
+          
+          shoesImage.setAttribute('href', shoesDataURI)
+          shoesImage.setAttribute('x', String(shoesX - imageWidth / 2))
+          shoesImage.setAttribute('y', String(shoesY - imageHeight / 2))
+          shoesImage.setAttribute('width', String(imageWidth))
+          shoesImage.setAttribute('height', String(imageHeight))
+          shoesImage.setAttribute('style', 'image-rendering: pixelated; image-rendering: crisp-edges;')
+          
+          accessoriesGroup.appendChild(shoesImage)
+        }
 
-      // Clear canvas (transparent background)
-      ctx.clearRect(0, 0, size, size)
+        // Add glasses (middle layer)
+        if (accessories?.glasses != null) {
+          const glassesDataURI = accessoryToDataURI(accessories.glasses, 'glasses', 2)
+          const glassesImage = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'image')
+          
+          const glassesY = (positions.glasses.y / 100) * 32
+          const glassesX = (positions.glasses.x / 100) * 32
+          
+          // Use natural canvas size: 240x120
+          const canvasWidth = 240
+          const canvasHeight = 120
+          const viewBoxSize = 32
+          const imageWidth = viewBoxSize // Map full canvas width to viewBox
+          const imageHeight = (canvasHeight / canvasWidth) * viewBoxSize // Maintain aspect ratio
+          
+          glassesImage.setAttribute('href', glassesDataURI)
+          glassesImage.setAttribute('x', String(glassesX - imageWidth / 2))
+          glassesImage.setAttribute('y', String(glassesY - imageHeight / 2))
+          glassesImage.setAttribute('width', String(imageWidth))
+          glassesImage.setAttribute('height', String(imageHeight))
+          glassesImage.setAttribute('style', 'image-rendering: pixelated; image-rendering: crisp-edges;')
+          
+          accessoriesGroup.appendChild(glassesImage)
+        }
 
-      // Draw accessories if any are equipped
-      if (accessories != null && (accessories.hat != null || accessories.glasses != null || accessories.shoes != null)) {
-        const centerX = size / 2
-        const bodyY = size * 0.4 // Position accessories relative to monster center
+        // Add hat (top layer)
+        if (accessories?.hat != null) {
+          const hatDataURI = accessoryToDataURI(accessories.hat, 'hat', 2)
+          const hatImage = svgDoc.createElementNS('http://www.w3.org/2000/svg', 'image')
+          
+          const hatY = (positions.hat.y / 100) * 32
+          const hatX = (positions.hat.x / 100) * 32
+          
+          // Use natural canvas size: 240x240 (square)
+          const viewBoxSize = 32
+          const imageSize = viewBoxSize // Map full canvas to viewBox (240->32)
+          
+          hatImage.setAttribute('href', hatDataURI)
+          hatImage.setAttribute('x', String(hatX - imageSize / 2))
+          hatImage.setAttribute('y', String(hatY - imageSize / 2))
+          hatImage.setAttribute('width', String(imageSize))
+          hatImage.setAttribute('height', String(imageSize))
+          hatImage.setAttribute('style', 'image-rendering: pixelated; image-rendering: crisp-edges;')
+          
+          accessoriesGroup.appendChild(hatImage)
+        }
 
-        drawEquippedAccessories(
-          ctx,
-          accessories,
-          bodyY,
-          centerX,
-          6, // pixelSize
-          frameRef.current
-        )
-      }
+        // Find the monster body group and append accessories inside it
+        // This ensures accessories inherit the body's animation transforms
+        const monsterBody = svgElement.querySelector('.monster-body')
+        if (monsterBody != null) {
+          monsterBody.appendChild(accessoriesGroup)
+        } else {
+          // Fallback: append to SVG root (animations might not sync)
+          console.warn('No .monster-body found, accessories might not animate correctly')
+          svgElement.appendChild(accessoriesGroup)
+        }
 
-      animationId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      if (animationId !== undefined) {
-        cancelAnimationFrame(animationId)
-      }
-    }
-  }, [accessories, size])
+        // Serialize back to string
+        const serializer = new XMLSerializer()
+        const modifiedSVG = serializer.serializeToString(svgElement)
+        setSvgContent(modifiedSVG)
+      })
+      .catch(error => {
+        console.error('Error loading SVG:', error)
+      })
+  }, [imageSrc, accessories])
 
   return (
     <div
-      className='relative'
+      ref={containerRef}
+      className='monster-container'
       style={{ width: size, height: size }}
-    >
-      {/* Base monster SVG */}
-      <img
-        src={imageSrc}
-        alt='Monster'
-        className='absolute inset-0 h-full w-full object-contain'
-        style={{ zIndex: 1 }}
-      />
-
-      {/* Accessories overlay canvas */}
-      <canvas
-        ref={canvasRef}
-        className='pixel-art absolute inset-0 h-full w-full'
-        style={{
-          imageRendering: 'pixelated',
-          zIndex: 2,
-          pointerEvents: 'none' // Allow clicks to pass through to monster
-        }}
-      />
-    </div>
+      dangerouslySetInnerHTML={{ __html: svgContent }}
+    />
   )
 }
