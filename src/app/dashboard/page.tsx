@@ -1,4 +1,5 @@
 import { getMonsters } from '@/actions/monsters.actions'
+import { getMyAccessories } from '@/actions/accessories.actions'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
@@ -15,10 +16,11 @@ export default async function DashboardPage (): Promise<React.ReactNode> {
   }
 
   const monsters = await getMonsters()
+  const userAccessories = await getMyAccessories()
 
   return (
     <AppLayout>
-      <DashboardContent session={session} monsters={monsters} />
+      <DashboardContent session={session} monsters={monsters} accessories={userAccessories} />
     </AppLayout>
   )
 }
