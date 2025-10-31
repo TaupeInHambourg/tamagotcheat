@@ -186,3 +186,21 @@ body {
 .animate-scale-in {
   animation: scale-in 0.4s ease-out;
 }
+
+/* ============================================
+   🎮 Pixel Art Styles
+   For Canvas-based pixel art rendering
+   ============================================ */
+
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Smooth pixel scaling on retina displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .pixel-art {
+    image-rendering: pixelated;
+  }
+}

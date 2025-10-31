@@ -3,6 +3,7 @@
  *
  * Displays an accessory card in TamagoTcheat style.
  * Matches the design of MonsterCard with subtle animations and cozy colors.
+ * Shows pixel art preview instead of emoji.
  *
  * @component
  */
@@ -13,6 +14,7 @@ import type { ReactNode } from 'react'
 import type { Accessory } from '@/types/accessory.types'
 import { getAccessoryPrice } from '@/config/accessories.config'
 import RarityBadge from './RarityBadge'
+import { AccessoryPreview } from './AccessoryPreview'
 
 interface AccessoryCardProps {
   /** The accessory to display */
@@ -47,7 +49,7 @@ export default function AccessoryCard ({
       className='group block bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg'
     >
       {/* Header avec rareté */}
-      <div className='relative bg-gradient-to-br from-autumn-cream to-autumn-peach/30 p-6'>
+      <div className='relative bg-gradient-to-br bg-white p-6 flex items-center justify-center min-h-[180px]'>
         {/* Rarity Badge - Top right */}
         <div className='absolute top-3 right-3'>
           <RarityBadge rarity={accessory.rarity} size='sm' />
@@ -63,9 +65,14 @@ export default function AccessoryCard ({
           </div>
         )}
 
-        {/* Emoji - Large et centré */}
-        <div className='text-7xl text-center transition-transform duration-500 group-hover:scale-110 animate-float'>
-          {accessory.emoji}
+        {/* Pixel Art Preview - Large et centré */}
+        <div className='transition-transform duration-500 group-hover:scale-110'>
+          <AccessoryPreview
+            accessoryId={accessory.id}
+            category={accessory.category}
+            rarity={accessory.rarity}
+            size={120}
+          />
         </div>
       </div>
 

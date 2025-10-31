@@ -1,14 +1,15 @@
 'use client'
 
 import { useMemo, useState, useCallback } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { toast, Bounce } from 'react-toastify'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
 import { interactWithMonster } from '@/actions/monsters.actions'
 import Button from '../Button'
-import { getMonsterAssetPath, extractFolderPath } from '@/utils/monster-asset-resolver'
+import { extractFolderPath, getMonsterAssetPath } from '@/utils/monster-asset-resolver'
+import { MonsterWithAccessories } from './MonsterWithAccessories'
+import { AccessoryPanel } from '../accessories'
 
 function getStateStyle (state: string): string {
   switch (state) {
@@ -185,7 +186,7 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const formattedCreationDate = useMemo(() => formatDate(monster.createdAt), [monster.createdAt])
   const moodEmoji = useMemo(() => getMoodEmoji(monster.state), [monster.state])
 
-  // Get the correct asset path based on current state
+  // Get the correct folder path and asset for the monster
   const folderPath = useMemo(() => extractFolderPath(monster.draw), [monster.draw])
   const currentAsset = useMemo(() => getMonsterAssetPath(folderPath, monster.state), [folderPath, monster.state])
 
@@ -204,14 +205,13 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
       </div>
 
       <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
-        {/* En-tête avec image */}
+        {/* En-tête avec créature et accessoires */}
         <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5'>
-          <Image
-            src={currentAsset}
-            alt={monster.name}
-            fill
-            className='object-contain'
-            priority
+          <MonsterWithAccessories
+            monsterId={getMonsterId(monster)}
+            imageSrc={currentAsset}
+            state={monster.state}
+            size={400}
           />
         </div>
 
@@ -276,6 +276,11 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
               >
                 💕 Câliner
               </Button>
+            </div>
+
+            {/* Accessory Management Panel */}
+            <div className='border-t border-slate-200 pt-6'>
+              <AccessoryPanel monsterId={getMonsterId(monster)} />
             </div>
           </div>
         </div>

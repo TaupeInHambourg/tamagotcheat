@@ -4,6 +4,11 @@
  * Central export point for all monster-related components.
  */
 
+// Canvas-based rendering with accessories support
+export { PixelMonster } from './PixelMonster'
+export { MonsterWithAccessories } from './MonsterWithAccessories'
+
+// Existing components
 export { default as MonsterCard } from './monster-card'
 export { default as MonstersList } from './monsters-list'
 export { default as MonsterPageClient } from './monster-page-client'
