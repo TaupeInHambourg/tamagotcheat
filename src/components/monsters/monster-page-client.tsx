@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useCallback } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { toast, Bounce } from 'react-toastify'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
@@ -190,6 +191,18 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
 
   return (
     <div className='w-full max-w-4xl mx-auto px-4 py-8'>
+      {/* Bouton boutique en haut */}
+      <div className='mb-6 flex justify-end'>
+        <Link href='/shop'>
+          <Button variant='primary' size='md'>
+            <span className='flex items-center gap-2'>
+              <span>🛍️</span>
+              <span>Boutique</span>
+            </span>
+          </Button>
+        </Link>
+      </div>
+
       <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
         {/* En-tête avec image */}
         <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5'>

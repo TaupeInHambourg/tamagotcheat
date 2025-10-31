@@ -14,9 +14,9 @@ import mongoose from 'mongoose'
 
 /**
  * Constructs MongoDB connection URI from environment variables
- * Format: mongodb+srv://username:password@host/params&appName
+ * Format: mongodb+srv://username:password@host/database?params&appName
  */
-const uri = `mongodb+srv://${process.env.MONGODB_USERNAME as string}:${process.env.MONGODB_PASSWORD as string}@${process.env.MONGODB_HOST as string}/${process.env.MONGODB_PARAMS as string}&appName=${process.env.MONGODB_APPNAME as string}`
+const uri = `mongodb+srv://${process.env.MONGODB_USERNAME as string}:${process.env.MONGODB_PASSWORD as string}@${process.env.MONGODB_HOST as string}/${process.env.MONGODB_DB_NAME as string}${process.env.MONGODB_PARAMS as string}&appName=${process.env.MONGODB_APPNAME as string}`
 
 /**
  * MongoDB client instance

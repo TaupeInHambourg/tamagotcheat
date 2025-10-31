@@ -1,5 +1,4 @@
 import Button from '@/components/Button'
-import { type Session } from '@/types/auth.types'
 
 interface DashboardHeaderProps {
   displayName: string
@@ -38,19 +37,15 @@ export function DashboardHeader ({ displayName, onCreateMonster, onLogout }: Das
           <Button
             size='lg'
             onClick={onCreateMonster}
-            className='group/btn relative bg-gradient-to-r from-monsters-pink via-monsters-purple to-monsters-blue bg-[length:200%_100%] text-white transition-all duration-500 hover:bg-right-bottom hover:shadow-xl hover:shadow-monsters-pink/20'
           >
-            <span className='absolute inset-0 -z-10 rounded-lg bg-white opacity-0 blur-md transition-opacity duration-300 group-hover/btn:opacity-30' />
-            <span className='animate-pulse-slow mr-2'>✨</span> Créer une créature
+            <span className='mr-2'>✨</span> Créer une créature
           </Button>
           <Button
             size='lg'
             variant='ghost'
             onClick={onLogout}
-            className='relative overflow-hidden text-pink-flare-600 transition-all duration-300 hover:bg-monsters-pink/10'
           >
-            <span className='absolute inset-0 -z-10 bg-gradient-to-r from-monsters-pink/0 via-monsters-purple/10 to-monsters-blue/0 opacity-0 transition-opacity duration-300 hover:opacity-100' />
-            <span className='animate-bounce-slow mr-2'>👋</span> Se déconnecter
+            <span className='mr-2'>👋</span> Se déconnecter
           </Button>
         </div>
       </div>

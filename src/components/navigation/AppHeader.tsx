@@ -35,6 +35,7 @@ export default function AppHeader (): React.ReactNode {
   const navItems: NavigationItem[] = [
     { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
     { href: '/creatures', label: 'Mes Créatures', icon: '🐾' },
+    { href: '/shop', label: 'Boutique', icon: '🛍️' },
     { href: '/wallet', label: 'Mon Wallet', icon: '💰' }
   ]
 

@@ -11,6 +11,7 @@ import { StatsCard } from './components/StatsCard'
 import { MoodTip } from './components/MoodTip'
 import { DashboardLayout } from './components/DashboardLayout'
 import CreateMonsterModal from '../modals/create-monster-modal'
+import AccessoriesSection from './AccessoriesSection'
 import { useMemo, useState } from 'react'
 
 type Session = typeof authClient.$Infer.Session
@@ -168,6 +169,11 @@ function DashboardContent ({ session, monsters }: DashboardContentProps): React.
         <aside className='flex flex-col gap-6'>
           <MoodTip favoriteMoodMessage={favoriteMoodMessage} />
         </aside>
+      </section>
+
+      {/* Accessories Section */}
+      <section className='mt-12'>
+        <AccessoriesSection />
       </section>
 
       <CreateMonsterModal

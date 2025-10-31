@@ -4,6 +4,8 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import MonstersList from '@/components/monsters/monsters-list'
 import { AppLayout } from '@/components/navigation'
+import Link from 'next/link'
+import Button from '@/components/Button'
 
 /**
  * Page Creatures - Affiche toutes les créatures de l'utilisateur
@@ -34,13 +36,24 @@ export default async function CreaturesPage (): Promise<React.ReactNode> {
     <AppLayout>
       <div className='py-12 px-6 lg:px-8'>
         <div className='max-w-7xl mx-auto'>
-          <div className='mb-12'>
-            <h1 className='text-5xl sm:text-6xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent leading-tight mb-4'>
-              Mes Créatures 🐾
-            </h1>
-            <p className='text-xl text-chestnut-medium leading-relaxed'>
-              Retrouve toutes tes créatures adorables ici !
-            </p>
+          {/* Header avec bouton boutique */}
+          <div className='mb-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6'>
+            <div>
+              <h1 className='text-5xl sm:text-6xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent leading-tight mb-4'>
+                Mes Créatures 🐾
+              </h1>
+              <p className='text-xl text-chestnut-medium leading-relaxed'>
+                Retrouve toutes tes créatures adorables ici !
+              </p>
+            </div>
+            <Link href='/shop'>
+              <Button variant='primary' size='md'>
+                <span className='flex items-center gap-2'>
+                  <span>🛍️</span>
+                  <span>Boutique</span>
+                </span>
+              </Button>
+            </Link>
           </div>
 
           {monsters.length === 0
