@@ -1,4 +1,5 @@
 import Button from '@/components/Button'
+import Link from 'next/link'
 
 interface DashboardHeaderProps {
   displayName: string
@@ -40,6 +41,14 @@ export function DashboardHeader ({ displayName, onCreateMonster, onLogout }: Das
           >
             <span className='mr-2'>✨</span> Créer une créature
           </Button>
+          <Link href='/gallery'>
+            <Button
+              size='lg'
+              variant='secondary'
+            >
+              <span className='mr-2'>🌍</span> Galerie publique
+            </Button>
+          </Link>
           <Button
             size='lg'
             variant='ghost'

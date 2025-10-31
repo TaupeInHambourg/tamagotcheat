@@ -200,8 +200,8 @@ User sees equipped accessory!
 ## 🔮 Prochaines Étapes
 
 ### Court Terme
-- [ ] Intégrer `AccessoryPanel` dans la page `/creatures/[id]`
-- [ ] Ajouter `MonsterWithAccessories` dans `MonsterCard`
+- [x] Intégrer `AccessoryPanel` dans la page `/creatures/[id]`
+- [x] Ajouter `MonsterWithAccessories` dans les cartes de monstre
 - [ ] Créer page boutique `/shop` avec achat d'accessoires
 - [ ] Décommenter débit Koins dans `purchaseAccessory`
 

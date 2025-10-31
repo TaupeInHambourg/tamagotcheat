@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { toast, Bounce } from 'react-toastify'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
-import { interactWithMonster } from '@/actions/monsters.actions'
+import { interactWithMonster, updateMonsterVisibility } from '@/actions/monsters.actions'
 import Button from '../Button'
 import { extractFolderPath, getMonsterAssetPath } from '@/utils/monster-asset-resolver'
 import { MonsterWithAccessories } from './MonsterWithAccessories'
@@ -84,6 +84,7 @@ function getMonsterId (monster: Monster): string {
 export default function MonsterPageClient ({ monster: initialMonster }: MonsterPageProps): React.ReactNode {
   const [isInteracting, setIsInteracting] = useState(false)
   const [accessoryRefreshTrigger, setAccessoryRefreshTrigger] = useState(0)
+  const [isUpdatingVisibility, setIsUpdatingVisibility] = useState(false)
 
   /**
    * Callback to refresh monster accessories display
@@ -201,6 +202,60 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const folderPath = useMemo(() => extractFolderPath(monster.draw), [monster.draw])
   const currentAsset = useMemo(() => getMonsterAssetPath(folderPath, monster.state), [folderPath, monster.state])
 
+  /**
+   * Handles toggling the public visibility of the monster
+   */
+  const handleToggleVisibility = useCallback(async () => {
+    if (isUpdatingVisibility) return
+
+    setIsUpdatingVisibility(true)
+
+    try {
+      const monsterId = getMonsterId(monster)
+      const newIsPublic = !(monster.isPublic ?? false)
+      const result = await updateMonsterVisibility(monsterId, newIsPublic)
+
+      if (result.success) {
+        toast.success(
+          newIsPublic
+            ? `🌍 ${monster.name} est maintenant visible dans la galerie publique !`
+            : `🔒 ${monster.name} est maintenant privé`,
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'light',
+            transition: Bounce
+          }
+        )
+      } else {
+        toast.error(
+          'Une erreur est survenue lors de la mise à jour de la visibilité',
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            theme: 'light'
+          }
+        )
+      }
+    } catch (error) {
+      console.error('Error updating visibility:', error)
+      toast.error(
+        'Une erreur est survenue lors de la mise à jour de la visibilité',
+        {
+          position: 'top-right',
+          autoClose: 3000,
+          theme: 'light'
+        }
+      )
+    } finally {
+      setIsUpdatingVisibility(false)
+    }
+  }, [monster, isUpdatingVisibility])
+
   return (
     <div className='w-full max-w-4xl mx-auto px-4 py-8'>
       {/* Bouton boutique en haut */}
@@ -256,6 +311,29 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
                 currentXP={monster.experience ?? 0}
                 xpForNextLevel={calculateLevelFromXP(monster.totalExperience ?? 0).xpForNextLevel}
               />
+            </div>
+
+            {/* Visibilité publique */}
+            <div className='flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200'>
+              <div className='flex items-center gap-3'>
+                <span className='text-2xl'>🌍</span>
+                <div>
+                  <h3 className='text-sm font-semibold text-slate-900'>Galerie publique</h3>
+                  <p className='text-xs text-slate-500'>
+                    {monster.isPublic === true
+                      ? 'Visible par tous les utilisateurs'
+                      : 'Seul toi peux voir cette créature'}
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant={monster.isPublic === true ? 'secondary' : 'primary'}
+                size='sm'
+                onClick={() => { void handleToggleVisibility() }}
+                disabled={isUpdatingVisibility}
+              >
+                {monster.isPublic === true ? '🔒 Rendre privé' : '🌍 Rendre public'}
+              </Button>
             </div>
 
             {/* Actions */}

@@ -1,90 +1,147 @@
+/**
+ * MonsterCard Component
+ *
+ * Dashboard-style monster card with auto-refresh capability.
+ * Automatically updates when monster state changes.
+ *
+ * Features:
+ * - Auto-refresh every 5 seconds
+ * - Visual indicator during refresh
+ * - Smooth state transitions
+ * - Dashboard-specific styling
+ */
+
 'use client'
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { type Monster } from '@/types/monster.types'
+import { type Monster, type MonsterState, DEFAULT_MONSTER_STATE, MONSTER_STATES } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
 import { getMonsterAssetPath, extractFolderPath } from '@/utils/monster-asset-resolver'
+import Image from 'next/image'
+import Link from 'next/link'
+
+const MONSTER_STATE_LABELS: Record<MonsterState, string> = {
+  happy: 'Heureux',
+  sad: 'Triste',
+  angry: 'Fâché',
+  hungry: 'Affamé',
+  sleepy: 'Somnolent'
+}
+
+const STATE_BADGE_CLASSES: Record<MonsterState, string> = {
+  happy: 'bg-lochinvar-100 text-lochinvar-700 ring-1 ring-inset ring-lochinvar-200',
+  sad: 'bg-fuchsia-blue-100 text-fuchsia-blue-700 ring-1 ring-inset ring-fuchsia-blue-200',
+  angry: 'bg-moccaccino-100 text-moccaccino-600 ring-1 ring-inset ring-moccaccino-200',
+  hungry: 'bg-amber-100 text-amber-700 ring-1 ring-inset ring-amber-200',
+  sleepy: 'bg-slate-100 text-slate-600 ring-1 ring-inset ring-slate-200'
+}
+
+const MONSTER_STATE_EMOJI: Record<MonsterState, string> = {
+  happy: '😄',
+  sad: '😢',
+  angry: '😤',
+  hungry: '😋',
+  sleepy: '😴'
+}
+
+const isMonsterState = (value: MonsterState | string | null | undefined): value is MonsterState => (
+  typeof value === 'string' && MONSTER_STATES.includes(value as MonsterState)
+)
+
+const formatAdoptionDate = (value: string | undefined): string | null => {
+  if (value === undefined) return null
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return null
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  }).format(date)
+}
 
 export interface MonsterCardProps {
-  monster: Monster
-  className?: string
-  /** Enable auto-refresh for this card (default: true) */
+  initialMonster: Monster
   autoRefresh?: boolean
 }
 
-function getStateStyle (state: string): string {
-  switch (state) {
-    case 'happy':
-      return 'bg-green-100 text-green-800'
-    case 'angry':
-      return 'bg-red-100 text-red-800'
-    case 'sleepy':
-      return 'bg-blue-100 text-blue-800'
-    case 'hungry':
-      return 'bg-yellow-100 text-yellow-800'
-    case 'sad':
-      return 'bg-gray-100 text-gray-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
-  }
-}
-
-export default function MonsterCard ({ monster: initialMonster, className = '', autoRefresh = true }: MonsterCardProps): React.ReactNode {
+export function MonsterCard ({ initialMonster, autoRefresh = true }: MonsterCardProps): React.ReactNode {
   /**
-   * Use simplified polling hook for card auto-refresh
+   * Use simplified polling hook for dashboard cards
    *
-   * Card-specific configuration:
-   * - Polls every 3 seconds (slightly slower than detail page)
-   * - Can be disabled via autoRefresh prop (useful for static lists)
-   * - No verbose logging to keep console clean
-   * - No onStateChange callback (cards don't need notifications)
+   * Dashboard-specific configuration:
+   * - Polls every 3 seconds for real-time updates
+   * - Disabled polling optional for performance (set autoRefresh={false})
+   * - Silent operation (no logs) for clean dashboard experience
    *
-   * Why polling for cards?
-   * - Cards are often displayed in grids/lists
-   * - Users expect to see live updates
-   * - 3s interval balances freshness vs performance
+   * Integration with lazy state system:
+   * - Each poll triggers backend state computation
+   * - Backend updates database if state changed
+   * - Card automatically reflects new state
+   * - No manual state management needed
    */
   const { monster } = useMonsterPolling({
     initialMonster,
-    pollingInterval: 3000, // Poll every 3 seconds for cards
+    pollingInterval: 3000, // Poll every 3 seconds
     enabled: autoRefresh,
     verbose: false
   })
 
-  const stateStyle = getStateStyle(monster.state)
-  const displayName = monster.name.length > 20 ? `${monster.name.slice(0, 20)}...` : monster.name
-  const monsterId = monster.id ?? monster._id ?? ''
+  const state = isMonsterState(monster.state) ? monster.state : DEFAULT_MONSTER_STATE
+  const adoptionDate = formatAdoptionDate(monster.createdAt ?? monster.updatedAt)
+  const levelLabel = monster.level ?? 1
+  const monsterHref = `/creatures/${String(monster.id ?? monster._id ?? '')}`
 
   // Get the correct asset path based on current state
   const folderPath = extractFolderPath(monster.draw)
-  const currentAsset = getMonsterAssetPath(folderPath, monster.state)
+  const currentAsset = getMonsterAssetPath(folderPath, state)
 
   return (
     <Link
-      href={`/creatures/${monsterId}`}
-      className={`group block bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${className}`}
+      href={monsterHref}
+      className='block group'
     >
-      <div className='relative w-full h-48'>
-        <div className='absolute inset-0 bg-monsters-pink/5 transition-colors duration-300 group-hover:bg-monsters-pink/10' />
-        <Image
-          src={currentAsset}
-          alt={displayName}
-          fill
-          className='object-contain transition-transform duration-500 group-hover:scale-105'
-        />
-      </div>
-      <div className='p-4'>
-        <h3 className='text-lg font-semibold text-pink-flare-900 transition-colors duration-300 group-hover:text-pink-flare-700'>
-          {displayName}
-        </h3>
-        <p className='text-sm text-slate-600'>Niveau {monster.level ?? 1}</p>
-        <div className='mt-2'>
-          <span className={`inline-block px-2 py-1 rounded-full text-xs transition-all duration-500 ${stateStyle} group-hover:shadow-sm`}>
-            {monster.state.charAt(0).toUpperCase() + monster.state.slice(1)}
-          </span>
+      <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
+        <div className='relative flex flex-col gap-6'>
+          <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-6 border border-autumn-peach/30'>
+            <Image
+              src={currentAsset}
+              alt={monster.name}
+              width={200}
+              height={200}
+              className='transition-transform duration-300 group-hover:scale-110'
+            />
+            <span
+              className='absolute right-3 top-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition-all duration-500'
+            >
+              <span aria-hidden='true'>⭐</span>
+              Niv {levelLabel}
+            </span>
+            {monster.isPublic === true && (
+              <span
+                className='absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold bg-lochinvar-500 shadow-md'
+                title='Visible dans la galerie publique'
+              >
+                <span aria-hidden='true'>🌍</span>
+                Public
+              </span>
+            )}
+          </div>
+
+          <div className='flex flex-1 flex-col gap-4'>
+            <div className='flex items-start justify-between gap-3'>
+              <div className='space-y-2'>
+                <h3 className='text-xl font-bold text-chestnut-deep'>{monster.name}</h3>
+                {adoptionDate !== null && (
+                  <p className='text-sm text-chestnut-medium'>Arrivé le {adoptionDate}</p>
+                )}
+              </div>
+              <span className={`inline-flex items-center gap-1 rounded-full ${STATE_BADGE_CLASSES[state]} px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-autumn-brown`}>
+                <span aria-hidden='true'>{MONSTER_STATE_EMOJI[state]}</span>
+                {MONSTER_STATE_LABELS[state]}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </article>
     </Link>
   )
 }

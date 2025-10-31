@@ -83,6 +83,8 @@ export interface Monster {
   lastStateChange?: Date
   /** Timestamp when the state should change next */
   nextStateChangeAt?: Date
+  /** Whether this monster is visible in the public gallery */
+  isPublic?: boolean
 }
 
 /**

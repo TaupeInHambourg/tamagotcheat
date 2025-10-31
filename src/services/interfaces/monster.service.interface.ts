@@ -67,4 +67,19 @@ export interface IMonsterService {
    * @returns Result containing the updated monster or error
    */
   interactWithMonster: (userId: string, monsterId: string, action: string) => Promise<OperationResult<Monster>>
+
+  /**
+   * Updates the public visibility of a monster
+   * @param userId - The ID of the user
+   * @param monsterId - The ID of the monster
+   * @param isPublic - Whether the monster should be publicly visible
+   * @returns Result indicating success or error
+   */
+  updateMonsterVisibility: (userId: string, monsterId: string, isPublic: boolean) => Promise<OperationResult<Monster>>
+
+  /**
+   * Retrieves all public monsters for the gallery
+   * @returns Result containing array of public monsters with owner info or error
+   */
+  getPublicMonsters: () => Promise<OperationResult<Array<Monster & { ownerName?: string }>>>
 }

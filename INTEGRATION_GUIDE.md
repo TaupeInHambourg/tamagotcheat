@@ -86,26 +86,25 @@ export default function CreaturePage({ params }: { params: { id: string } }) {
 }
 ```
 
-## Étape 3 : Ajouter dans MonsterCard 📇
+## Étape 3 : Ajouter dans les Cartes de Monstre 📇
 
-Pour afficher les accessoires dans les cards de liste :
+Pour afficher les accessoires dans les cartes de liste, utilisez `MonsterCard` ou `PublicMonsterCard` qui intègrent déjà `MonsterWithAccessories` :
 
 ```tsx
-// src/components/monsters/monster-card.tsx
-
+// src/components/monsters/monster-card.tsx (déjà intégré)
 import { MonsterWithAccessories } from './MonsterWithAccessories'
 
-export default function MonsterCard({ monster }: MonsterCardProps) {
+export function MonsterCard({ initialMonster }: Props) {
   return (
-    <div className="card">
+    <article className="card">
       <MonsterWithAccessories
-        monsterId={monster._id}
-        imageSrc={assetPath}
+        monsterId={monster.id}
+        imageSrc={currentAsset}
         state={monster.state}
-        size={150}
+        size={200}
       />
       {/* ... reste du contenu */}
-    </div>
+    </article>
   )
 }
 ```
@@ -117,6 +116,7 @@ export default function MonsterCard({ monster }: MonsterCardProps) {
 ```tsx
 // src/app/shop/page.tsx
 'use client'
+
 
 import { useState } from 'react'
 import { ACCESSORIES_CATALOG, getAccessoryPrice } from '@/config/accessories.config'

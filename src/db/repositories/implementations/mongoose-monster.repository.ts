@@ -160,11 +160,15 @@ export class MongooseMonsterRepository implements IMonsterRepository {
       throw new Error(`Invalid owner ID format: ${ownerId}`)
     }
 
+    console.log('[MonsterRepository] Updating monster:', id, 'with:', updates)
+
     const monster = await Monster.findOneAndUpdate(
       { _id: id, ownerId },
       { $set: updates },
       { new: true }
     ).exec()
+
+    console.log('[MonsterRepository] Updated result:', monster)
 
     if (monster === null) {
       return null
@@ -189,5 +193,50 @@ export class MongooseMonsterRepository implements IMonsterRepository {
 
     const result = await Monster.deleteOne({ _id: id, ownerId }).exec()
     return result.deletedCount > 0
+  }
+
+  /**
+   * Finds all public monsters with owner information
+   * Uses MongoDB aggregation to join with user collection
+   */
+  async findPublicWithOwners (): Promise<Array<MonsterType & { ownerName?: string }>> {
+    await this.ensureConnection()
+
+    const monsters = await Monster.aggregate([
+      {
+        $match: { isPublic: true }
+      },
+      {
+        $lookup: {
+          from: 'user',
+          localField: 'ownerId',
+          foreignField: '_id',
+          as: 'owner'
+        }
+      },
+      {
+        $unwind: {
+          path: '$owner',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $addFields: {
+          ownerName: '$owner.name'
+        }
+      },
+      {
+        $project: {
+          owner: 0
+        }
+      },
+      {
+        $sort: { createdAt: -1 }
+      }
+    ]).exec()
+
+    console.log('[MonsterRepository] Public monsters with owners:', JSON.stringify(monsters, null, 2))
+
+    return this.serialize<Array<MonsterType & { ownerName?: string }>>(monsters)
   }
 }

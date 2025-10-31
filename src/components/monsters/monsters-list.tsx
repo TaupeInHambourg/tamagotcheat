@@ -1,7 +1,7 @@
 'use client'
 
 import { type Monster } from '@/types/monster.types'
-import { MonsterDashboardCard } from './monster-dashboard-card'
+import { MonsterCard } from './monster-card'
 
 // Type alias for better compatibility
 export type DashboardMonster = Monster
@@ -35,7 +35,7 @@ function MonstersList ({ monsters, className }: MonstersListProps): React.ReactN
           const cardKey = monster.id ?? monster._id ?? monster.name
 
           return (
-            <MonsterDashboardCard
+            <MonsterCard
               key={cardKey}
               initialMonster={monster}
               autoRefresh

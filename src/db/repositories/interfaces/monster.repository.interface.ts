@@ -69,4 +69,10 @@ export interface IMonsterRepository {
    * @returns Promise resolving to true if deleted, false otherwise
    */
   delete: (id: string, ownerId: string) => Promise<boolean>
+
+  /**
+   * Finds all public monsters with owner information for the gallery
+   * @returns Promise resolving to an array of public monsters with owner names
+   */
+  findPublicWithOwners: () => Promise<Array<Monster & { ownerName?: string }>>
 }

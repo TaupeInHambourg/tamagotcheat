@@ -6,16 +6,18 @@ import { authClient } from '@/lib/auth-client'
 interface Credentials {
   email: string
   password: string
+  name: string
 }
 
 function SignUpForm ({ onError }: { onError: (error: string) => void }): React.ReactNode {
   const [credentials, setCredentials] = useState<Credentials>({
-    email: 'poubelle@test.com',
-    password: '1234567890'
+    email: '',
+    password: '',
+    name: ''
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
     setIsLoading(true)
     onError('')
@@ -23,7 +25,7 @@ function SignUpForm ({ onError }: { onError: (error: string) => void }): React.R
     void authClient.signUp.email({
       email: credentials.email,
       password: credentials.password,
-      name: '',
+      name: credentials.name,
       callbackURL: '/sign-in'
     }, {
       onRequest: (ctx) => {
@@ -47,6 +49,13 @@ function SignUpForm ({ onError }: { onError: (error: string) => void }): React.R
       <h2 className='text-3xl font-bold mb-8 text-pink-flare-900 text-center'>Créer un compte</h2>
       <form className='space-y-6' onSubmit={handleSubmit}>
         <InputField
+          type='text'
+          name='name'
+          label='Pseudo:'
+          value={credentials.name}
+          onChangeText={(text: string) => setCredentials({ ...credentials, name: text })}
+        />
+        <InputField
           type='email'
           name='email'
           label='Email:'
@@ -56,11 +65,13 @@ function SignUpForm ({ onError }: { onError: (error: string) => void }): React.R
         <InputField
           type='password'
           name='password'
-          label='Password:'
+          label='Mot de passe:'
           value={credentials.password}
           onChangeText={(text: string) => setCredentials({ ...credentials, password: text })}
         />
-        <Button variant='primary' size='md' type='submit'>Sign Up</Button>
+        <Button variant='primary' size='md' type='submit' disabled={isLoading}>
+          {isLoading ? 'Création en cours...' : 'Créer mon compte'}
+        </Button>
       </form>
     </div>
   )

@@ -28,7 +28,7 @@ The lazy state decay system is a performance-optimized approach to handling mons
 ┌─────────────────────────────────────────────────┐
 │           Presentation Layer (UI)               │
 │  ┌──────────────────────────────────────────┐  │
-│  │  MonsterCard, MonsterPage Components     │  │
+│  │  MonsterCard, MonsterPage       │  │
 │  │  Uses: useMonsterPolling hook            │  │
 │  └──────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────┘
@@ -236,7 +236,7 @@ await createMonster({ name: 'Fluffy', ...timingFields })
 const monster = await getMonsterById(userId, monsterId)
 
 // 3. Display with auto-refresh
-<MonsterCard monster={monster} autoRefresh={true} />
+<MonsterCard initialMonster={monster} autoRefresh={true} />
 ```
 
 ## Testing Strategy

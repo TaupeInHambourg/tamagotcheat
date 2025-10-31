@@ -8,11 +8,13 @@
 export { PixelMonster } from './PixelMonster'
 export { MonsterWithAccessories } from './MonsterWithAccessories'
 
-// Existing components
-export { default as MonsterCard } from './monster-card'
+// Card components
+export { MonsterCard } from './monster-card'
+export { PublicMonsterCard } from './public-monster-card'
+
+// List and detail components
 export { default as MonstersList } from './monsters-list'
 export { default as MonsterPageClient } from './monster-page-client'
-export { MonsterDashboardCard } from './monster-dashboard-card'
 
 // Types
 export type { MonsterCardProps } from './monster-card'

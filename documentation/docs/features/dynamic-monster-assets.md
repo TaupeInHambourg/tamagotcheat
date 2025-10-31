@@ -60,12 +60,12 @@ This creates a smooth, automatic visual feedback loop where monsters' appearance
 
 ## Usage in Components
 
-### Monster Card
+### Monster Dashboard Card
 
 ```tsx
 import { getMonsterAssetPath, extractFolderPath } from '@/utils/monster-asset-resolver'
 
-export default function MonsterCard({ monster }) {
+export function MonsterCard({ initialMonster }) {
   const folderPath = extractFolderPath(monster.draw)
   const currentAsset = getMonsterAssetPath(folderPath, monster.state)
   
@@ -73,7 +73,8 @@ export default function MonsterCard({ monster }) {
     <Image
       src={currentAsset}
       alt={monster.name}
-      fill
+      width={200}
+      height={200}
       className="object-contain"
     />
   )

@@ -449,7 +449,7 @@ describe('useMonsterPolling', () => {
 // High priority: detail page
 <MonsterDetailPage pollingInterval={2000} />
 
-// Medium priority: card in list
+// Medium priority: dashboard cards
 <MonsterCard pollingInterval={3000} />
 
 // Low priority: background component

@@ -358,4 +358,65 @@ export class MonsterService implements IMonsterService {
       }
     }
   }
+
+  /**
+   * Updates the public visibility of a monster
+   *
+   * @param userId - The ID of the user who owns the monster
+   * @param monsterId - The ID of the monster
+   * @param isPublic - Whether the monster should be publicly visible in the gallery
+   * @returns Result with updated monster or error
+   */
+  async updateMonsterVisibility (userId: string, monsterId: string, isPublic: boolean): Promise<OperationResult<Monster>> {
+    try {
+      console.log('[MonsterService] Updating visibility for monster:', monsterId, 'to:', isPublic)
+
+      const updatedMonster = await this.monsterRepository.update(monsterId, userId, {
+        isPublic
+      })
+
+      console.log('[MonsterService] Updated monster:', updatedMonster)
+
+      if (updatedMonster === null) {
+        return {
+          success: false,
+          error: 'Monster not found or unauthorized'
+        }
+      }
+
+      return {
+        success: true,
+        data: updatedMonster
+      }
+    } catch (error) {
+      console.error('Error updating monster visibility:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to update monster visibility'
+      }
+    }
+  }
+
+  /**
+   * Retrieves all public monsters for the gallery with owner information
+   *
+   * @returns Result containing array of public monsters with owner names
+   */
+  async getPublicMonsters (): Promise<OperationResult<Array<Monster & { ownerName?: string }>>> {
+    try {
+      const monsters = await this.monsterRepository.findPublicWithOwners()
+
+      return {
+        success: true,
+        data: monsters
+      }
+    } catch (error) {
+      console.error('Error fetching public monsters:', error)
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to fetch public monsters',
+        data: []
+      }
+    }
+  }
 }

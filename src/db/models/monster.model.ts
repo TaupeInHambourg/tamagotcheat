@@ -65,6 +65,11 @@ const monsterSchema = new Schema({
   nextStateChangeAt: {
     type: Date,
     required: false
+  },
+  isPublic: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt fields

@@ -160,3 +160,64 @@ export async function interactWithMonster (
     }
   }
 }
+
+/**
+ * Updates the public visibility of a monster
+ * @param monsterId - The monster's unique identifier
+ * @param isPublic - Whether the monster should be publicly visible
+ * @returns Result with success status and optional error message
+ */
+export async function updateMonsterVisibility (
+  monsterId: string,
+  isPublic: boolean
+): Promise<{ success: boolean, error?: string }> {
+  try {
+    // Get authenticated user
+    const user = await getAuthenticatedUser()
+
+    // Update visibility via service
+    const monsterService = createMonsterService()
+    const result = await monsterService.updateMonsterVisibility(user.id, monsterId, isPublic)
+
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error
+      }
+    }
+
+    // Revalidate pages to reflect visibility change
+    revalidatePath(`/creatures/${monsterId}`)
+    revalidatePath('/creatures')
+    revalidatePath('/gallery')
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error in updateMonsterVisibility action:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to update monster visibility'
+    }
+  }
+}
+
+/**
+ * Retrieves all public monsters for the gallery
+ * @returns Array of public monsters with owner information
+ */
+export async function getPublicMonsters (): Promise<Array<Monster & { ownerName?: string }>> {
+  try {
+    const monsterService = createMonsterService()
+    const result = await monsterService.getPublicMonsters()
+
+    if (!result.success) {
+      console.error('Error fetching public monsters:', result.error)
+      return []
+    }
+
+    return result.data ?? []
+  } catch (error) {
+    console.error('Error in getPublicMonsters action:', error)
+    return []
+  }
+}
