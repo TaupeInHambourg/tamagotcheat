@@ -122,33 +122,33 @@ export default function ShopClient ({
   }
 
   return (
-    <div className='py-12 px-6 lg:px-8'>
+    <div className='py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-7xl mx-auto'>
         {/* Header */}
-        <div className='mb-12'>
-          <h1 className='text-5xl sm:text-6xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent leading-tight mb-4'>
+        <div className='mb-8 sm:mb-10 lg:mb-12'>
+          <h1 className='text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent leading-tight mb-3 sm:mb-4'>
             Boutique d'Accessoires 🛍️
           </h1>
-          <p className='text-xl text-chestnut-medium leading-relaxed'>
+          <p className='text-base sm:text-lg lg:text-xl text-chestnut-medium leading-relaxed'>
             Personnalise tes créatures avec style ! Découvre notre collection d'accessoires uniques.
           </p>
 
           {/* Koins balance */}
-          <div className='mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-autumn-cream to-autumn-peach/50 rounded-full px-6 py-3 shadow-md border border-autumn-peach'>
-            <span className='text-2xl'>💰</span>
-            <span className='text-xl font-bold text-chestnut-deep'>
+          <div className='mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-autumn-cream to-autumn-peach/50 rounded-full px-4 py-2 sm:px-6 sm:py-3 shadow-md border border-autumn-peach'>
+            <span className='text-xl sm:text-2xl'>💰</span>
+            <span className='text-lg sm:text-xl font-bold text-chestnut-deep'>
               {currentKoins}
             </span>
-            <span className='text-sm text-chestnut-medium'>Koins disponibles</span>
+            <span className='text-xs sm:text-sm text-chestnut-medium'>Koins disponibles</span>
           </div>
 
-          <p className='text-sm text-chestnut-soft mt-4'>
+          <p className='text-xs sm:text-sm text-chestnut-soft mt-3 sm:mt-4'>
             {filteredAccessories.length} accessoire{filteredAccessories.length > 1 ? 's' : ''} disponible{filteredAccessories.length > 1 ? 's' : ''}
           </p>
         </div>
 
         {/* Category Filters */}
-        <div className='flex flex-wrap items-center justify-between gap-4 mb-8'>
+        <div className='flex flex-wrap items-center justify-between gap-4 mb-6 sm:mb-8'>
           {/* Category Buttons */}
           <div className='flex flex-wrap gap-2'>
             {categoryFilters.map(category => (
@@ -156,10 +156,10 @@ export default function ShopClient ({
                 key={category.id}
                 onClick={() => { handleCategoryChange(category.id) }}
                 className={`
-                  px-4 py-2 rounded-xl
-                  font-semibold text-sm
+                  px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl
+                  font-semibold text-xs sm:text-sm
                   transition-all duration-300
-                  flex items-center gap-2
+                  flex items-center gap-1.5 sm:gap-2
                   hover:-translate-y-0.5
                   ${selectedCategory === category.id
                     ? 'bg-gradient-to-r from-autumn-coral to-autumn-cinnamon text-white shadow-md ring-2 ring-autumn-cinnamon/30'
@@ -186,7 +186,7 @@ export default function ShopClient ({
         {/* Accessories Grid */}
         {filteredAccessories.length > 0
           ? (
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-10 lg:mb-12'>
               {filteredAccessories.map(accessory => {
                 const price = getAccessoryPrice(accessory)
                 const isOwned = ownedIds.includes(accessory.id)
@@ -207,12 +207,12 @@ export default function ShopClient ({
             </div>
             )
           : (
-            <div className='card-cozy text-center py-16 mb-12'>
-              <div className='text-6xl mb-4'>😢</div>
-              <p className='text-2xl font-bold text-chestnut-deep mb-2'>
+            <div className='card-cozy text-center py-12 sm:py-16 mb-8 sm:mb-10 lg:mb-12'>
+              <div className='text-5xl sm:text-6xl mb-3 sm:mb-4'>😢</div>
+              <p className='text-xl sm:text-2xl font-bold text-chestnut-deep mb-2'>
                 Aucun accessoire trouvé
               </p>
-              <p className='text-chestnut-medium'>
+              <p className='text-sm sm:text-base text-chestnut-medium'>
                 Essaye une autre catégorie !
               </p>
             </div>
@@ -220,29 +220,29 @@ export default function ShopClient ({
 
         {/* Info Section */}
         <div className='card-cozy'>
-          <h2 className='text-2xl font-black text-chestnut-deep text-center flex items-center justify-center gap-2 mb-6'>
+          <h2 className='text-xl sm:text-2xl font-black text-chestnut-deep text-center flex items-center justify-center gap-2 mb-4 sm:mb-6'>
             <span>💡</span>
             <span>À propos des accessoires</span>
           </h2>
-          <div className='grid md:grid-cols-3 gap-6'>
+          <div className='grid grid-cols-1 sm:grid-cols-3 gap-6'>
             <div className='text-center space-y-2'>
-              <div className='text-4xl'>🎨</div>
-              <h3 className='font-bold text-chestnut-deep'>Personnalisation</h3>
-              <p className='text-sm text-chestnut-soft'>
+              <div className='text-3xl sm:text-4xl'>🎨</div>
+              <h3 className='text-sm sm:text-base font-bold text-chestnut-deep'>Personnalisation</h3>
+              <p className='text-xs sm:text-sm text-chestnut-soft'>
                 Rends tes créatures uniques avec des accessoires variés
               </p>
             </div>
             <div className='text-center space-y-2'>
-              <div className='text-4xl'>⭐</div>
-              <h3 className='font-bold text-chestnut-deep'>Système de Rareté</h3>
-              <p className='text-sm text-chestnut-soft'>
+              <div className='text-3xl sm:text-4xl'>⭐</div>
+              <h3 className='text-sm sm:text-base font-bold text-chestnut-deep'>Système de Rareté</h3>
+              <p className='text-xs sm:text-sm text-chestnut-soft'>
                 Du commun au légendaire, collectionne-les tous !
               </p>
             </div>
             <div className='text-center space-y-2'>
-              <div className='text-4xl'>🪙</div>
-              <h3 className='font-bold text-chestnut-deep'>Achats avec Koins</h3>
-              <p className='text-sm text-chestnut-soft'>
+              <div className='text-3xl sm:text-4xl'>🪙</div>
+              <h3 className='text-sm sm:text-base font-bold text-chestnut-deep'>Achats avec Koins</h3>
+              <p className='text-xs sm:text-sm text-chestnut-soft'>
                 Utilise tes Koins pour acheter des accessoires et personnaliser tes créatures
               </p>
             </div>

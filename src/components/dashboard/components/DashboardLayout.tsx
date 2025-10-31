@@ -19,8 +19,8 @@ export function DashboardLayout ({ children }: DashboardLayoutProps): React.Reac
         <div className='absolute bottom-20 right-1/4 h-16 w-16 -rotate-12 text-6xl'>🍡</div>
       </div>
 
-      <main className='relative z-10 mx-auto w-full max-w-6xl px-4 pb-24 pt-20 sm:px-6 lg:px-8'>
-        <section className='relative overflow-hidden rounded-[2rem] px-6 py-10 backdrop-blur-sm sm:px-10'>
+      <main className='relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 pb-24'>
+        <section className='relative overflow-hidden rounded-[2rem] backdrop-blur-sm'>
           {/* Effets de lumière internes */}
           <div className='animate-pulse-slow pointer-events-none absolute -right-28 -top-16 h-64 w-64 rounded-full bg-gradient-to-br from-monsters-pink/40 via-monsters-blue/30 to-white/40 blur-3xl' aria-hidden='true' />
           <div className='animate-pulse-slow pointer-events-none absolute -left-32 bottom-0 h-64 w-64 translate-y-1/2 rounded-full bg-gradient-to-tr from-monsters-green/40 via-white/30 to-monsters-purple/40 blur-3xl' aria-hidden='true' />

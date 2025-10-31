@@ -106,11 +106,11 @@ export function MonsterCard ({
   const currentAsset = getMonsterAssetPath(folderPath, state)
 
   const cardContent = (
-    <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
-      <div className='relative flex flex-col gap-6'>
+    <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-4 sm:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
+      <div className='relative flex flex-col gap-4 sm:gap-6'>
         {/* Monster visual with accessories */}
-        <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-6 border border-autumn-peach/30'>
-          <div className='w-[200px] h-[200px] flex items-center justify-center'>
+        <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-4 sm:p-6 border border-autumn-peach/30'>
+          <div className='w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] flex items-center justify-center'>
             <MonsterWithAccessories
               monsterId={monsterId}
               imageSrc={currentAsset}
@@ -120,14 +120,14 @@ export function MonsterCard ({
             />
           </div>
           <span
-            className='absolute right-3 top-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition-all duration-500 text-autumn-brown'
+            className='absolute right-2 top-2 sm:right-3 sm:top-3 inline-flex items-center gap-1 sm:gap-2 rounded-full px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wide transition-all duration-500 text-autumn-brown'
           >
             <span aria-hidden='true'>⭐</span>
             Niv {levelLabel}
           </span>
           {monster.isPublic === true && (
             <span
-              className='absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold bg-lochinvar-500 shadow-md'
+              className='absolute left-2 top-2 sm:left-3 sm:top-3 inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold bg-lochinvar-500 shadow-md'
               title='Visible dans la galerie publique'
             >
               <span aria-hidden='true'>🌍</span>
@@ -136,23 +136,24 @@ export function MonsterCard ({
           )}
         </div>
 
-        <div className='flex flex-1 flex-col gap-4'>
-          <div className='flex items-start justify-between gap-3'>
-            <div className='space-y-2 flex-1'>
-              <h3 className='text-xl font-bold text-chestnut-deep'>{monster.name}</h3>
+        <div className='flex flex-1 flex-col gap-3 sm:gap-4'>
+          <div className='flex items-start justify-between gap-2 sm:gap-3'>
+            <div className='space-y-1 sm:space-y-2 flex-1'>
+              <h3 className='text-lg sm:text-xl font-bold text-chestnut-deep'>{monster.name}</h3>
               {!showOwner && adoptionDate !== null && (
-                <p className='text-sm text-chestnut-medium'>Arrivé le {adoptionDate}</p>
+                <p className='text-xs sm:text-sm text-chestnut-medium'>Arrivé le {adoptionDate}</p>
               )}
               {showOwner && ownerName !== undefined && ownerName !== '' && (
-                <p className='text-sm text-chestnut-medium flex items-center gap-1.5'>
+                <p className='text-xs sm:text-sm text-chestnut-medium flex items-center gap-1.5'>
                   <span aria-hidden='true'>👤</span>
                   Par {ownerName}
                 </p>
               )}
             </div>
-            <span className={`inline-flex items-center gap-1 rounded-full ${STATE_BADGE_CLASSES[state]} px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-autumn-brown`}>
-              <span aria-hidden='true'>{MONSTER_STATE_EMOJI[state]}</span>
-              {MONSTER_STATE_LABELS[state]}
+            <span className={`inline-flex items-center gap-1 rounded-full ${STATE_BADGE_CLASSES[state]} px-2 py-1 sm:px-3 sm:py-1.5 text-[10px] sm:text-xs font-semibold uppercase tracking-wide text-autumn-brown`}>
+              <span aria-hidden='true' className='hidden sm:inline'>{MONSTER_STATE_EMOJI[state]}</span>
+              <span className='sm:hidden'>{MONSTER_STATE_EMOJI[state]}</span>
+              <span className='hidden sm:inline'>{MONSTER_STATE_LABELS[state]}</span>
             </span>
           </div>
         </div>

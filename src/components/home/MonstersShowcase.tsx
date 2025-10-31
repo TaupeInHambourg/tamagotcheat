@@ -47,18 +47,18 @@ export default function MonstersShowcase (): React.ReactNode {
   ]
 
   return (
-    <section id='monsters' className='py-20 lg:py-28 px-6 lg:px-8 bg-gradient-to-br from-moss-light/30 to-autumn-cream'>
+    <section id='monsters' className='py-12 sm:py-16 lg:py-20 xl:py-28 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-moss-light/30 to-autumn-cream'>
       <div className='max-w-7xl mx-auto'>
-        <div className='text-center mb-16'>
-          <h2 className='text-4xl sm:text-5xl font-bold text-chestnut-deep leading-tight mb-6'>
+        <div className='text-center mb-10 sm:mb-12 lg:mb-16'>
+          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-chestnut-deep leading-tight mb-4 sm:mb-6'>
             Rencontrez vos futurs compagnons 🌟
           </h2>
-          <p className='text-xl text-chestnut-medium leading-relaxed max-w-2xl mx-auto'>
+          <p className='text-base sm:text-lg lg:text-xl text-chestnut-medium leading-relaxed max-w-2xl mx-auto'>
             Chaque créature a sa propre personnalité et ses besoins spécifiques
           </p>
         </div>
 
-        <div className='grid md:grid-cols-4 gap-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8'>
           {monsters.map((monster) => (
             <div key={monster.name}>
               <MonsterCard initialMonster={monster} autoRefresh={false} />

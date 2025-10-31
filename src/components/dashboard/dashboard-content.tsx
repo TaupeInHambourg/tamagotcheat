@@ -102,21 +102,17 @@ function DashboardContent ({ session, monsters, accessories }: DashboardContentP
         onLogout={handleLogout}
       />
 
-      <div className='mt-8'>
+      <div className='mt-6 sm:mt-8'>
         <StatsCard monsters={monsters} />
       </div>
 
-      <section className='mt-12 grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]'>
-        <div>
-          <MonstersList monsters={monsters} className='mt-0' />
-        </div>
-        <aside className='flex flex-col gap-6'>
-          <MoodTip favoriteMoodMessage={favoriteMoodMessage} />
-        </aside>
+      <section className='mt-8 sm:mt-10 lg:mt-12 space-y-6'>
+        <MonstersList monsters={monsters} className='mt-0' />
+        <MoodTip favoriteMoodMessage={favoriteMoodMessage} />
       </section>
 
       {/* Accessories Section */}
-      <section className='mt-12'>
+      <section className='mt-8 sm:mt-10 lg:mt-12'>
         <AccessoriesSection accessories={accessories} />
       </section>
 

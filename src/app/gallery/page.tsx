@@ -47,14 +47,14 @@ export default async function GalleryPage ({ searchParams }: Props): Promise<Rea
   }
 
   const content = (
-    <div className='py-12 px-6 lg:px-8'>
+    <div className='py-8 px-4 sm:py-10 sm:px-6 lg:py-12 lg:px-8'>
       <div className='max-w-7xl mx-auto'>
         {/* Header */}
-        <div className='mb-12'>
-          <h1 className='text-5xl sm:text-6xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent leading-tight mb-4'>
+        <div className='mb-8 sm:mb-10 lg:mb-12'>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent leading-tight mb-3 sm:mb-4'>
             Galerie Publique 🌍
           </h1>
-          <p className='text-xl text-chestnut-medium leading-relaxed'>
+          <p className='text-lg sm:text-xl text-chestnut-medium leading-relaxed'>
             Découvre les créatures adorables de notre communauté !
           </p>
         </div>
@@ -86,7 +86,7 @@ export default async function GalleryPage ({ searchParams }: Props): Promise<Rea
                 </p>
               </div>
 
-              <div className='grid gap-8 sm:grid-cols-2 xl:grid-cols-3'>
+              <div className='grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'>
                 {publicMonsters.map((monster) => {
                   const cardKey = monster.id ?? monster._id ?? monster.name
 

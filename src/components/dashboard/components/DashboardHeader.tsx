@@ -49,13 +49,6 @@ export function DashboardHeader ({ displayName, onCreateMonster, onLogout }: Das
               <span className='mr-2'>🌍</span> Galerie publique
             </Button>
           </Link>
-          <Button
-            size='lg'
-            variant='ghost'
-            onClick={onLogout}
-          >
-            <span className='mr-2'>👋</span> Se déconnecter
-          </Button>
         </div>
       </div>
     </div>

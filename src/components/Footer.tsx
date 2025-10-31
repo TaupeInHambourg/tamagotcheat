@@ -9,11 +9,11 @@ import type { ReactNode } from 'react'
 export default function Footer (): ReactNode {
   return (
     <footer className='bg-gradient-to-br from-chestnut-cream to-autumn-peach/30 border-t-2 border-autumn-peach'>
-      <div className='max-w-7xl mx-auto px-6 lg:px-8 py-16'>
-        <div className='grid grid-cols-1 md:grid-cols-4 gap-12 mb-12'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 lg:py-16'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 lg:gap-12 mb-8 sm:mb-10 lg:mb-12'>
           {/* Company Info */}
-          <div className='space-y-4'>
-            <h3 className='text-xl font-bold text-chestnut-deep flex items-center gap-2'>
+          <div className='space-y-3 sm:space-y-4'>
+            <h3 className='text-lg sm:text-xl font-bold text-chestnut-deep flex items-center gap-2'>
               <span>🍂</span>
               <span>TamagoTcheat</span>
             </h3>
@@ -23,9 +23,9 @@ export default function Footer (): ReactNode {
           </div>
 
           {/* Legal Links */}
-          <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-chestnut-deep'>Légal</h3>
-            <ul className='space-y-3'>
+          <div className='space-y-3 sm:space-y-4'>
+            <h3 className='text-base sm:text-lg font-semibold text-chestnut-deep'>Légal</h3>
+            <ul className='space-y-2 sm:space-y-3'>
               <li>
                 <Link href='/privacy' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   Politique de confidentialité
@@ -45,9 +45,9 @@ export default function Footer (): ReactNode {
           </div>
 
           {/* Resources */}
-          <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-chestnut-deep'>Ressources</h3>
-            <ul className='space-y-3'>
+          <div className='space-y-3 sm:space-y-4'>
+            <h3 className='text-base sm:text-lg font-semibold text-chestnut-deep'>Ressources</h3>
+            <ul className='space-y-2 sm:space-y-3'>
               <li>
                 <Link href='/blog' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   Blog
@@ -67,9 +67,9 @@ export default function Footer (): ReactNode {
           </div>
 
           {/* Social */}
-          <div className='space-y-4'>
-            <h3 className='text-lg font-semibold text-chestnut-deep'>Suivez-nous</h3>
-            <ul className='space-y-3'>
+          <div className='space-y-3 sm:space-y-4'>
+            <h3 className='text-base sm:text-lg font-semibold text-chestnut-deep'>Suivez-nous</h3>
+            <ul className='space-y-2 sm:space-y-3'>
               <li>
                 <Link href='https://twitter.com' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200 flex items-center gap-2'>
                   <span>🐦</span>
@@ -92,8 +92,8 @@ export default function Footer (): ReactNode {
           </div>
         </div>
 
-        <div className='mt-12 pt-8 border-t-2 border-autumn-peach/50'>
-          <p className='text-center text-chestnut-medium leading-relaxed text-sm flex items-center justify-center gap-2'>
+        <div className='mt-8 sm:mt-10 lg:mt-12 pt-6 sm:pt-8 border-t-2 border-autumn-peach/50'>
+          <p className='text-center text-chestnut-medium leading-relaxed text-sm flex flex-wrap items-center justify-center gap-2'>
             <span>© {new Date().getFullYear()} TamagoTcheat.</span>
             <span>Tous droits réservés</span>
             <span>✨</span>
