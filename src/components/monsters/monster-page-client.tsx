@@ -81,6 +81,15 @@ function getMonsterId (monster: Monster): string {
 
 export default function MonsterPageClient ({ monster: initialMonster }: MonsterPageProps): React.ReactNode {
   const [isInteracting, setIsInteracting] = useState(false)
+  const [accessoryRefreshTrigger, setAccessoryRefreshTrigger] = useState(0)
+
+  /**
+   * Callback to refresh monster accessories display
+   * Increments trigger to force MonsterWithAccessories to re-fetch
+   */
+  const refreshAccessories = (): void => {
+    setAccessoryRefreshTrigger(prev => prev + 1)
+  }
 
   /**
    * Handles monster interaction with action buttons
@@ -206,12 +215,13 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
 
       <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
         {/* En-tête avec créature et accessoires */}
-        <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5'>
+        <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5 flex items-center justify-center'>
           <MonsterWithAccessories
             monsterId={getMonsterId(monster)}
             imageSrc={currentAsset}
             state={monster.state}
             size={400}
+            refreshTrigger={accessoryRefreshTrigger}
           />
         </div>
 
@@ -280,7 +290,10 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
 
             {/* Accessory Management Panel */}
             <div className='border-t border-slate-200 pt-6'>
-              <AccessoryPanel monsterId={getMonsterId(monster)} />
+              <AccessoryPanel
+                monsterId={getMonsterId(monster)}
+                onAccessoriesChange={refreshAccessories}
+              />
             </div>
           </div>
         </div>

@@ -138,10 +138,10 @@ export function AccessoryPanel ({
 
   if (isLoadingEquipment) {
     return (
-      <div className='rounded-2xl bg-gradient-to-br from-chestnut-soft to-pastel-sky p-6 shadow-lg'>
+      <div className='rounded-2xl bg-gradient-to-br from-autumn-cream to-autumn-peach/30 p-6 shadow-md border-2 border-autumn-peach/30'>
         <div className='text-center py-8'>
-          <div className='inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm text-chestnut-medium'>
-            <div className='h-4 w-4 animate-spin rounded-full border-2 border-monster-blue border-t-transparent' />
+          <div className='inline-flex items-center gap-2 rounded-full bg-autumn-cream px-4 py-2 text-sm text-chestnut-dark shadow-sm'>
+            <div className='h-4 w-4 animate-spin rounded-full border-2 border-autumn-cinnamon border-t-transparent' />
             <span>Chargement des accessoires...</span>
           </div>
         </div>
@@ -150,7 +150,7 @@ export function AccessoryPanel ({
   }
 
   return (
-    <div className='rounded-2xl bg-gradient-to-br from-chestnut-soft to-pastel-sky p-6 shadow-lg'>
+    <div className='rounded-2xl bg-gradient-to-br from-autumn-cream to-autumn-peach/30 p-6 shadow-md border-2 border-autumn-peach/30'>
       {/* Header */}
       <div className='mb-6 flex items-center gap-3'>
         <span className='text-3xl'>✨</span>
@@ -158,7 +158,7 @@ export function AccessoryPanel ({
           <h3 className='text-xl font-bold text-chestnut-deep'>
             Accessoires
           </h3>
-          <p className='text-sm text-chestnut-medium'>
+          <p className='text-sm text-chestnut-dark'>
             Personnalisez votre créature
           </p>
         </div>
@@ -189,8 +189,8 @@ export function AccessoryPanel ({
       {/* Loading State */}
       {loading && (
         <div className='mt-4 text-center'>
-          <div className='inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm text-chestnut-medium'>
-            <div className='h-4 w-4 animate-spin rounded-full border-2 border-monster-blue border-t-transparent' />
+          <div className='inline-flex items-center gap-2 rounded-full bg-autumn-cream px-4 py-2 text-sm text-chestnut-dark shadow-sm'>
+            <div className='h-4 w-4 animate-spin rounded-full border-2 border-autumn-cinnamon border-t-transparent' />
             <span>Chargement des accessoires...</span>
           </div>
         </div>

@@ -601,21 +601,26 @@ export function drawEquippedAccessories (
   pixelSize: number,
   frame: number
 ): void {
+  console.log('[drawEquippedAccessories] Called with:', { accessories, bodyY, centerX, pixelSize, frame })
+
   // Draw in order: shoes -> glasses -> hat (bottom to top)
   // This ensures proper layering
 
   if (accessories.shoes != null) {
     const shoesY = bodyY + 60 // Position at monster's feet
+    console.log('[drawEquippedAccessories] Drawing shoes at:', shoesY)
     drawAccessory(ctx, accessories.shoes, 'shoes', centerX, shoesY, pixelSize, frame)
   }
 
   if (accessories.glasses != null) {
     const glassesY = bodyY + 24 // Position at monster's eyes
+    console.log('[drawEquippedAccessories] Drawing glasses at:', glassesY)
     drawAccessory(ctx, accessories.glasses, 'glasses', centerX, glassesY, pixelSize, frame)
   }
 
   if (accessories.hat != null) {
     const hatY = bodyY - 12 // Position above monster's head
+    console.log('[drawEquippedAccessories] Drawing hat at:', hatY)
     drawAccessory(ctx, accessories.hat, 'hat', centerX, hatY, pixelSize, frame)
   }
 }

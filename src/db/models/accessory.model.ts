@@ -24,6 +24,20 @@ async function getAccessoriesCollection (): Promise<Collection<OwnedAccessory>> 
 }
 
 /**
+ * Serialize MongoDB document to plain object
+ * Converts ObjectId to string and Date to ISO string
+ */
+function serializeAccessory (doc: any): OwnedAccessory {
+  return {
+    _id: doc._id.toString(),
+    ownerId: doc.ownerId,
+    accessoryId: doc.accessoryId,
+    equippedOnMonsterId: doc.equippedOnMonsterId,
+    acquiredAt: doc.acquiredAt instanceof Date ? doc.acquiredAt : new Date(doc.acquiredAt)
+  }
+}
+
+/**
  * Get all accessories owned by a user
  *
  * @param userId - The user's unique identifier
@@ -31,9 +45,10 @@ async function getAccessoriesCollection (): Promise<Collection<OwnedAccessory>> 
  */
 export async function getUserAccessories (userId: string): Promise<OwnedAccessory[]> {
   const collection = await getAccessoriesCollection()
-  return await collection
+  const docs = await collection
     .find({ ownerId: userId })
     .toArray()
+  return docs.map(serializeAccessory)
 }
 
 /**
@@ -44,9 +59,10 @@ export async function getUserAccessories (userId: string): Promise<OwnedAccessor
  */
 export async function getMonsterAccessories (monsterId: string): Promise<OwnedAccessory[]> {
   const collection = await getAccessoriesCollection()
-  return await collection
+  const docs = await collection
     .find({ equippedOnMonsterId: monsterId })
     .toArray()
+  return docs.map(serializeAccessory)
 }
 
 /**

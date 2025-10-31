@@ -82,7 +82,7 @@ export function AccessorySlot ({
             {onUnequip != null && (
               <button
                 onClick={() => { onUnequip(String(equipped._id)) }}
-                className='absolute -right-2 -top-2 hidden rounded-full bg-maple-warm p-1 text-white shadow-md transition-transform hover:scale-110 group-hover:block'
+                className='absolute -right-2 -top-2 hidden rounded-full bg-maple-warm p-1 text-white shadow-md transition-transform hover:scale-110 hover:bg-maple-deep group-hover:block'
                 title='Retirer'
               >
                 <svg className='h-4 w-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -95,28 +95,19 @@ export function AccessorySlot ({
           // Empty slot
           <button
             onClick={() => { onSelectAccessory(category) }}
-            className='flex h-24 w-24 items-center justify-center rounded-lg border-2 border-dashed border-chestnut-medium bg-chestnut-soft transition-colors hover:border-monster-blue hover:bg-pastel-sky'
+            className='flex h-24 w-24 items-center justify-center rounded-lg border-2 border-dashed border-autumn-coral bg-autumn-cream transition-colors hover:border-autumn-cinnamon hover:bg-autumn-peach'
             title={`Équiper ${categoryConfig.name.toLowerCase()}`}
           >
-            <span className='text-3xl opacity-50'>{categoryConfig.emoji}</span>
+            <span className='text-4xl font-light text-autumn-cinnamon'>+</span>
           </button>
         )}
       </div>
 
       {/* Accessory Name */}
       <div className='min-h-[2rem] text-center'>
-        {accessoryInfo != null
-          ? (
-            <p className='text-sm font-medium text-chestnut-deep'>{accessoryInfo.name}</p>
-            )
-          : (
-            <button
-              onClick={() => { onSelectAccessory(category) }}
-              className='text-xs font-medium text-monster-blue transition-colors hover:text-monster-purple'
-            >
-              Équiper
-            </button>
-            )}
+        {accessoryInfo != null && (
+          <p className='text-sm font-medium text-chestnut-deep'>{accessoryInfo.name}</p>
+        )}
       </div>
     </div>
   )

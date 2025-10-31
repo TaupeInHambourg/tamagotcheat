@@ -14,7 +14,8 @@
 
 import { headers } from 'next/headers'
 import { auth } from '@/lib/auth'
-import { getAccessoryById } from '@/config/accessories.config'
+import { getAccessoryById, getAccessoryPrice } from '@/config/accessories.config'
+import { subtractKoins } from './wallet.actions'
 import {
   getUserAccessories,
   getMonsterAccessories,
@@ -65,8 +66,8 @@ export async function purchaseAccessory (
       return { success: false, error: 'Accessoire introuvable' }
     }
 
-    // 3. Calculate price (for future wallet integration)
-    // const price = getAccessoryPrice(accessory)
+    // 3. Calculate price
+    const price = getAccessoryPrice(accessory)
 
     // 4. Check if user already owns this accessory
     const userAccessories = await getUserAccessories(session.user.id)
@@ -78,14 +79,11 @@ export async function purchaseAccessory (
       return { success: false, error: 'Accessoire déjà possédé' }
     }
 
-    // 5. TODO: Debit Koins from user wallet
-    // This requires a wallet.actions module with subtractKoins function
-    // For now, we'll skip this validation
-    // Example:
-    // const walletResult = await subtractKoins(price)
-    // if (!walletResult.success) {
-    //   return { success: false, error: 'Pas assez de Koins' }
-    // }
+    // 5. Debit Koins from user wallet
+    const walletResult = await subtractKoins(session.user.id, price)
+    if (!walletResult.success) {
+      return { success: false, error: walletResult.error ?? 'Pas assez de Koins' }
+    }
 
     // 6. Create the accessory in database
     const newAccessory = await dbPurchaseAccessory(session.user.id, accessoryId)
@@ -131,9 +129,19 @@ export async function equipAccessory (
 
     // 2. Verify user owns this accessory
     const userAccessories = await getUserAccessories(session.user.id)
+
+    // Debug: Log accessory IDs for comparison
+    console.log('[equipAccessory] Looking for accessoryDbId:', accessoryDbId)
+    console.log('[equipAccessory] Available accessories:', userAccessories.map(acc => ({
+      id: acc._id,
+      accessoryId: acc.accessoryId
+    })))
+
     const accessory = userAccessories.find(acc => acc._id === accessoryDbId)
 
     if (accessory == null) {
+      console.error('[equipAccessory] Accessory not found. Searched for:', accessoryDbId)
+      console.error('[equipAccessory] Available IDs:', userAccessories.map(acc => acc._id))
       return { success: false, error: 'Accessoire introuvable' }
     }
 

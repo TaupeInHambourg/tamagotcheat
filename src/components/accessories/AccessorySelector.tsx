@@ -72,11 +72,11 @@ export function AccessorySelector ({
 
   return (
     <div
-      className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4'
+      className='fixed inset-0 z-50 flex items-center justify-center bg-chestnut-dark/60 backdrop-blur-md p-4'
       onClick={onClose}
     >
       <div
-        className='max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl'
+        className='max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-gradient-to-br from-autumn-cream via-white to-autumn-peach/20 p-6 shadow-2xl border-2 border-autumn-peach/30'
         onClick={(e) => { e.stopPropagation() }}
       >
         {/* Header */}
@@ -110,10 +110,10 @@ export function AccessorySelector ({
                   onClick={() => { onSelect(String(owned._id)) }}
                   disabled={isSelecting || isEquipped}
                   className={`
-                    group relative flex flex-col items-center gap-2 rounded-xl border-2 p-3 transition-all
+                    group relative flex flex-col items-center gap-2 rounded-xl border-2 p-3 transition-all duration-300
                     ${isEquipped
                       ? 'border-moss-medium bg-moss-soft cursor-not-allowed opacity-60'
-                      : 'border-chestnut-soft bg-white hover:border-monster-blue hover:shadow-md'
+                      : 'border-autumn-peach/40 bg-autumn-cream/30 hover:border-autumn-coral hover:bg-autumn-peach/20 hover:shadow-lg hover:scale-105'
                     }
                     ${isSelecting ? 'cursor-wait opacity-50' : ''}
                   `}
@@ -127,7 +127,7 @@ export function AccessorySelector ({
                   />
 
                   {/* Name */}
-                  <p className='text-center text-sm font-medium text-chestnut-deep'>
+                  <p className='text-center text-sm font-medium text-chestnut-deep group-hover:text-autumn-cinnamon transition-colors duration-300'>
                     {info.name}
                   </p>
 
@@ -138,13 +138,9 @@ export function AccessorySelector ({
                     </span>
                   )}
 
-                  {/* Hover Effect */}
+                  {/* Hover Indicator - Subtle ring */}
                   {!isEquipped && !isSelecting && (
-                    <div className='absolute inset-0 hidden items-center justify-center rounded-xl bg-monster-blue bg-opacity-10 group-hover:flex'>
-                      <span className='text-sm font-semibold text-monster-blue'>
-                        Équiper
-                      </span>
-                    </div>
+                    <div className='absolute -inset-0.5 rounded-xl bg-gradient-to-r from-autumn-coral to-autumn-cinnamon opacity-0 group-hover:opacity-20 transition-opacity duration-300 -z-10' />
                   )}
                 </button>
               )
@@ -160,6 +156,34 @@ export function AccessorySelector ({
             <p className='mt-2 text-sm text-chestnut-medium'>
               Visitez la boutique pour acheter des accessoires !
             </p>
+
+            {/* CTA Boutique */}
+            <a
+              href='/shop'
+              className='mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-autumn-coral to-autumn-cinnamon px-6 py-3 text-white font-semibold shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 hover:from-autumn-cinnamon hover:to-maple-warm'
+            >
+              <span>🛍️</span>
+              <span>Aller à la boutique</span>
+              <svg className='h-5 w-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
+              </svg>
+            </a>
+          </div>
+        )}
+
+        {/* Shop CTA - Always visible at bottom */}
+        {categoryAccessories.length > 0 && (
+          <div className='mt-6 pt-4 border-t border-autumn-peach/30'>
+            <a
+              href='/shop'
+              className='flex items-center justify-center gap-2 rounded-lg bg-autumn-cream px-4 py-3 text-chestnut-deep font-medium transition-all duration-300 hover:bg-autumn-peach/30 hover:shadow-md group'
+            >
+              <span>🛍️</span>
+              <span>Découvrir plus d'accessoires</span>
+              <svg className='h-4 w-4 transition-transform duration-300 group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
+              </svg>
+            </a>
           </div>
         )}
 
