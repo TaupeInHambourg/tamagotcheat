@@ -21,7 +21,7 @@
 
 import { getPublicMonsters } from '@/actions/monsters.actions'
 import { AppLayout } from '@/components/navigation'
-import { PublicMonsterCard } from '@/components/monsters/public-monster-card'
+import { MonsterCard } from '@/components/monsters/monster-card'
 
 export default async function GalleryPage (): Promise<React.ReactNode> {
   const publicMonsters = await getPublicMonsters()
@@ -72,9 +72,12 @@ export default async function GalleryPage (): Promise<React.ReactNode> {
                     const cardKey = monster.id ?? monster._id ?? monster.name
 
                     return (
-                      <PublicMonsterCard
+                      <MonsterCard
                         key={cardKey}
-                        monster={monster}
+                        initialMonster={monster}
+                        autoRefresh={false}
+                        showOwner
+                        isClickable={false}
                       />
                     )
                   })}

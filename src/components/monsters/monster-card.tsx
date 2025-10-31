@@ -1,14 +1,16 @@
 /**
  * MonsterCard Component
  *
- * Dashboard-style monster card with auto-refresh capability.
- * Automatically updates when monster state changes.
+ * Unified monster card component with auto-refresh capability.
+ * Used for both dashboard and public gallery displays.
  *
  * Features:
- * - Auto-refresh every 5 seconds
+ * - Auto-refresh every 3 seconds (configurable)
+ * - Display equipped accessories
+ * - Optional owner name display
  * - Visual indicator during refresh
  * - Smooth state transitions
- * - Dashboard-specific styling
+ * - Responsive styling
  */
 
 'use client'
@@ -16,7 +18,7 @@
 import { type Monster, type MonsterState, DEFAULT_MONSTER_STATE, MONSTER_STATES } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
 import { getMonsterAssetPath, extractFolderPath } from '@/utils/monster-asset-resolver'
-import Image from 'next/image'
+import { MonsterWithAccessories } from './MonsterWithAccessories'
 import Link from 'next/link'
 
 const MONSTER_STATE_LABELS: Record<MonsterState, string> = {
@@ -59,18 +61,25 @@ const formatAdoptionDate = (value: string | undefined): string | null => {
 }
 
 export interface MonsterCardProps {
-  initialMonster: Monster
+  initialMonster: Monster & { ownerName?: string }
   autoRefresh?: boolean
+  showOwner?: boolean
+  isClickable?: boolean
 }
 
-export function MonsterCard ({ initialMonster, autoRefresh = true }: MonsterCardProps): React.ReactNode {
+export function MonsterCard ({
+  initialMonster,
+  autoRefresh = true,
+  showOwner = false,
+  isClickable = true
+}: MonsterCardProps): React.ReactNode {
   /**
-   * Use simplified polling hook for dashboard cards
+   * Use simplified polling hook for cards
    *
-   * Dashboard-specific configuration:
+   * Card-specific configuration:
    * - Polls every 3 seconds for real-time updates
    * - Disabled polling optional for performance (set autoRefresh={false})
-   * - Silent operation (no logs) for clean dashboard experience
+   * - Silent operation (no logs) for clean card experience
    *
    * Integration with lazy state system:
    * - Each poll triggers backend state computation
@@ -88,60 +97,76 @@ export function MonsterCard ({ initialMonster, autoRefresh = true }: MonsterCard
   const state = isMonsterState(monster.state) ? monster.state : DEFAULT_MONSTER_STATE
   const adoptionDate = formatAdoptionDate(monster.createdAt ?? monster.updatedAt)
   const levelLabel = monster.level ?? 1
-  const monsterHref = `/creatures/${String(monster.id ?? monster._id ?? '')}`
+  const monsterId = String(monster.id ?? monster._id ?? '')
+  const monsterHref = `/creatures/${monsterId}`
+  const ownerName = (initialMonster as Monster & { ownerName?: string }).ownerName
 
   // Get the correct asset path based on current state
   const folderPath = extractFolderPath(monster.draw)
   const currentAsset = getMonsterAssetPath(folderPath, state)
 
-  return (
-    <Link
-      href={monsterHref}
-      className='block group'
-    >
-      <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
-        <div className='relative flex flex-col gap-6'>
-          <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-6 border border-autumn-peach/30'>
-            <Image
-              src={currentAsset}
-              alt={monster.name}
-              width={200}
-              height={200}
-              className='transition-transform duration-300 group-hover:scale-110'
+  const cardContent = (
+    <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
+      <div className='relative flex flex-col gap-6'>
+        {/* Monster visual with accessories */}
+        <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-6 border border-autumn-peach/30'>
+          <div className='w-[200px] h-[200px] flex items-center justify-center'>
+            <MonsterWithAccessories
+              monsterId={monsterId}
+              imageSrc={currentAsset}
+              state={state}
+              size={200}
+              refreshTrigger={0}
             />
-            <span
-              className='absolute right-3 top-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition-all duration-500'
-            >
-              <span aria-hidden='true'>⭐</span>
-              Niv {levelLabel}
-            </span>
-            {monster.isPublic === true && (
-              <span
-                className='absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold bg-lochinvar-500 shadow-md'
-                title='Visible dans la galerie publique'
-              >
-                <span aria-hidden='true'>🌍</span>
-                Public
-              </span>
-            )}
           </div>
+          <span
+            className='absolute right-3 top-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wide transition-all duration-500 text-autumn-brown'
+          >
+            <span aria-hidden='true'>⭐</span>
+            Niv {levelLabel}
+          </span>
+          {monster.isPublic === true && (
+            <span
+              className='absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold bg-lochinvar-500 shadow-md'
+              title='Visible dans la galerie publique'
+            >
+              <span aria-hidden='true'>🌍</span>
+              Public
+            </span>
+          )}
+        </div>
 
-          <div className='flex flex-1 flex-col gap-4'>
-            <div className='flex items-start justify-between gap-3'>
-              <div className='space-y-2'>
-                <h3 className='text-xl font-bold text-chestnut-deep'>{monster.name}</h3>
-                {adoptionDate !== null && (
-                  <p className='text-sm text-chestnut-medium'>Arrivé le {adoptionDate}</p>
-                )}
-              </div>
-              <span className={`inline-flex items-center gap-1 rounded-full ${STATE_BADGE_CLASSES[state]} px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-autumn-brown`}>
-                <span aria-hidden='true'>{MONSTER_STATE_EMOJI[state]}</span>
-                {MONSTER_STATE_LABELS[state]}
-              </span>
+        <div className='flex flex-1 flex-col gap-4'>
+          <div className='flex items-start justify-between gap-3'>
+            <div className='space-y-2 flex-1'>
+              <h3 className='text-xl font-bold text-chestnut-deep'>{monster.name}</h3>
+              {!showOwner && adoptionDate !== null && (
+                <p className='text-sm text-chestnut-medium'>Arrivé le {adoptionDate}</p>
+              )}
+              {showOwner && ownerName !== undefined && ownerName !== '' && (
+                <p className='text-sm text-chestnut-medium flex items-center gap-1.5'>
+                  <span aria-hidden='true'>👤</span>
+                  Par {ownerName}
+                </p>
+              )}
             </div>
+            <span className={`inline-flex items-center gap-1 rounded-full ${STATE_BADGE_CLASSES[state]} px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-autumn-brown`}>
+              <span aria-hidden='true'>{MONSTER_STATE_EMOJI[state]}</span>
+              {MONSTER_STATE_LABELS[state]}
+            </span>
           </div>
         </div>
-      </article>
+      </div>
+    </article>
+  )
+
+  if (!isClickable) {
+    return cardContent
+  }
+
+  return (
+    <Link href={monsterHref} className='block group'>
+      {cardContent}
     </Link>
   )
 }

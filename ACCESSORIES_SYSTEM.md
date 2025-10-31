@@ -315,7 +315,7 @@ Pour utiliser le nouveau système sur vos composants existants :
 
 ## Prochaines étapes
 
-1. **Intégrer dans les cartes** : Les accessoires sont déjà intégrés dans `MonsterCard` et `PublicMonsterCard`
+1. **Intégrer dans les cartes** : Les accessoires sont déjà intégrés dans `MonsterCard` (unifié pour dashboard et galerie publique)
 2. **Page de boutique** : Interface complète d'achat d'accessoires
 3. **Wallet integration** : Décommenter le débit de Koins dans `purchaseAccessory`
 4. **Plus d'accessoires** : Ajouter plus de designs (ailes, queues, bijoux, etc.)

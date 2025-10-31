@@ -8,9 +8,8 @@
 export { PixelMonster } from './PixelMonster'
 export { MonsterWithAccessories } from './MonsterWithAccessories'
 
-// Card components
+// Card component (unified for dashboard and gallery)
 export { MonsterCard } from './monster-card'
-export { PublicMonsterCard } from './public-monster-card'
 
 // List and detail components
 export { default as MonstersList } from './monsters-list'

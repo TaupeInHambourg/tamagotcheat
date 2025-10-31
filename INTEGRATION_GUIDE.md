@@ -88,13 +88,13 @@ export default function CreaturePage({ params }: { params: { id: string } }) {
 
 ## Étape 3 : Ajouter dans les Cartes de Monstre 📇
 
-Pour afficher les accessoires dans les cartes de liste, utilisez `MonsterCard` ou `PublicMonsterCard` qui intègrent déjà `MonsterWithAccessories` :
+Pour afficher les accessoires dans les cartes de liste, utilisez `MonsterCard` qui intègre déjà `MonsterWithAccessories` :
 
 ```tsx
 // src/components/monsters/monster-card.tsx (déjà intégré)
 import { MonsterWithAccessories } from './MonsterWithAccessories'
 
-export function MonsterCard({ initialMonster }: Props) {
+export function MonsterCard({ initialMonster, showOwner = false }: Props) {
   return (
     <article className="card">
       <MonsterWithAccessories
@@ -103,6 +103,7 @@ export function MonsterCard({ initialMonster }: Props) {
         state={monster.state}
         size={200}
       />
+      {showOwner && <p>Par {monster.ownerName}</p>}
       {/* ... reste du contenu */}
     </article>
   )
