@@ -1,4 +1,6 @@
-import { MonsterTemplate, MONSTER_TEMPLATES } from '@/types/monster-templates.types'
+import { MonsterTemplate, MonsterTemplates } from '@/types/monster.types'
+
+const MONSTER_TEMPLATES = Object.values(MonsterTemplates)
 
 function hexToRgb (hex: string): { r: number, g: number, b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)

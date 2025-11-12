@@ -10,7 +10,7 @@
  * - Proper error handling and type safety
  */
 
-import { MonsterTemplate, monsterTemplates } from '@/types/monster-templates.types'
+import { MonsterTemplate, MonsterTemplates } from '@/types/monster.types'
 
 /**
  * RGB color representation
@@ -96,7 +96,7 @@ function colorDistance (color1: string, color2: string): number {
  * ```
  */
 export function findMonsterTemplateByColor (color: string): MonsterTemplate {
-  const availableTemplates = Object.values(monsterTemplates)
+  const availableTemplates = Object.values(MonsterTemplates)
   let closestMonster = availableTemplates[0]
   let minDistance = Infinity
 

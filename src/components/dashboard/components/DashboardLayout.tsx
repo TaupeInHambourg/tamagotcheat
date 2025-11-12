@@ -4,7 +4,7 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout ({ children }: DashboardLayoutProps): React.ReactNode {
   return (
-    <div className='relative min-h-screen overflow-hidden bg-rose-20'>
+    <div className='relative min-h-screen bg-rose-20'>
       {/* Bulles décoratives */}
       <div className='animate-float-slow pointer-events-none absolute -right-32 top-24 h-72 w-72 rounded-full bg-monsters-purple/30 blur-3xl' aria-hidden='true' />
       <div className='animate-float pointer-events-none absolute -left-32 bottom-24 h-80 w-80 rounded-full bg-monsters-green/40 blur-3xl' aria-hidden='true' />
@@ -20,7 +20,7 @@ export function DashboardLayout ({ children }: DashboardLayoutProps): React.Reac
       </div>
 
       <main className='relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 pb-24'>
-        <section className='relative overflow-hidden rounded-[2rem] backdrop-blur-sm'>
+        <section className='relative rounded-[2rem]'>
           {/* Effets de lumière internes */}
           <div className='animate-pulse-slow pointer-events-none absolute -right-28 -top-16 h-64 w-64 rounded-full bg-gradient-to-br from-monsters-pink/40 via-monsters-blue/30 to-white/40 blur-3xl' aria-hidden='true' />
           <div className='animate-pulse-slow pointer-events-none absolute -left-32 bottom-0 h-64 w-64 translate-y-1/2 rounded-full bg-gradient-to-tr from-monsters-green/40 via-white/30 to-monsters-purple/40 blur-3xl' aria-hidden='true' />

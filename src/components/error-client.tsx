@@ -1,6 +1,6 @@
 'use client'
 
-import { redirectToDashboard } from '@/actions/navigation.action.ts'
+import { redirectToDashboard } from '@/actions/navigation.action'
 import React, { use, useEffect } from 'react'
 import { toast } from 'react-toastify'
 
