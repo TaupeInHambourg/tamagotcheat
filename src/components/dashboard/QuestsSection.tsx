@@ -21,6 +21,7 @@ import type { Quest } from '@/types/quest.types'
 import { getQuests, claimQuestReward } from '@/actions/quests.actions'
 import { getQuestDefinition, DASHBOARD_QUEST_PREVIEW_COUNT } from '@/config/quests.config'
 import Button from '@/components/Button'
+import { QuestCardSkeleton } from '@/components/skeletons'
 
 export default function QuestsSection (): React.ReactNode {
   const [quests, setQuests] = useState<Quest[]>([])
@@ -79,10 +80,22 @@ export default function QuestsSection (): React.ReactNode {
 
   if (loading) {
     return (
-      <div className='card-cozy p-6'>
-        <div className='text-center'>
-          <div className='text-4xl mb-2 animate-bounce'>⏳</div>
-          <p className='text-sm text-chestnut-medium'>Chargement des quêtes...</p>
+      <div className='card-cozy p-6 sm:p-8'>
+        {/* Header with skeleton */}
+        <div className='flex items-center justify-between mb-6'>
+          <div className='flex items-center gap-3'>
+            <div className='text-4xl'>🏆</div>
+            <div>
+              <h2 className='text-2xl font-bold text-chestnut-dark'>
+                Quêtes Quotidiennes
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        {/* Quest skeletons */}
+        <div className='space-y-4'>
+          <QuestCardSkeleton count={DASHBOARD_QUEST_PREVIEW_COUNT} />
         </div>
       </div>
     )
