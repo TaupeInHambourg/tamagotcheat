@@ -1,0 +1,144 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <defs>
+    <!-- Dégradé du ciel -->
+    <linearGradient id="skyGradientMeadow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F4FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFF5F0;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Dégradé de l'herbe -->
+    <linearGradient id="grassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4F5E9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#C5E8D3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Ciel doux -->
+  <rect width="400" height="400" fill="url(#skyGradientMeadow)"/>
+  
+  <!-- Nuages pastels -->
+  <g opacity="0.4">
+    <ellipse cx="80" cy="60" rx="45" ry="22" fill="#FFFFFF"/>
+    <ellipse cx="105" cy="55" rx="38" ry="20" fill="#FFFFFF"/>
+    <ellipse cx="55" cy="58" rx="32" ry="18" fill="#FFFFFF"/>
+  </g>
+  
+  <g opacity="0.35">
+    <ellipse cx="280" cy="80" rx="50" ry="25" fill="#FFE5F5"/>
+    <ellipse cx="310" cy="75" rx="42" ry="22" fill="#FFE5F5"/>
+    <ellipse cx="250" cy="78" rx="35" ry="20" fill="#FFE5F5"/>
+  </g>
+  
+  <g opacity="0.3">
+    <ellipse cx="180" cy="50" rx="40" ry="20" fill="#E8F4FF"/>
+    <ellipse cx="205" cy="48" rx="35" ry="18" fill="#E8F4FF"/>
+  </g>
+  
+  <!-- Collines douces -->
+  <ellipse cx="100" cy="280" rx="150" ry="80" fill="#E8F5D9" opacity="0.6"/>
+  <ellipse cx="320" cy="300" rx="180" ry="100" fill="#D4F5E9" opacity="0.5"/>
+  
+  <!-- Prairie principale -->
+  <rect x="0" y="200" width="400" height="200" fill="url(#grassGradient)"/>
+  
+  <!-- Touffes d'herbe -->
+  <ellipse cx="50" cy="240" rx="30" ry="12" fill="#B5E8D3" opacity="0.6"/>
+  <ellipse cx="150" cy="250" rx="35" ry="14" fill="#C5F0E0" opacity="0.6"/>
+  <ellipse cx="280" cy="245" rx="32" ry="13" fill="#B5E8D3" opacity="0.6"/>
+  <ellipse cx="360" cy="255" rx="28" ry="11" fill="#C5F0E0" opacity="0.6"/>
+  
+  <!-- Fleurs pastels - Roses -->
+  <!-- Fleur rose 1 -->
+  <circle cx="80" cy="260" r="8" fill="#FFB5E8"/>
+  <circle cx="75" cy="257" r="5" fill="#FFC9ED"/>
+  <circle cx="85" cy="257" r="5" fill="#FFC9ED"/>
+  <circle cx="80" cy="254" r="5" fill="#FFC9ED"/>
+  <circle cx="80" cy="263" r="5" fill="#FFC9ED"/>
+  <circle cx="80" cy="260" r="4" fill="#FFE5F5"/>
+  <rect x="79" y="265" width="2" height="15" fill="#A8D9BF"/>
+  
+  <!-- Fleur rose 2 -->
+  <circle cx="200" cy="280" r="8" fill="#FFB5E8"/>
+  <circle cx="195" cy="277" r="5" fill="#FFC9ED"/>
+  <circle cx="205" cy="277" r="5" fill="#FFC9ED"/>
+  <circle cx="200" cy="274" r="5" fill="#FFC9ED"/>
+  <circle cx="200" cy="283" r="5" fill="#FFC9ED"/>
+  <circle cx="200" cy="280" r="4" fill="#FFE5F5"/>
+  <rect x="199" y="285" width="2" height="15" fill="#A8D9BF"/>
+  
+  <!-- Fleurs lavande -->
+  <!-- Fleur lavande 1 -->
+  <circle cx="130" cy="270" r="7" fill="#D4B5FF"/>
+  <circle cx="126" cy="268" r="4" fill="#E5D0FF"/>
+  <circle cx="134" cy="268" r="4" fill="#E5D0FF"/>
+  <circle cx="130" cy="265" r="4" fill="#E5D0FF"/>
+  <circle cx="130" cy="273" r="4" fill="#E5D0FF"/>
+  <circle cx="130" cy="270" r="3" fill="#F5E5FF"/>
+  <rect x="129" y="274" width="2" height="12" fill="#A8D9BF"/>
+  
+  <!-- Fleur lavande 2 -->
+  <circle cx="320" cy="290" r="7" fill="#D4B5FF"/>
+  <circle cx="316" cy="288" r="4" fill="#E5D0FF"/>
+  <circle cx="324" cy="288" r="4" fill="#E5D0FF"/>
+  <circle cx="320" cy="285" r="4" fill="#E5D0FF"/>
+  <circle cx="320" cy="293" r="4" fill="#E5D0FF"/>
+  <circle cx="320" cy="290" r="3" fill="#F5E5FF"/>
+  <rect x="319" y="294" width="2" height="12" fill="#A8D9BF"/>
+  
+  <!-- Fleurs bleues -->
+  <!-- Fleur bleue 1 -->
+  <circle cx="180" cy="310" r="6" fill="#B5E8FF"/>
+  <circle cx="177" cy="308" r="4" fill="#D4F0FF"/>
+  <circle cx="183" cy="308" r="4" fill="#D4F0FF"/>
+  <circle cx="180" cy="306" r="4" fill="#D4F0FF"/>
+  <circle cx="180" cy="313" r="4" fill="#D4F0FF"/>
+  <circle cx="180" cy="310" r="3" fill="#E8F4FF"/>
+  <rect x="179" y="314" width="2" height="10" fill="#A8D9BF"/>
+  
+  <!-- Fleur bleue 2 -->
+  <circle cx="260" cy="295" r="6" fill="#B5E8FF"/>
+  <circle cx="257" cy="293" r="4" fill="#D4F0FF"/>
+  <circle cx="263" cy="293" r="4" fill="#D4F0FF"/>
+  <circle cx="260" cy="290" r="4" fill="#D4F0FF"/>
+  <circle cx="260" cy="298" r="4" fill="#D4F0FF"/>
+  <circle cx="260" cy="295" r="3" fill="#E8F4FF"/>
+  <rect x="259" y="299" width="2" height="10" fill="#A8D9BF"/>
+  
+  <!-- Fleurs jaunes pastel -->
+  <!-- Fleur jaune 1 -->
+  <circle cx="110" cy="320" r="7" fill="#FFF9B5"/>
+  <circle cx="106" cy="318" r="4" fill="#FFFDD4"/>
+  <circle cx="114" cy="318" r="4" fill="#FFFDD4"/>
+  <circle cx="110" cy="315" r="4" fill="#FFFDD4"/>
+  <circle cx="110" cy="323" r="4" fill="#FFFDD4"/>
+  <circle cx="110" cy="320" r="3" fill="#FFFFE8"/>
+  <rect x="109" y="324" width="2" height="12" fill="#A8D9BF"/>
+  
+  <!-- Fleur jaune 2 -->
+  <circle cx="350" cy="310" r="7" fill="#FFF9B5"/>
+  <circle cx="346" cy="308" r="4" fill="#FFFDD4"/>
+  <circle cx="354" cy="308" r="4" fill="#FFFDD4"/>
+  <circle cx="350" cy="305" r="4" fill="#FFFDD4"/>
+  <circle cx="350" cy="313" r="4" fill="#FFFDD4"/>
+  <circle cx="350" cy="310" r="3" fill="#FFFFE8"/>
+  <rect x="349" y="314" width="2" height="12" fill="#A8D9BF"/>
+  
+  <!-- Petites fleurs dispersées -->
+  <circle cx="60" cy="290" r="4" fill="#FFE5F5"/>
+  <circle cx="240" cy="320" r="4" fill="#E8F4FF"/>
+  <circle cx="140" cy="300" r="4" fill="#FFF9D4"/>
+  <circle cx="300" cy="315" r="4" fill="#FFD4F0"/>
+  <circle cx="90" cy="330" r="4" fill="#D4F0FF"/>
+  <circle cx="220" cy="295" r="4" fill="#FFE5D9"/>
+  
+  <!-- Papillons -->
+  <g opacity="0.7">
+    <ellipse cx="160" cy="180" rx="6" ry="10" fill="#FFB5E8" transform="rotate(-20 160 180)"/>
+    <ellipse cx="170" cy="180" rx="6" ry="10" fill="#FFB5E8" transform="rotate(20 170 180)"/>
+  </g>
+  
+  <g opacity="0.6">
+    <ellipse cx="280" cy="160" rx="5" ry="8" fill="#D4B5FF" transform="rotate(-15 280 160)"/>
+    <ellipse cx="288" cy="160" rx="5" ry="8" fill="#D4B5FF" transform="rotate(15 288 160)"/>
+  </g>
+</svg>

@@ -114,9 +114,9 @@ export function MonsterCard ({
     <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-4 sm:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
       <div className='relative flex flex-col gap-4 sm:gap-6'>
         {/* Monster visual with accessories */}
-        <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-4 sm:p-6 border border-autumn-peach/30'>
-          {/* Refresh is now invisible - no animation during auto-refresh */}
-          <div className='w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] flex items-center justify-center'>
+        <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 border border-autumn-peach/30'>
+          {/* Container with fixed dimensions for the monster */}
+          <div className='w-full h-[200px] sm:h-[240px] flex items-center justify-center'>
             <MonsterWithAccessories
               monsterId={monsterId}
               imageSrc={currentAsset}

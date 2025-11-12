@@ -1,0 +1,106 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <defs>
+    <!-- Dégradé du ciel coucher de soleil -->
+    <linearGradient id="sunsetGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE5D9;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#FFD4C9;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFC9B8;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#E8B8D4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4A8C9;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Dégradé de la mer/horizon -->
+    <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4C9E8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#BFB8D9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Ciel coucher de soleil -->
+  <rect width="400" height="400" fill="url(#sunsetGradient)"/>
+  
+  <!-- Soleil couchant -->
+  <circle cx="200" cy="200" r="70" fill="#FFD9A8" opacity="0.9"/>
+  <circle cx="200" cy="200" r="60" fill="#FFECB3" opacity="0.7"/>
+  <circle cx="200" cy="200" r="50" fill="#FFF5D9" opacity="0.6"/>
+  
+  <!-- Rayons du soleil -->
+  <g opacity="0.3">
+    <path d="M 200 130 L 180 100 L 220 100 Z" fill="#FFE5B3"/>
+    <path d="M 270 200 L 300 180 L 300 220 Z" fill="#FFE5B3"/>
+    <path d="M 130 200 L 100 180 L 100 220 Z" fill="#FFE5B3"/>
+    <path d="M 240 160 L 270 130 L 260 170 Z" fill="#FFE5B3"/>
+    <path d="M 160 160 L 130 130 L 140 170 Z" fill="#FFE5B3"/>
+    <path d="M 240 240 L 270 270 L 260 230 Z" fill="#FFE5B3"/>
+    <path d="M 160 240 L 130 270 L 140 230 Z" fill="#FFE5B3"/>
+  </g>
+  
+  <!-- Nuages pastel doux -->
+  <g opacity="0.4">
+    <ellipse cx="80" cy="80" rx="50" ry="20" fill="#FFC9E8"/>
+    <ellipse cx="110" cy="75" rx="45" ry="18" fill="#FFC9E8"/>
+    <ellipse cx="50" cy="78" rx="35" ry="15" fill="#FFC9E8"/>
+  </g>
+  
+  <g opacity="0.35">
+    <ellipse cx="320" cy="100" rx="55" ry="22" fill="#E8B8D4"/>
+    <ellipse cx="355" cy="95" rx="48" ry="20" fill="#E8B8D4"/>
+    <ellipse cx="285" cy="98" rx="40" ry="18" fill="#E8B8D4"/>
+  </g>
+  
+  <g opacity="0.3">
+    <ellipse cx="180" cy="60" rx="45" ry="18" fill="#FFD4E8"/>
+    <ellipse cx="210" cy="58" rx="40" ry="16" fill="#FFD4E8"/>
+    <ellipse cx="150" cy="62" rx="35" ry="15" fill="#FFD4E8"/>
+  </g>
+  
+  <g opacity="0.4">
+    <ellipse cx="350" cy="150" rx="50" ry="20" fill="#D4C9E8"/>
+    <ellipse cx="380" cy="148" rx="40" ry="18" fill="#D4C9E8"/>
+  </g>
+  
+  <g opacity="0.35">
+    <ellipse cx="50" cy="140" rx="45" ry="18" fill="#FFC9E8"/>
+    <ellipse cx="80" cy="138" rx="38" ry="16" fill="#FFC9E8"/>
+  </g>
+  
+  <!-- Horizon / Mer -->
+  <rect x="0" y="250" width="400" height="150" fill="url(#waterGradient)"/>
+  
+  <!-- Reflets du soleil sur l'eau -->
+  <ellipse cx="200" cy="270" rx="40" ry="15" fill="#FFE5B3" opacity="0.5"/>
+  <ellipse cx="200" cy="290" rx="35" ry="12" fill="#FFD4A8" opacity="0.4"/>
+  <ellipse cx="200" cy="310" rx="30" ry="10" fill="#FFC9A8" opacity="0.3"/>
+  <ellipse cx="200" cy="330" rx="25" ry="8" fill="#FFB8A8" opacity="0.3"/>
+  <ellipse cx="200" cy="350" rx="20" ry="6" fill="#FFA8A8" opacity="0.2"/>
+  
+  <!-- Vagues douces -->
+  <path d="M 0 280 Q 50 275 100 280 T 200 280 T 300 280 T 400 280 L 400 290 L 0 290 Z" 
+        fill="#C9B8D9" opacity="0.3"/>
+  <path d="M 0 300 Q 60 295 120 300 T 240 300 T 360 300 T 400 300 L 400 310 L 0 310 Z" 
+        fill="#BFA8C9" opacity="0.3"/>
+  <path d="M 0 320 Q 70 315 140 320 T 280 320 T 400 320 L 400 330 L 0 330 Z" 
+        fill="#B899BF" opacity="0.3"/>
+  
+  <!-- Oiseaux en silhouette -->
+  <g opacity="0.6">
+    <path d="M 100 180 Q 105 175 110 180" stroke="#8A7A9A" stroke-width="2" fill="none"/>
+    <path d="M 110 180 Q 115 175 120 180" stroke="#8A7A9A" stroke-width="2" fill="none"/>
+  </g>
+  
+  <g opacity="0.5">
+    <path d="M 280 160 Q 285 155 290 160" stroke="#8A7A9A" stroke-width="2" fill="none"/>
+    <path d="M 290 160 Q 295 155 300 160" stroke="#8A7A9A" stroke-width="2" fill="none"/>
+  </g>
+  
+  <g opacity="0.6">
+    <path d="M 150 200 Q 155 195 160 200" stroke="#8A7A9A" stroke-width="2" fill="none"/>
+    <path d="M 160 200 Q 165 195 170 200" stroke="#8A7A9A" stroke-width="2" fill="none"/>
+  </g>
+  
+  <!-- Étoiles commençant à apparaître -->
+  <circle cx="50" cy="50" r="1.5" fill="#FFFEF5" opacity="0.5"/>
+  <circle cx="370" cy="60" r="1.5" fill="#FFFEF5" opacity="0.4"/>
+  <circle cx="120" cy="40" r="1" fill="#FFF9E6" opacity="0.3"/>
+  <circle cx="340" cy="70" r="1" fill="#FFF9E6" opacity="0.4"/>
+</svg>

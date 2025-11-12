@@ -18,6 +18,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { drawEquippedAccessories } from '@/utils/accessory-renderer'
 import type { MonsterState } from '@/types/monster.types'
 
@@ -32,20 +33,23 @@ interface PixelMonsterProps {
     glasses?: string
     shoes?: string
   }
+  /** Background image path (optional) */
+  backgroundPath?: string
   /** Canvas size (default: 160x160) */
   size?: number
 }
 
 /**
- * PixelMonster - Hybrid SVG + Canvas monster renderer
+ * PixelMonster - Hybrid SVG + Canvas monster renderer with background support
  *
- * This component uses a unique approach:
- * 1. Displays the base monster as an SVG image (existing assets)
- * 2. Overlays a Canvas for pixel art accessories
- * 3. Synchronizes animations between both layers
+ * This component uses a layered approach:
+ * 1. Displays an optional background image (z-index: 0)
+ * 2. Displays the base monster as an SVG image (z-index: 1)
+ * 3. Overlays a Canvas for pixel art accessories (z-index: 2)
+ * 4. Synchronizes animations between layers
  *
  * This approach allows us to keep existing monster SVG assets
- * while adding pixel art accessories on top.
+ * while adding backgrounds and pixel art accessories.
  *
  * @param props - Component props
  * @returns React component
@@ -54,6 +58,7 @@ interface PixelMonsterProps {
  * ```tsx
  * <PixelMonster
  *   imageSrc="/assets/tamagocheats/chat-cosmique/happy.svg"
+ *   backgroundPath="/assets/backgrounds/bg_autumn_forest.svg"
  *   state="happy"
  *   accessories={{
  *     hat: 'hat-crown',
@@ -66,6 +71,7 @@ export function PixelMonster ({
   imageSrc,
   state = 'happy',
   accessories,
+  backgroundPath,
   size = 160
 }: PixelMonsterProps): React.ReactNode {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -124,27 +130,55 @@ export function PixelMonster ({
 
   return (
     <div
-      className='relative'
-      style={{ width: size, height: size }}
+      className='relative overflow-hidden'
+      style={{ width: '100%', height: '100%' }}
     >
-      {/* Base monster SVG */}
-      <img
-        src={imageSrc}
-        alt='Monster'
-        className='absolute inset-0 h-full w-full object-contain'
-        style={{ zIndex: 1 }}
-      />
+      {/* Background layer (z-index: 0) - full width/height */}
+      {backgroundPath != null && (
+        <div className='absolute inset-0' style={{ zIndex: 0 }}>
+          <Image
+            src={backgroundPath}
+            alt='Background'
+            fill
+            className='object-cover'
+            sizes={`${size}px`}
+            priority={false}
+          />
+          {/* Subtle overlay to ensure creature visibility */}
+          <div
+            className='absolute inset-0 bg-gradient-to-b from-black/5 via-black/10 to-black/15'
+            style={{ zIndex: 0 }}
+          />
+        </div>
+      )}
 
-      {/* Accessories overlay canvas */}
-      <canvas
-        ref={canvasRef}
-        className='pixel-art absolute inset-0 h-full w-full'
-        style={{
-          imageRendering: 'pixelated',
-          zIndex: 2,
-          pointerEvents: 'none' // Allow clicks to pass through to monster
-        }}
-      />
+      {/* Centered container for monster and accessories with fixed size */}
+      <div
+        className='absolute inset-0 flex items-center justify-center'
+        style={{ zIndex: 1 }}
+      >
+        <div
+          className='relative'
+          style={{ width: size, height: size }}
+        >
+          {/* Base monster SVG */}
+          <img
+            src={imageSrc}
+            alt='Monster'
+            className='absolute inset-0 h-full w-full object-contain'
+          />
+
+          {/* Accessories overlay canvas */}
+          <canvas
+            ref={canvasRef}
+            className='pixel-art absolute inset-0 h-full w-full'
+            style={{
+              imageRendering: 'pixelated',
+              pointerEvents: 'none' // Allow clicks to pass through to monster
+            }}
+          />
+        </div>
+      </div>
     </div>
   )
 }

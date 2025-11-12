@@ -1,16 +1,22 @@
 /**
  * Shop Filters Utility
  *
- * Pure functions for filtering and sorting shop accessories.
+ * Pure functions for filtering and sorting shop items (accessories, backgrounds, etc.).
  * Implements Single Responsibility Principle - each function does one thing.
  *
  * @module utils/shop-filters
  */
 
-import type { Accessory, Rarity } from '@/types/accessory.types'
+import type { Rarity } from '@/types/accessory.types'
 
 /**
- * Sort order for accessories display
+ * Generic item type with rarity and id (for filtering/sorting)
+ * This interface constraint ensures type safety for shop operations
+ */
+interface ShopItem { id: string, rarity: Rarity }
+
+/**
+ * Sort order for items display
  */
 export type SortOrder = 'rarest-first' | 'common-first'
 
@@ -27,12 +33,13 @@ const RARITY_ORDER: Record<Rarity, number> = {
 }
 
 /**
- * Sort accessories by rarity
+ * Sort items by rarity (generic function)
  *
  * Pure function - does not mutate input array.
  * Follows Single Responsibility: only handles sorting logic.
+ * Works with any item type that has a rarity property.
  *
- * @param accessories - Array of accessories to sort
+ * @param items - Array of items to sort
  * @param order - Sort order (rarest-first or common-first)
  * @returns New sorted array
  *
@@ -42,12 +49,12 @@ const RARITY_ORDER: Record<Rarity, number> = {
  * // Returns: [legendary items, epic items, rare items, common items]
  * ```
  */
-export function sortByRarity (
-  accessories: Accessory[],
+export function sortByRarity<T extends ShopItem> (
+  items: T[],
   order: SortOrder
-): Accessory[] {
+): T[] {
   // Create a copy to avoid mutation (Immutability principle)
-  const sorted = [...accessories]
+  const sorted = [...items]
 
   sorted.sort((a, b) => {
     const rarityA = RARITY_ORDER[a.rarity] ?? 0
@@ -64,37 +71,39 @@ export function sortByRarity (
 }
 
 /**
- * Filter out owned accessories
+ * Filter out owned items (generic function)
  *
  * Pure function - does not mutate input.
  * Follows Single Responsibility: only handles filtering logic.
+ * Works with any item type that has an id property.
  *
- * @param accessories - Array of accessories to filter
- * @param ownedIds - Array of owned accessory IDs
+ * @param items - Array of items to filter
+ * @param ownedIds - Array of owned item IDs
  * @returns New filtered array
  *
  * @example
  * ```typescript
  * const available = filterOutOwned(accessories, ['hat-cowboy', 'glasses-aviator'])
- * // Returns: Only accessories not in ownedIds
+ * // Returns: Only items not in ownedIds
  * ```
  */
-export function filterOutOwned (
-  accessories: Accessory[],
+export function filterOutOwned<T extends ShopItem> (
+  items: T[],
   ownedIds: string[]
-): Accessory[] {
-  return accessories.filter(accessory => !ownedIds.includes(accessory.id))
+): T[] {
+  return items.filter(item => !ownedIds.includes(item.id))
 }
 
 /**
- * Apply all filters and sorting to accessories
+ * Apply all filters and sorting to shop items (generic function)
  *
  * Composes filtering and sorting operations.
  * Follows Dependency Inversion: depends on abstract filter/sort functions.
+ * Works with accessories, backgrounds, or any shop item type.
  *
- * @param accessories - Array of accessories to process
+ * @param items - Array of items to process
  * @param options - Filter and sort options
- * @returns Processed array of accessories
+ * @returns Processed array of items
  *
  * @example
  * ```typescript
@@ -105,15 +114,15 @@ export function filterOutOwned (
  * })
  * ```
  */
-export function applyShopFilters (
-  accessories: Accessory[],
+export function applyShopFilters<T extends ShopItem> (
+  items: T[],
   options: {
     sortOrder: SortOrder
     hideOwned: boolean
     ownedIds: string[]
   }
-): Accessory[] {
-  let result = accessories
+): T[] {
+  let result = items
 
   // Apply ownership filter if enabled
   if (options.hideOwned) {

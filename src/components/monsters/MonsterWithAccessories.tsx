@@ -17,6 +17,8 @@
 import { useEffect, useState } from 'react'
 import { PixelMonster } from './PixelMonster'
 import { getCreatureEquipment } from '@/actions/accessories.actions'
+import { getCreatureBackground } from '@/actions/backgrounds.actions'
+import { BACKGROUNDS_CATALOG } from '@/config/backgrounds.config'
 import type { MonsterState } from '@/types/monster.types'
 
 interface MonsterWithAccessoriesProps {
@@ -37,9 +39,10 @@ interface MonsterWithAccessoriesProps {
  *
  * This component:
  * 1. Fetches equipped accessories from the server
- * 2. Passes them to PixelMonster for rendering
- * 3. Handles loading and error states
- * 4. Supports refresh when accessories change
+ * 2. Fetches equipped background
+ * 3. Passes them to PixelMonster for rendering
+ * 4. Handles loading and error states
+ * 5. Supports refresh when accessories/background change
  *
  * @param props - Component props
  * @returns React component
@@ -65,12 +68,15 @@ export function MonsterWithAccessories ({
     glasses?: string
     shoes?: string
   }>({})
+  const [backgroundPath, setBackgroundPath] = useState<string>()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchAccessories = async (): Promise<void> => {
+    const fetchEquipment = async (): Promise<void> => {
       try {
         setLoading(true)
+        
+        // Fetch accessories
         const equipment = await getCreatureEquipment(monsterId)
 
         // Transform equipment to simple ID map
@@ -91,17 +97,31 @@ export function MonsterWithAccessories ({
         }
 
         setAccessories(accessoryIds)
+
+        // Fetch background
+        const background = await getCreatureBackground(monsterId)
+        if (background != null) {
+          // Find background in catalog to get asset path
+          const backgroundConfig = BACKGROUNDS_CATALOG.find(
+            bg => bg.id === background.backgroundId
+          )
+          if (backgroundConfig != null) {
+            setBackgroundPath(backgroundConfig.assetPath)
+          }
+        } else {
+          setBackgroundPath(undefined)
+        }
       } catch (error) {
-        console.error('Failed to fetch accessories:', error)
+        console.error('Failed to fetch equipment:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    void fetchAccessories()
+    void fetchEquipment()
   }, [monsterId, refreshTrigger])
 
-  // Show loading state with just the monster (no accessories)
+  // Show loading state with just the monster (no accessories/background)
   if (loading) {
     return (
       <PixelMonster
@@ -117,6 +137,7 @@ export function MonsterWithAccessories ({
       imageSrc={imageSrc}
       state={state}
       accessories={accessories}
+      backgroundPath={backgroundPath}
       size={size}
     />
   )

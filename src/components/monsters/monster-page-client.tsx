@@ -11,6 +11,7 @@ import Button from '@/components/Button'
 import { extractFolderPath, getMonsterAssetPath } from '@/utils/monster-asset-resolver'
 import { MonsterWithAccessories } from './MonsterWithAccessories'
 import { AccessoryPanel } from '../accessories'
+import { BackgroundPanel } from '../backgrounds'
 import LevelProgressBar from './LevelProgressBar'
 import { calculateLevelFromXP } from '@/utils/xp-system'
 
@@ -340,14 +341,16 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
 
       <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
         {/* En-tête avec créature et accessoires */}
-        <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5 flex items-center justify-center'>
-          <MonsterWithAccessories
-            monsterId={getMonsterId(monster)}
-            imageSrc={currentAsset}
-            state={monster.state}
-            size={400}
-            refreshTrigger={accessoryRefreshTrigger}
-          />
+        <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5 flex items-center justify-center overflow-hidden'>
+          <div className='w-full h-full'>
+            <MonsterWithAccessories
+              monsterId={getMonsterId(monster)}
+              imageSrc={currentAsset}
+              state={monster.state}
+              size={400}
+              refreshTrigger={accessoryRefreshTrigger}
+            />
+          </div>
         </div>
 
         {/* Contenu */}
@@ -450,6 +453,14 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
               <AccessoryPanel
                 monsterId={getMonsterId(monster)}
                 onAccessoriesChange={refreshAccessories}
+              />
+            </div>
+
+            {/* Background Management Panel */}
+            <div className='border-t border-slate-200 pt-6'>
+              <BackgroundPanel
+                monsterId={getMonsterId(monster)}
+                onBackgroundChange={refreshAccessories}
               />
             </div>
           </div>

@@ -1,7 +1,7 @@
 /**
- * Shop Page - Accessories Store
+ * Shop Page - Accessories & Backgrounds Store
  *
- * Main page for browsing and purchasing accessories.
+ * Main page for browsing and purchasing accessories and backgrounds.
  * Server component that fetches user data and delegates to client component.
  *
  * Design Principles:
@@ -18,6 +18,7 @@ import { AppLayout } from '@/components/navigation'
 import ShopClient from '@/components/shop/ShopClient'
 import { getKoinsBalance } from '@/actions/wallet.actions'
 import { getMyAccessories } from '@/actions/accessories.actions'
+import { getMyBackgrounds } from '@/actions/backgrounds.actions'
 
 export default async function ShopPage (): Promise<React.ReactNode> {
   // Verify authentication
@@ -36,11 +37,16 @@ export default async function ShopPage (): Promise<React.ReactNode> {
   const ownedAccessories = await getMyAccessories()
   const ownedAccessoryIds = ownedAccessories.map(acc => acc.accessoryId)
 
+  // Fetch user's owned backgrounds
+  const ownedBackgrounds = await getMyBackgrounds()
+  const ownedBackgroundIds = ownedBackgrounds.map(bg => bg.backgroundId)
+
   return (
     <AppLayout>
       <ShopClient
         userKoins={userKoins}
         ownedAccessoryIds={ownedAccessoryIds}
+        ownedBackgroundIds={ownedBackgroundIds}
       />
     </AppLayout>
   )
