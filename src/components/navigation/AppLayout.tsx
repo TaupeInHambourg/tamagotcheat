@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { authClient } from '@/lib/auth-client'
 import { WalletProvider } from '@/contexts/WalletContext'
+import { PageLoader } from '@/components/common/PageLoader'
 import AppHeader from './AppHeader'
 import { MobileHeader } from './MobileHeader'
 import BottomNav from './BottomNav'
@@ -60,14 +61,7 @@ export default function AppLayout ({ children }: AppLayoutProps): React.ReactNod
 
   // Show loading while fetching user
   if (isLoading || userId == null) {
-    return (
-      <div className='min-h-screen flex items-center justify-center bg-autumn-gradient'>
-        <div className='text-center'>
-          <div className='text-6xl mb-4 animate-bounce'>🍂</div>
-          <p className='text-chestnut-deep font-semibold'>Chargement...</p>
-        </div>
-      </div>
-    )
+    return <PageLoader />
   }
 
   return (

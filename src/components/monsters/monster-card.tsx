@@ -1,16 +1,21 @@
 /**
  * MonsterCard Component
  *
- * Unified monster card component with auto-refresh capability.
+ * Unified monster card component with invisible auto-refresh capability.
  * Used for both dashboard and public gallery displays.
  *
  * Features:
  * - Auto-refresh every 3 seconds (configurable)
  * - Display equipped accessories
  * - Optional owner name display
- * - Visual indicator during refresh
+ * - Invisible refresh (no loading animation)
  * - Smooth state transitions
  * - Responsive styling
+ *
+ * Design Principle:
+ * - Silent operation: Auto-refresh happens in background without visual feedback
+ * - Clean UX: No loading spinners or animations during refresh
+ * - Real-time updates: Monster state updates automatically reflect server changes
  */
 
 'use client'
@@ -87,7 +92,7 @@ export function MonsterCard ({
    * - Card automatically reflects new state
    * - No manual state management needed
    */
-  const { monster, isLoading } = useMonsterPolling({
+  const { monster } = useMonsterPolling({
     initialMonster,
     pollingInterval: 3000, // Poll every 3 seconds
     enabled: autoRefresh,
@@ -106,16 +111,11 @@ export function MonsterCard ({
   const currentAsset = getMonsterAssetPath(folderPath, state)
 
   const cardContent = (
-    <article className={`bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-4 sm:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50 ${isLoading ? 'opacity-75' : ''}`}>
+    <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-4 sm:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
       <div className='relative flex flex-col gap-4 sm:gap-6'>
         {/* Monster visual with accessories */}
         <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 p-4 sm:p-6 border border-autumn-peach/30'>
-          {/* Loading indicator */}
-          {isLoading && (
-            <div className='absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10'>
-              <div className='animate-spin text-2xl'>⏳</div>
-            </div>
-          )}
+          {/* Refresh is now invisible - no animation during auto-refresh */}
           <div className='w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] flex items-center justify-center'>
             <MonsterWithAccessories
               monsterId={monsterId}

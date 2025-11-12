@@ -8,33 +8,14 @@ import { useWallet } from '@/contexts/WalletContext'
  *
  * Shows current Koins and Gifts balance with link to wallet page.
  * Uses WalletContext for real-time updates without unnecessary re-fetching.
+ * Displays values immediately (starts at 0) and updates smoothly when data arrives.
  *
  * @architecture Presentation Layer
  * @principle Single Responsibility - Only displays wallet balance
+ * @principle Clean Code - No loading states, smooth transitions
  */
 export function WalletDisplay ({ compact = false }: { compact?: boolean }): React.JSX.Element {
-  const { koins, gifts, isLoading } = useWallet()
-
-  // Show loading state only on initial load
-  if (isLoading) {
-    return (
-      <div className={`flex items-center gap-2 ${compact ? 'gap-1.5 px-2 py-1' : 'gap-3 px-4 py-2'} rounded-xl bg-gradient-to-r from-autumn-peach to-autumn-coral text-chestnut-deep shadow-md`}>
-        <div className='flex items-center gap-1'>
-          <span className={compact ? 'text-base' : 'text-xl'}>💰</span>
-          <span className='text-xs animate-pulse'>...</span>
-        </div>
-        {!compact && (
-          <>
-            <div className='w-px h-6 bg-chestnut-deep/20' />
-            <div className='flex items-center gap-1'>
-              <span className='text-xl'>🎁</span>
-              <span className='text-xs animate-pulse'>...</span>
-            </div>
-          </>
-        )}
-      </div>
-    )
-  }
+  const { koins, gifts } = useWallet()
 
   return (
     <Link href='/wallet'>
