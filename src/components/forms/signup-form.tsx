@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import InputField from '../Input'
-import Button from '../Button'
+import Button from '@/components/Button'
 import { authClient } from '@/lib/auth-client'
 
 interface Credentials {

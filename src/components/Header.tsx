@@ -1,6 +1,6 @@
 'use client'
 
-import Button from './Button'
+import Button from '@/components/Button'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 

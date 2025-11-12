@@ -20,7 +20,7 @@ import { toast } from 'react-toastify'
 import type { Quest } from '@/types/quest.types'
 import { getQuests, claimQuestReward } from '@/actions/quests.actions'
 import { getQuestDefinition, DASHBOARD_QUEST_PREVIEW_COUNT } from '@/config/quests.config'
-import Button from '../Button'
+import Button from '@/components/Button'
 
 export default function QuestsSection (): React.ReactNode {
   const [quests, setQuests] = useState<Quest[]>([])

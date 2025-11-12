@@ -19,7 +19,7 @@ import { useState } from 'react'
 import { CreateMonsterDto, MonsterTemplates } from '@/types/monster.types'
 import { ValidationError, validateMonsterForm } from '@/utils/monster-form-validator'
 
-import Button from '../Button'
+import Button from '@/components/Button'
 import InputField from '../Input'
 
 /**

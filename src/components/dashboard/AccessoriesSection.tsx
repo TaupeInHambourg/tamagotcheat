@@ -14,7 +14,7 @@ import Link from 'next/link'
 import { ACCESSORIES_CATALOG } from '@/config/accessories.config'
 import type { OwnedAccessory } from '@/types/accessory.types'
 import RarityBadge from '../accessories/RarityBadge'
-import Button from '../Button'
+import Button from '@/components/Button'
 
 interface AccessoriesSectionProps {
   /** User's owned accessories */

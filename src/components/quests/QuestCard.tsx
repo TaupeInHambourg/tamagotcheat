@@ -19,7 +19,7 @@
 
 import type { Quest } from '@/types/quest.types'
 import { getQuestDefinition } from '@/config/quests.config'
-import Button from '../Button'
+import Button from '@/components/Button'
 
 interface QuestCardProps {
   quest: Quest
