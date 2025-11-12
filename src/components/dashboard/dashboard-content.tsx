@@ -13,6 +13,7 @@ import { MoodTip } from './components/MoodTip'
 import { DashboardLayout } from './components/DashboardLayout'
 import CreateMonsterModal from '../modals/create-monster-modal'
 import AccessoriesSection from './AccessoriesSection'
+import QuestsSection from './QuestsSection'
 import { useMemo, useState } from 'react'
 
 type Session = typeof authClient.$Infer.Session
@@ -109,6 +110,11 @@ function DashboardContent ({ session, monsters, accessories }: DashboardContentP
       <section className='mt-8 sm:mt-10 lg:mt-12 space-y-6'>
         <MonstersList monsters={monsters} className='mt-0' />
         <MoodTip favoriteMoodMessage={favoriteMoodMessage} />
+      </section>
+
+      {/* Quests Section */}
+      <section className='mt-8 sm:mt-10 lg:mt-12'>
+        <QuestsSection />
       </section>
 
       {/* Accessories Section */}

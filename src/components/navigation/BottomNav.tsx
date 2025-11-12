@@ -37,6 +37,7 @@ export default function BottomNav (): React.ReactNode {
   const navItems: NavigationItem[] = [
     { href: '/dashboard', label: 'Home', icon: '🏠' },
     { href: '/creatures', label: 'Créatures', icon: '🐾' },
+    { href: '/quests', label: 'Quêtes', icon: '🏆' },
     { href: '/shop', label: 'Boutique', icon: '🛍️' },
     { href: '/wallet', label: 'Wallet', icon: '💰' }
   ]
@@ -45,7 +46,7 @@ export default function BottomNav (): React.ReactNode {
     <>
       {/* Barre de navigation fixée en bas */}
       <nav className='md:hidden fixed bottom-0 left-0 right-0 glass-autumn z-50 border-t-2 border-autumn-peach/50 shadow-cozy-lg'>
-        <div className='grid grid-cols-5 gap-1 px-2 py-2 safe-area-inset-bottom'>
+        <div className='grid grid-cols-6 gap-1 px-2 py-2 safe-area-inset-bottom'>
           {navItems.map((item) => (
             <Link
               key={item.href}

@@ -27,6 +27,7 @@ import {
 import type { OwnedAccessory } from '@/types/accessory.types'
 import { createMonsterRepository } from '@/db/repositories'
 import { addXP, XP_PER_ACCESSORY } from '@/utils/xp-system'
+import { updateQuestProgress } from './quests.actions'
 
 /**
  * Result type for server actions
@@ -169,6 +170,11 @@ export async function equipAccessory (
       // Log XP error but don't fail the entire operation
       console.error('Error awarding XP for accessory:', xpError)
     }
+
+    // 7. Update quest progress for equipping accessory
+    await updateQuestProgress('equip_accessory', 1).catch((err: unknown) => {
+      console.error('Failed to update quest progress:', err)
+    })
 
     return { success: true }
   } catch (error) {

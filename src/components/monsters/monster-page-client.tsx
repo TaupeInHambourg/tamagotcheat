@@ -1,11 +1,12 @@
 'use client'
 
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { toast, Bounce } from 'react-toastify'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
-import { interactWithMonster, updateMonsterVisibility } from '@/actions/monsters.actions'
+import { interactWithMonster, updateMonsterVisibility, giveGiftToMonsterAction } from '@/actions/monsters.actions'
+import { getUserGiftsBalance } from '@/actions/quests.actions'
 import Button from '../Button'
 import { extractFolderPath, getMonsterAssetPath } from '@/utils/monster-asset-resolver'
 import { MonsterWithAccessories } from './MonsterWithAccessories'
@@ -85,6 +86,18 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const [isInteracting, setIsInteracting] = useState(false)
   const [accessoryRefreshTrigger, setAccessoryRefreshTrigger] = useState(0)
   const [isUpdatingVisibility, setIsUpdatingVisibility] = useState(false)
+  const [giftsBalance, setGiftsBalance] = useState(0)
+  const [isGivingGift, setIsGivingGift] = useState(false)
+
+  // Load gifts balance
+  useEffect(() => {
+    const loadGifts = async (): Promise<void> => {
+      const balance = await getUserGiftsBalance()
+      setGiftsBalance(balance)
+    }
+
+    void loadGifts()
+  }, [])
 
   /**
    * Callback to refresh monster accessories display
@@ -256,6 +269,61 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
     }
   }, [monster, isUpdatingVisibility])
 
+  /**
+   * Handles giving a gift to the monster
+   * Deducts one gift and adds XP
+   */
+  const handleGiveGift = useCallback(async () => {
+    if (isGivingGift || giftsBalance === 0) return
+
+    setIsGivingGift(true)
+
+    try {
+      const monsterId = getMonsterId(monster)
+      const result = await giveGiftToMonsterAction(monsterId)
+
+      if (result.success) {
+        toast.success(
+          `🎁 Tu as offert un cadeau à ${monster.name} ! +${result.xpGained ?? 50} XP !`,
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: 'light',
+            transition: Bounce
+          }
+        )
+
+        // Update gifts balance
+        setGiftsBalance(prev => Math.max(0, prev - 1))
+      } else {
+        toast.error(
+          result.error ?? 'Impossible d\'offrir le cadeau',
+          {
+            position: 'top-right',
+            autoClose: 3000,
+            theme: 'light'
+          }
+        )
+      }
+    } catch (error) {
+      console.error('Error giving gift:', error)
+      toast.error(
+        'Une erreur est survenue lors de l\'offrande du cadeau',
+        {
+          position: 'top-right',
+          autoClose: 3000,
+          theme: 'light'
+        }
+      )
+    } finally {
+      setIsGivingGift(false)
+    }
+  }, [monster, isGivingGift, giftsBalance])
+
   return (
     <div className='w-full max-w-4xl mx-auto px-4 py-8'>
       {/* Bouton boutique en haut */}
@@ -365,6 +433,15 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
                 disabled={isInteracting}
               >
                 💕 Câliner
+              </Button>
+              <Button
+                variant='primary'
+                onClick={() => { void handleGiveGift() }}
+                disabled={isGivingGift || giftsBalance === 0}
+              >
+                {isGivingGift
+                  ? '🎁 En cours...'
+                  : `🎁 Cadeau (${giftsBalance})`}
               </Button>
             </div>
 

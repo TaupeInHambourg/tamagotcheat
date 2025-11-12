@@ -21,7 +21,12 @@ import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { createMonsterService } from '@/services'
+import { giveGiftToMonster, updateQuestProgress } from '@/actions/quests.actions'
+import { addXP } from '@/utils/xp-system'
+import MonsterModel from '@/db/models/monster.model'
+import { connectMongooseToDatabase } from '@/db'
 import type { CreateMonsterDto, Monster } from '@/types/monster.types'
+import type { QuestType } from '@/config/quests.config'
 
 /**
  * Retrieves the authenticated user's session
@@ -145,6 +150,21 @@ export async function interactWithMonster (
       }
     }
 
+    // Update quest progress based on action
+    const questTypeMap: Record<string, QuestType> = {
+      feed: 'feed',
+      play: 'play',
+      cuddle: 'hug'
+      // sleep, wash, heal n'ont pas de quêtes actuellement
+    }
+
+    const questType = questTypeMap[action]
+    if (questType !== undefined) {
+      await updateQuestProgress(questType, 1).catch((err: unknown) => {
+        console.error('Failed to update quest progress:', err)
+      })
+    }
+
     // Revalidate the monster page to show updated state
     revalidatePath(`/creatures/${monsterId}`)
 
@@ -219,5 +239,74 @@ export async function getPublicMonsters (): Promise<Array<Monster & { ownerName?
   } catch (error) {
     console.error('Error in getPublicMonsters action:', error)
     return []
+  }
+}
+
+/**
+ * Give a gift to a monster to increase its XP
+ * Uses one gift from the user's balance and adds XP to the monster
+ * @param monsterId - The monster's unique identifier
+ * @returns Result with success status, new balances, and XP gained
+ */
+export async function giveGiftToMonsterAction (
+  monsterId: string
+): Promise<{ success: boolean, error?: string, xpGained?: number, newLevel?: number }> {
+  try {
+    // Get authenticated user
+    const user = await getAuthenticatedUser()
+
+    // Spend a gift
+    const giftResult = await giveGiftToMonster()
+    if (!giftResult.success) {
+      return {
+        success: false,
+        error: giftResult.error
+      }
+    }
+
+    // Get the monster
+    const monsterService = createMonsterService()
+    const monsterResult = await monsterService.getMonsterById(user.id, monsterId)
+
+    if (!monsterResult.success || monsterResult.data == null) {
+      return {
+        success: false,
+        error: 'Monster not found'
+      }
+    }
+
+    const monster = monsterResult.data
+
+    // Calculate XP to add (gifts give 50 XP)
+    const XP_PER_GIFT = 50
+    const currentTotalXP = monster.totalExperience ?? 0
+    const xpResult = addXP(currentTotalXP, XP_PER_GIFT)
+
+    // Update monster XP in database
+    await connectMongooseToDatabase()
+    await MonsterModel.findByIdAndUpdate(monsterId, {
+      totalExperience: xpResult.newTotalXP,
+      level: xpResult.newLevel,
+      experience: xpResult.newCurrentXP
+    })
+
+    // Update quest progress
+    await updateQuestProgress('gift', 1)
+
+    // Revalidate pages
+    revalidatePath(`/creatures/${monsterId}`)
+    revalidatePath('/dashboard')
+
+    return {
+      success: true,
+      xpGained: XP_PER_GIFT,
+      newLevel: xpResult.newLevel
+    }
+  } catch (error) {
+    console.error('Error in giveGiftToMonsterAction:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to give gift'
+    }
   }
 }
