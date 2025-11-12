@@ -101,7 +101,7 @@ const SIZE_STYLES: Record<ButtonSize, string> = {
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
   primary: 'bg-gradient-to-r from-autumn-peach to-autumn-coral text-chestnut-deep shadow-md hover:shadow-xl hover:shadow-monsters-pink-20 shadow-md hover:scale-105 active:scale-95',
   secondary: 'bg-gradient-to-r from-moss-soft to-moss-medium text-white hover:from-moss-medium hover:to-moss-deep hover:shadow-lg shadow-md hover:scale-105 active:scale-95',
-  ghost: 'bg-transparent text-pink-flare-600 hover:bg-pink-flare-150 active:scale-95',
+  ghost: 'bg-transparent text-pink-flare-600 hover:bg-pink-flare-200 active:scale-95',
   link: 'bg-transparent text-autumn-cinnamon underline hover:text-autumn-brown active:scale-95',
   outline: 'bg-white/90 text-chestnut-dark border-2 border-autumn-peach hover:bg-autumn-cream hover:border-autumn-coral shadow-md hover:scale-105 active:scale-95'
 }

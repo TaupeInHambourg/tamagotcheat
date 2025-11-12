@@ -4,9 +4,11 @@
  * Barrel exports pour faciliter les imports (Open/Closed Principle)
  *
  * Usage:
- * import { AppLayout } from '@/components/navigation'
+ * import { AppLayout, BackButton } from '@/components/navigation'
  */
 export { default as AppHeader } from './AppHeader'
 export { default as BottomNav } from './BottomNav'
 export { default as AppLayout } from './AppLayout'
 export { WalletDisplay } from './WalletDisplay'
+export { MobileHeader } from './MobileHeader'
+export { BackButton, BackButtonCompact } from './BackButton'

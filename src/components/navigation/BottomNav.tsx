@@ -7,15 +7,16 @@ import { useState } from 'react'
 import type { NavigationItem } from '@/types/navigation.types'
 
 /**
- * Barre de navigation en bas pour mobile et tablette
+ * Barre de navigation en bas pour tous les écrans
  *
  * Affiche une navigation de type "app mobile" en bas de l'écran.
- * Design adapté au style TamagoTcheat avec palette pink-flare.
+ * Visible sur tous les formats (mobile, tablette, desktop).
+ * Design adapté au style TamagoTcheat avec palette autumn.
  *
- * Responsabilité unique : Gérer la navigation mobile/tablette de l'application
+ * Responsabilité unique : Gérer la navigation bottom universelle de l'application
  *
  * Principes appliqués :
- * - Single Responsibility : Gère uniquement la navigation mobile
+ * - Single Responsibility : Gère uniquement la navigation bottom
  * - Open/Closed : Extensible via la liste navItems
  * - Liskov Substitution : Respecte le contrat NavigationItem
  * - Interface Segregation : Utilise des interfaces ciblées
@@ -39,44 +40,36 @@ export default function BottomNav (): React.ReactNode {
     { href: '/creatures', label: 'Créatures', icon: '🐾' },
     { href: '/quests', label: 'Quêtes', icon: '🏆' },
     { href: '/shop', label: 'Boutique', icon: '🛍️' },
-    { href: '/wallet', label: 'Wallet', icon: '💰' }
+    { href: '/wallet', label: 'Koins', icon: '💰' }
   ]
 
   return (
     <>
-      {/* Barre de navigation fixée en bas */}
-      <nav className='md:hidden fixed bottom-0 left-0 right-0 glass-autumn z-50 border-t-2 border-autumn-peach/50 shadow-cozy-lg'>
-        <div className='grid grid-cols-6 gap-1 px-2 py-2 safe-area-inset-bottom'>
+      {/* Barre de navigation fixée en bas - Visible sur tous les écrans */}
+      <nav className='fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg z-50 border-t-2 border-autumn-peach/50 shadow-lg'>
+        <div className='grid grid-cols-5 gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 pb-safe max-w-7xl mx-auto'>
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex flex-col items-center justify-center gap-1 py-3 rounded-xl font-semibold transition-all duration-200 active-press ${
+              className={`flex flex-col items-center justify-center gap-1 py-2 sm:py-3 px-1 sm:px-2 rounded-xl font-semibold transition-all duration-200 touch-manipulation active:scale-95 ${
                 isActive(item.href)
-                  ? 'bg-gradient-to-br from-autumn-peach to-autumn-coral text-chestnut-deep shadow-cozy animate-bounce-soft'
-                  : 'text-chestnut-medium hover:bg-autumn-cream hover:text-chestnut-deep'
+                  ? 'bg-gradient-to-br from-autumn-peach to-autumn-coral text-chestnut-deep shadow-md'
+                  : 'text-chestnut-medium active:bg-autumn-cream/50 hover:bg-autumn-cream/30'
               }`}
             >
-              <span className='text-2xl'>{item.icon}</span>
-              <span className='text-xs'>{item.label}</span>
+              <span className='text-xl sm:text-2xl'>{item.icon}</span>
+              <span className='text-[10px] sm:text-xs leading-tight'>{item.label}</span>
             </Link>
           ))}
 
-          {/* Bouton Quitter */}
-          <button
-            onClick={() => { setShowLogoutConfirm(true) }}
-            className='flex flex-col items-center justify-center gap-1 py-3 rounded-xl font-semibold text-chestnut-medium hover:bg-maple-light hover:text-maple-deep transition-all duration-200 active-press'
-          >
-            <span className='text-2xl'>🚪</span>
-            <span className='text-xs'>Quitter</span>
-          </button>
         </div>
       </nav>
 
       {/* Modal de confirmation de déconnexion */}
       {showLogoutConfirm && (
         <div
-          className='md:hidden fixed inset-0 bg-chestnut-deep/60 backdrop-blur-md z-50 flex items-end justify-center animate-fade-in-up'
+          className='fixed inset-0 bg-chestnut-deep/60 backdrop-blur-md z-50 flex items-end justify-center animate-fade-in-up'
           onClick={() => { setShowLogoutConfirm(false) }}
         >
           <div
