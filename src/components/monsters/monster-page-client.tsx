@@ -5,82 +5,31 @@ import Link from 'next/link'
 import { toast, Bounce } from 'react-toastify'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
+import { useMonsterSize } from '@/hooks/use-monster-size'
 import { interactWithMonster, updateMonsterVisibility, giveGiftToMonsterAction } from '@/actions/monsters.actions'
 import { getUserGiftsBalance } from '@/actions/quests.actions'
 import Button from '@/components/Button'
 import { extractFolderPath, getMonsterAssetPath } from '@/utils/monster-asset-resolver'
 import { MonsterWithAccessories } from './MonsterWithAccessories'
+import { MonsterHeader } from './MonsterHeader'
+import { MonsterActions } from './MonsterActions'
+import { MonsterVisibilitySection } from './MonsterVisibilitySection'
 import { AccessoryPanel } from '../accessories'
 import { BackgroundPanel } from '../backgrounds'
 import LevelProgressBar from './LevelProgressBar'
 import { calculateLevelFromXP } from '@/utils/xp-system'
-
-function getStateStyle (state: string): string {
-  switch (state) {
-    case 'happy':
-      return 'bg-green-100 text-green-800'
-    case 'angry':
-      return 'bg-red-100 text-red-800'
-    case 'sleepy':
-      return 'bg-blue-100 text-blue-800'
-    case 'hungry':
-      return 'bg-yellow-100 text-yellow-800'
-    case 'sad':
-      return 'bg-gray-100 text-gray-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
-  }
-}
+import {
+  formatDate,
+  getMoodEmoji,
+  getStateLabelFr,
+  getMonsterId,
+  TOAST_SUCCESS_CONFIG,
+  TOAST_INFO_CONFIG,
+  TOAST_ERROR_CONFIG
+} from '@/utils/monster-page.utils'
 
 interface MonsterPageProps {
   monster: Monster
-}
-
-function getMoodEmoji (state: string): string {
-  const moodEmojis: Record<string, string> = {
-    happy: '😄',
-    sad: '😢',
-    angry: '😤',
-    hungry: '😋',
-    sleepy: '😴'
-  }
-  return moodEmojis[state] ?? '😶'
-}
-
-function getStateLabelFr (state: string): string {
-  const stateLabels: Record<string, string> = {
-    happy: 'Heureux',
-    sad: 'Triste',
-    angry: 'En colère',
-    hungry: 'Affamé',
-    sleepy: 'Endormi'
-  }
-  return stateLabels[state] ?? state.charAt(0).toUpperCase() + state.slice(1)
-}
-
-function formatDate (date: string | undefined): string {
-  if (typeof date !== 'string' || date.trim() === '') return 'Date inconnue'
-
-  const parsedDate = new Date(date)
-  if (Number.isNaN(parsedDate.getTime())) return 'Date inconnue'
-
-  return new Intl.DateTimeFormat('fr-FR', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric'
-  }).format(parsedDate)
-}
-
-/**
- * Safely extracts the monster ID from either id or _id field
- * The repository should always provide an id field, but we keep _id as fallback
- * @param monster - Monster object
- * @returns The monster ID as string
- */
-function getMonsterId (monster: Monster): string {
-  // Repository normalizes _id to id, so id should always be available
-  // We keep _id as fallback for backward compatibility
-  return monster.id ?? monster._id ?? ''
 }
 
 export default function MonsterPageClient ({ monster: initialMonster }: MonsterPageProps): React.ReactNode {
@@ -89,30 +38,9 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const [isUpdatingVisibility, setIsUpdatingVisibility] = useState(false)
   const [giftsBalance, setGiftsBalance] = useState(0)
   const [isGivingGift, setIsGivingGift] = useState(false)
-  const [monsterSize, setMonsterSize] = useState(400)
 
-  // Adjust monster size based on window width
-  useEffect(() => {
-    const updateMonsterSize = (): void => {
-      const width = window.innerWidth
-      if (width < 640) { // mobile
-        setMonsterSize(280)
-      } else if (width < 768) { // sm
-        setMonsterSize(350)
-      } else if (width < 1024) { // md
-        setMonsterSize(400)
-      } else { // lg and above
-        setMonsterSize(500)
-      }
-    }
-
-    updateMonsterSize()
-    window.addEventListener('resize', updateMonsterSize)
-
-    return () => {
-      window.removeEventListener('resize', updateMonsterSize)
-    }
-  }, [])
+  // Use custom hook for responsive monster size
+  const monsterSize = useMonsterSize()
 
   // Load gifts balance
   useEffect(() => {
@@ -126,24 +54,13 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
 
   /**
    * Callback to refresh monster accessories display
-   * Increments trigger to force MonsterWithAccessories to re-fetch
    */
-  const refreshAccessories = (): void => {
+  const refreshAccessories = useCallback((): void => {
     setAccessoryRefreshTrigger(prev => prev + 1)
-  }
+  }, [])
 
   /**
    * Handles monster interaction with action buttons
-   *
-   * Business logic (enforced by backend):
-   * - hungry → feed
-   * - sleepy → sleep
-   * - sad → play
-   * - angry → cuddle
-   * - happy → no action needed
-   *
-   * If wrong action is clicked, nothing happens (backend returns error silently).
-   * If correct action is clicked, monster becomes happy.
    */
   const handleInteraction = useCallback(async (action: string, actionLabel: string) => {
     if (isInteracting) return
@@ -155,35 +72,14 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
       const result = await interactWithMonster(monsterId, action)
 
       if (result.success) {
-        // Success: Show success toast
         toast.success(
           `✨ ${actionLabel} a fonctionné ! ${initialMonster.name} est maintenant heureux ! 😄`,
-          {
-            position: 'top-right',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: 'light',
-            transition: Bounce
-          }
+          { ...TOAST_SUCCESS_CONFIG, transition: Bounce }
         )
-      } else {
-        // Wrong action or already happy: Silent fail (no toast)
-        // The backend has already validated and rejected the action
-        console.log(`Action ${action} n'est pas applicable pour l'état actuel`)
       }
     } catch (error) {
       console.error('Error during interaction:', error)
-      toast.error(
-        'Une erreur est survenue lors de l\'interaction',
-        {
-          position: 'top-right',
-          autoClose: 3000,
-          theme: 'light'
-        }
-      )
+      toast.error('Une erreur est survenue lors de l\'interaction', TOAST_ERROR_CONFIG)
     } finally {
       setIsInteracting(false)
     }
@@ -191,54 +87,32 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
 
   /**
    * Use simplified polling hook with lazy state computation on backend
-   *
-   * How it works:
-   * 1. Hook polls /api/monsters/[id] every 2 seconds
-   * 2. Backend (getMonsterById) applies lazy state computation
-   * 3. If state changed, backend updates database automatically
-   * 4. Hook detects state change and triggers notification
-   *
-   * Benefits:
-   * - State computed only when monster is viewed
-   * - Backend handles all state logic (single responsibility)
-   * - Frontend just polls and displays (separation of concerns)
    */
   const { monster } = useMonsterPolling({
     initialMonster,
-    onStateChange: (newState, oldState) => {
+    onStateChange: useCallback((newState: string, oldState: string) => {
       console.log(`🎉 ${initialMonster.name} changed state: ${oldState} → ${newState}`)
 
-      // Show toast notification with custom styling
       const oldEmoji = getMoodEmoji(oldState)
       const newEmoji = getMoodEmoji(newState)
       const newLabel = getStateLabelFr(newState)
 
       toast.info(
         `${newEmoji} ${initialMonster.name} est maintenant ${newLabel.toLowerCase()} ! (${oldEmoji} → ${newEmoji})`,
-        {
-          position: 'top-right',
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-          transition: Bounce
-        }
+        { ...TOAST_INFO_CONFIG, transition: Bounce }
       )
-    },
-    pollingInterval: 2000, // Poll every 2 seconds
+    }, [initialMonster.name]),
+    pollingInterval: 2000,
     enabled: true,
-    verbose: false // Set to true for debugging
+    verbose: false
   })
 
+  // Memoize computed values
   const formattedCreationDate = useMemo(() => formatDate(monster.createdAt), [monster.createdAt])
   const moodEmoji = useMemo(() => getMoodEmoji(monster.state), [monster.state])
-
-  // Get the correct folder path and asset for the monster
   const folderPath = useMemo(() => extractFolderPath(monster.draw), [monster.draw])
   const currentAsset = useMemo(() => getMonsterAssetPath(folderPath, monster.state), [folderPath, monster.state])
+  const monsterId = useMemo(() => getMonsterId(monster), [monster])
 
   /**
    * Handles toggling the public visibility of the monster
@@ -249,7 +123,6 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
     setIsUpdatingVisibility(true)
 
     try {
-      const monsterId = getMonsterId(monster)
       const newIsPublic = !(monster.isPublic ?? false)
       const result = await updateMonsterVisibility(monsterId, newIsPublic)
 
@@ -258,45 +131,21 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
           newIsPublic
             ? `🌍 ${monster.name} est maintenant visible dans la galerie publique !`
             : `🔒 ${monster.name} est maintenant privé`,
-          {
-            position: 'top-right',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: 'light',
-            transition: Bounce
-          }
+          { ...TOAST_SUCCESS_CONFIG, transition: Bounce }
         )
       } else {
-        toast.error(
-          'Une erreur est survenue lors de la mise à jour de la visibilité',
-          {
-            position: 'top-right',
-            autoClose: 3000,
-            theme: 'light'
-          }
-        )
+        toast.error('Une erreur est survenue lors de la mise à jour de la visibilité', TOAST_ERROR_CONFIG)
       }
     } catch (error) {
       console.error('Error updating visibility:', error)
-      toast.error(
-        'Une erreur est survenue lors de la mise à jour de la visibilité',
-        {
-          position: 'top-right',
-          autoClose: 3000,
-          theme: 'light'
-        }
-      )
+      toast.error('Une erreur est survenue lors de la mise à jour de la visibilité', TOAST_ERROR_CONFIG)
     } finally {
       setIsUpdatingVisibility(false)
     }
-  }, [monster, isUpdatingVisibility])
+  }, [monster, monsterId, isUpdatingVisibility])
 
   /**
    * Handles giving a gift to the monster
-   * Deducts one gift and adds XP
    */
   const handleGiveGift = useCallback(async () => {
     if (isGivingGift || giftsBalance === 0) return
@@ -304,50 +153,24 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
     setIsGivingGift(true)
 
     try {
-      const monsterId = getMonsterId(monster)
       const result = await giveGiftToMonsterAction(monsterId)
 
       if (result.success) {
         toast.success(
           `🎁 Tu as offert un cadeau à ${monster.name} ! +${result.xpGained ?? 50} XP !`,
-          {
-            position: 'top-right',
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: 'light',
-            transition: Bounce
-          }
+          { ...TOAST_SUCCESS_CONFIG, transition: Bounce }
         )
-
-        // Update gifts balance
         setGiftsBalance(prev => Math.max(0, prev - 1))
       } else {
-        toast.error(
-          result.error ?? 'Impossible d\'offrir le cadeau',
-          {
-            position: 'top-right',
-            autoClose: 3000,
-            theme: 'light'
-          }
-        )
+        toast.error(result.error ?? 'Impossible d\'offrir le cadeau', TOAST_ERROR_CONFIG)
       }
     } catch (error) {
       console.error('Error giving gift:', error)
-      toast.error(
-        'Une erreur est survenue lors de l\'offrande du cadeau',
-        {
-          position: 'top-right',
-          autoClose: 3000,
-          theme: 'light'
-        }
-      )
+      toast.error('Une erreur est survenue lors de l\'offrande du cadeau', TOAST_ERROR_CONFIG)
     } finally {
       setIsGivingGift(false)
     }
-  }, [monster, isGivingGift, giftsBalance])
+  }, [monster.name, monsterId, isGivingGift, giftsBalance])
 
   return (
     <div className='w-full max-w-4xl mx-auto px-4 py-8'>
@@ -368,7 +191,7 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
         <div className='relative h-64 sm:h-80 md:h-96 lg:h-[28rem] w-full bg-monsters-pink/5 flex items-center justify-center overflow-hidden'>
           <div className='w-full h-full'>
             <MonsterWithAccessories
-              monsterId={getMonsterId(monster)}
+              monsterId={monsterId}
               imageSrc={currentAsset}
               state={monster.state}
               size={monsterSize}
@@ -381,26 +204,15 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
         <div className='p-6 sm:p-8'>
           <div className='flex flex-col gap-6'>
             {/* Titre et informations principales */}
-            <div className='flex items-start justify-between'>
-              <div>
-                <h1 className='text-3xl font-bold text-slate-900'>{monster.name}</h1>
-                <p className='mt-1 text-sm text-slate-500'>
-                  Créé le {formattedCreationDate}
-                </p>
-              </div>
-              <div className='flex items-center gap-2'>
-                <span className='text-2xl' role='img' aria-label={`Humeur: ${monster.state}`}>
-                  {moodEmoji}
-                </span>
-                <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full transition-all duration-500 ${getStateStyle(monster.state)}`}>
-                  {getStateLabelFr(monster.state)}
-                </span>
-              </div>
-            </div>
+            <MonsterHeader
+              name={monster.name}
+              creationDate={formattedCreationDate}
+              state={monster.state}
+              moodEmoji={moodEmoji}
+            />
 
             {/* Niveau et caractéristiques */}
             <div className='grid gap-4'>
-              {/* Barre de progression XP */}
               <LevelProgressBar
                 level={monster.level ?? 1}
                 currentXP={monster.experience ?? 0}
@@ -409,73 +221,26 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
             </div>
 
             {/* Visibilité publique */}
-            <div className='flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200'>
-              <div className='flex items-center gap-3'>
-                <span className='text-2xl'>🌍</span>
-                <div>
-                  <h3 className='text-sm font-semibold text-slate-900'>Galerie publique</h3>
-                  <p className='text-xs text-slate-500'>
-                    {monster.isPublic === true
-                      ? 'Visible par tous les utilisateurs'
-                      : 'Seul toi peux voir cette créature'}
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant={monster.isPublic === true ? 'secondary' : 'primary'}
-                size='sm'
-                onClick={() => { void handleToggleVisibility() }}
-                disabled={isUpdatingVisibility}
-              >
-                {monster.isPublic === true ? '🔒 Rendre privé' : '🌍 Rendre public'}
-              </Button>
-            </div>
+            <MonsterVisibilitySection
+              isPublic={monster.isPublic ?? false}
+              monsterName={monster.name}
+              isUpdating={isUpdatingVisibility}
+              onToggle={() => { void handleToggleVisibility() }}
+            />
 
             {/* Actions */}
-            <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6 justify-center'>
-              <Button
-                variant='outline'
-                onClick={() => { void handleInteraction('feed', 'Nourrir') }}
-                disabled={isInteracting}
-              >
-                🍪 Nourrir
-              </Button>
-              <Button
-                variant='outline'
-                onClick={() => { void handleInteraction('sleep', 'Mettre au lit') }}
-                disabled={isInteracting}
-              >
-                💤 Mettre au lit
-              </Button>
-              <Button
-                variant='outline'
-                onClick={() => { void handleInteraction('play', 'Jouer') }}
-                disabled={isInteracting}
-              >
-                🎮 Jouer
-              </Button>
-              <Button
-                variant='outline'
-                onClick={() => { void handleInteraction('cuddle', 'Câliner') }}
-                disabled={isInteracting}
-              >
-                💕 Câliner
-              </Button>
-              <Button
-                variant='primary'
-                onClick={() => { void handleGiveGift() }}
-                disabled={isGivingGift || giftsBalance === 0}
-              >
-                {isGivingGift
-                  ? '🎁 En cours...'
-                  : `🎁 Cadeau (${giftsBalance})`}
-              </Button>
-            </div>
+            <MonsterActions
+              isInteracting={isInteracting}
+              isGivingGift={isGivingGift}
+              giftsBalance={giftsBalance}
+              onInteraction={(action, label) => { void handleInteraction(action, label) }}
+              onGiveGift={() => { void handleGiveGift() }}
+            />
 
             {/* Accessory Management Panel */}
             <div className='border-t border-slate-200 pt-6'>
               <AccessoryPanel
-                monsterId={getMonsterId(monster)}
+                monsterId={monsterId}
                 onAccessoriesChange={refreshAccessories}
               />
             </div>
@@ -483,7 +248,7 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
             {/* Background Management Panel */}
             <div className='border-t border-slate-200 pt-6'>
               <BackgroundPanel
-                monsterId={getMonsterId(monster)}
+                monsterId={monsterId}
                 onBackgroundChange={refreshAccessories}
               />
             </div>

@@ -15,6 +15,12 @@ export { MonsterCard } from './monster-card'
 export { default as MonstersList } from './monsters-list'
 export { default as MonsterPageClient } from './monster-page-client'
 
+// Sub-components (refactored from monster-page-client)
+export { MonsterHeader } from './MonsterHeader'
+export { MonsterActions } from './MonsterActions'
+export { MonsterVisibilitySection } from './MonsterVisibilitySection'
+export { default as LevelProgressBar } from './LevelProgressBar'
+
 // Types
 export type { MonsterCardProps } from './monster-card'
 export type { DashboardMonster } from './monsters-list'
