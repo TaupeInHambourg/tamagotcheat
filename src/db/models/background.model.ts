@@ -29,12 +29,12 @@ async function getBackgroundsCollection (): Promise<Collection<BackgroundDB>> {
  * Serialize MongoDB document to plain object
  * Converts ObjectId to string and Date to ISO string
  */
-function serializeBackground (doc: any): BackgroundDB {
+function serializeBackground (doc: Record<string, unknown> & { _id: { toString: () => string }, userId: string, backgroundId: string, purchasedAt: unknown, equippedTo?: string | null }): BackgroundDB {
   return {
     _id: doc._id.toString(),
     userId: doc.userId,
     backgroundId: doc.backgroundId,
-    purchasedAt: doc.purchasedAt instanceof Date ? doc.purchasedAt : new Date(doc.purchasedAt),
+    purchasedAt: doc.purchasedAt instanceof Date ? doc.purchasedAt : new Date(doc.purchasedAt as string | number | Date),
     equippedTo: doc.equippedTo ?? null
   }
 }

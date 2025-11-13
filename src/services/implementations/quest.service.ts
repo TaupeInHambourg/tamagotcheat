@@ -18,12 +18,14 @@
 import QuestModel from '@/db/models/quest.model'
 import { connectMongooseToDatabase } from '@/db'
 import { addKoins, addGifts } from '@/db/models/user.model'
+import type { Document } from 'mongoose'
 import {
   getQuestsByPeriod,
   getQuestDefinition,
   QUEST_REFRESH_INTERVALS,
   type QuestType,
-  type QuestPeriod
+  type QuestPeriod,
+  type RewardType
 } from '@/config/quests.config'
 import type {
   Quest,
@@ -38,15 +40,30 @@ export class QuestService implements IQuestService {
   /**
    * Convert Mongoose document to plain Quest object
    */
-  private documentToQuest (doc: any): Quest {
+  private documentToQuest (doc: Document & Record<string, unknown> & {
+    _id: { toString: () => string }
+    userId: string
+    questType: string
+    period: string
+    targetCount: number
+    currentCount: number
+    rewardType: string
+    rewardAmount: number
+    completed: boolean
+    claimed: boolean
+    questDate: string
+    expiresAt: { toISOString: () => string }
+    createdAt?: { toISOString: () => string }
+    updatedAt?: { toISOString: () => string }
+  }): Quest {
     return {
       id: doc._id.toString(),
       userId: doc.userId,
-      questType: doc.questType,
-      period: doc.period,
+      questType: doc.questType as QuestType,
+      period: doc.period as QuestPeriod,
       targetCount: doc.targetCount,
       currentCount: doc.currentCount,
-      rewardType: doc.rewardType,
+      rewardType: doc.rewardType as RewardType,
       rewardAmount: doc.rewardAmount,
       completed: doc.completed,
       claimed: doc.claimed,
@@ -200,11 +217,11 @@ export class QuestService implements IQuestService {
       let questsCompleted = 0
 
       for (const quest of quests) {
-        if (quest.completed) continue
+        if (quest.completed === true) continue
 
         quest.currentCount = Math.min(
-          quest.currentCount + increment,
-          quest.targetCount
+          Number(quest.currentCount) + increment,
+          Number(quest.targetCount)
         )
 
         if (quest.currentCount >= quest.targetCount) {
@@ -255,14 +272,14 @@ export class QuestService implements IQuestService {
         }
       }
 
-      if (!quest.completed) {
+      if (quest.completed !== true) {
         return {
           success: false,
           error: 'Quest not completed'
         }
       }
 
-      if (quest.claimed) {
+      if (quest.claimed === true) {
         return {
           success: false,
           error: 'Reward already claimed'
@@ -305,7 +322,7 @@ export class QuestService implements IQuestService {
   async getQuestStats (userId: string, period?: QuestPeriod): Promise<QuestStats> {
     await connectMongooseToDatabase()
 
-    const query: any = { userId }
+    const query: Record<string, unknown> = { userId }
     if (period !== undefined) {
       query.period = period
       query.questDate = this.getQuestDate(period)

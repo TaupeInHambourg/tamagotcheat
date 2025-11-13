@@ -11,6 +11,7 @@
  */
 
 import { Types } from 'mongoose'
+import type { Document } from 'mongoose'
 import Monster from '@/db/models/monster.model'
 import { connectMongooseToDatabase } from '@/db'
 import { computeCurrentState } from '@/utils/monster-state-decay'
@@ -87,7 +88,7 @@ export class MongooseMonsterRepository implements IMonsterRepository {
    * @param monster - Mongoose document to check and update
    * @private
    */
-  private async applyStateDecay (monster: any): Promise<void> {
+  private async applyStateDecay (monster: Document & Record<string, unknown> & { save: () => Promise<unknown> }): Promise<void> {
     const monsterData = this.serialize<MonsterType>(monster)
     const result = computeCurrentState(monsterData)
 

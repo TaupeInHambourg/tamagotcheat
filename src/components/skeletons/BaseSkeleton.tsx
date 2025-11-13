@@ -115,7 +115,7 @@ export const SkeletonPatterns = {
   ),
 
   /** Button skeleton */
-  Button: ({ width = 120, height = 40 }: { width?: number, height?: number }) => (
+  Button: ({ width = 120, height = 40 }: { width?: number | string, height?: number }) => (
     <Skeleton width={width} height={height} borderRadius='0.75rem' />
   )
 }

@@ -27,13 +27,13 @@ async function getAccessoriesCollection (): Promise<Collection<OwnedAccessory>> 
  * Serialize MongoDB document to plain object
  * Converts ObjectId to string and Date to ISO string
  */
-function serializeAccessory (doc: any): OwnedAccessory {
+function serializeAccessory (doc: Record<string, unknown> & { _id: { toString: () => string }, ownerId: string, accessoryId: string, equippedOnMonsterId?: string | null, acquiredAt: unknown }): OwnedAccessory {
   return {
     _id: doc._id.toString(),
     ownerId: doc.ownerId,
     accessoryId: doc.accessoryId,
-    equippedOnMonsterId: doc.equippedOnMonsterId,
-    acquiredAt: doc.acquiredAt instanceof Date ? doc.acquiredAt : new Date(doc.acquiredAt)
+    equippedOnMonsterId: doc.equippedOnMonsterId ?? null,
+    acquiredAt: doc.acquiredAt instanceof Date ? doc.acquiredAt : new Date(doc.acquiredAt as string | number | Date)
   }
 }
 
