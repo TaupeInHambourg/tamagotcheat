@@ -16,7 +16,7 @@
  * @page
  */
 
-import Header from '@/components/Header'
+import LandingHeader from '@/components/navigation/LandingHeader'
 import Footer from '@/components/Footer'
 import HeroSection from '@/components/home/HeroSection'
 import FeaturesSection from '@/components/home/FeaturesSection'
@@ -47,7 +47,7 @@ export const metadata: Readonly<Metadata> = {
 export default function Home (): React.ReactNode {
   return (
     <div className='bg-gradient-to-br from-autumn-cream via-autumn-peach/20 to-moss-light min-h-screen'>
-      <Header />
+      <LandingHeader />
       <main className='pt-20'>
         <HeroSection />
         <FeaturesSection />

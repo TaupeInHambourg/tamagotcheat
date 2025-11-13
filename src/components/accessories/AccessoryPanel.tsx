@@ -9,18 +9,17 @@
  * - Single Responsibility: Orchestrate accessory management UI
  * - Uses composition of AccessorySlot and AccessorySelector
  * - Dependency Inversion: Depends on hooks interface, not implementation
+ * - Custom Hooks: Encapsulates complex logic for better reusability
  *
  * @module components/accessories
  */
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, type ReactNode } from 'react'
 import { AccessorySlot } from './AccessorySlot'
 import { AccessorySelector } from './AccessorySelector'
-import { useAccessories } from '@/hooks/accessories/use-accessories'
-import { useEquipAccessory } from '@/hooks/accessories/use-equip-accessory'
-import { getCreatureEquipment } from '@/actions/accessories.actions'
+import { useAccessoryManagement } from '@/hooks/use-accessory-management'
 import type { AccessoryCategory } from '@/types/accessory.types'
 
 interface AccessoryPanelProps {
@@ -47,6 +46,7 @@ interface AccessoryPanelProps {
  * - Open/Closed: Can add new categories without modifying core logic
  * - Single Responsibility: Only manages accessory UI interactions
  * - Dependency Inversion: Depends on abstractions (hooks) not concrete implementations
+ * - Custom Hooks: Separates state management from presentation
  *
  * @param props - Component props
  * @returns React component
@@ -62,78 +62,38 @@ interface AccessoryPanelProps {
 export function AccessoryPanel ({
   monsterId,
   onAccessoriesChange
-}: AccessoryPanelProps): React.ReactNode {
+}: AccessoryPanelProps): ReactNode {
+  // Modal state
   const [selectedCategory, setSelectedCategory] = useState<AccessoryCategory | null>(null)
-  const [equipment, setEquipment] = useState<{
-    hat: any | null
-    glasses: any | null
-    shoes: any | null
-  }>({
-    hat: null,
-    glasses: null,
-    shoes: null
-  })
-  const [isLoadingEquipment, setIsLoadingEquipment] = useState(true)
 
-  const { accessories, loading } = useAccessories()
-  const { equipAccessory, unequipAccessory, isEquipping } = useEquipAccessory(monsterId)
+  // Accessory state management
+  const {
+    accessories,
+    equipment,
+    isLoadingEquipment,
+    isLoadingAccessories,
+    isOperating,
+    handleEquip,
+    handleUnequip
+  } = useAccessoryManagement({ monsterId, onAccessoriesChange })
 
   /**
-   * Fetch equipment on mount and when monsterId changes
-   * Follows Single Responsibility: This component manages its own data
+   * Handle accessory selection with modal closure
    */
-  useEffect(() => {
-    const fetchEquipment = async (): Promise<void> => {
-      try {
-        setIsLoadingEquipment(true)
-        const result = await getCreatureEquipment(monsterId)
-        setEquipment(result)
-      } catch (error) {
-        console.error('Failed to fetch equipment:', error)
-      } finally {
-        setIsLoadingEquipment(false)
-      }
-    }
-
-    void fetchEquipment()
-  }, [monsterId])
-
-  /**
-   * Handle accessory selection from the modal
-   */
-  const handleSelectAccessory = (accessoryDbId: string): void => {
+  const onSelectAccessory = (accessoryDbId: string): void => {
     void (async () => {
-      const result = await equipAccessory(accessoryDbId)
-
-      if (result.success) {
+      const success = await handleEquip(accessoryDbId)
+      if (success) {
         setSelectedCategory(null) // Close modal
-        // Refresh equipment
-        const newEquipment = await getCreatureEquipment(monsterId)
-        setEquipment(newEquipment)
-        onAccessoriesChange?.() // Notify parent
-      } else if (result.error != null) {
-        // Show error to user (you could use a toast notification here)
-        console.error('Failed to equip accessory:', result.error)
       }
     })()
   }
 
   /**
-   * Handle unequipping an accessory
+   * Handle unequip operation
    */
-  const handleUnequip = (accessoryDbId: string): void => {
-    void (async () => {
-      const result = await unequipAccessory(accessoryDbId)
-
-      if (result.success) {
-        // Refresh equipment
-        const newEquipment = await getCreatureEquipment(monsterId)
-        setEquipment(newEquipment)
-        onAccessoriesChange?.() // Notify parent
-      } else if (result.error != null) {
-        console.error('Failed to unequip accessory:', result.error)
-      }
-    })()
+  const onUnequip = (accessoryDbId: string): void => {
+    void handleUnequip(accessoryDbId)
   }
 
   if (isLoadingEquipment) {
@@ -170,24 +130,24 @@ export function AccessoryPanel ({
           category='hat'
           equipped={equipment.hat}
           onSelectAccessory={setSelectedCategory}
-          onUnequip={handleUnequip}
+          onUnequip={onUnequip}
         />
         <AccessorySlot
           category='glasses'
           equipped={equipment.glasses}
           onSelectAccessory={setSelectedCategory}
-          onUnequip={handleUnequip}
+          onUnequip={onUnequip}
         />
         <AccessorySlot
           category='shoes'
           equipped={equipment.shoes}
           onSelectAccessory={setSelectedCategory}
-          onUnequip={handleUnequip}
+          onUnequip={onUnequip}
         />
       </div>
 
       {/* Loading State */}
-      {loading && (
+      {isLoadingAccessories && (
         <div className='mt-4 text-center'>
           <div className='inline-flex items-center gap-2 rounded-full bg-autumn-cream px-4 py-2 text-sm text-chestnut-dark shadow-sm'>
             <div className='h-4 w-4 animate-spin rounded-full border-2 border-autumn-cinnamon border-t-transparent' />
@@ -201,9 +161,9 @@ export function AccessoryPanel ({
         <AccessorySelector
           category={selectedCategory}
           ownedAccessories={accessories}
-          onSelect={handleSelectAccessory}
+          onSelect={onSelectAccessory}
           onClose={() => { setSelectedCategory(null) }}
-          isSelecting={isEquipping}
+          isSelecting={isOperating}
         />
       )}
     </div>

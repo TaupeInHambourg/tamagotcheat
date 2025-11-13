@@ -1,13 +1,13 @@
 /**
  * AccessoryCardSkeleton Component
  *
- * Loading skeleton for AccessoryCard component.
+ * Loading skeleton for AccessoryCard using BaseSkeleton.
  * Matches the visual structure of the shop's accessory cards.
  *
  * Design Principles:
- * - Single Responsibility: Only displays loading state for accessory cards
- * - Open/Closed: Standalone component that doesn't need modification
- * - Interface Segregation: Simple, focused props interface
+ * - DRY: Reuses BaseSkeleton and SkeletonPatterns
+ * - Single Responsibility: Only defines accessory card skeleton structure
+ * - Open/Closed: Extended from BaseSkeleton without modifying it
  *
  * @component
  */
@@ -15,6 +15,7 @@
 'use client'
 
 import type { ReactNode } from 'react'
+import { BaseSkeleton, SkeletonPatterns } from './BaseSkeleton'
 import Skeleton from 'react-loading-skeleton'
 
 interface AccessoryCardSkeletonProps {
@@ -22,58 +23,37 @@ interface AccessoryCardSkeletonProps {
   count?: number
 }
 
-/**
- * Skeleton loader matching AccessoryCard structure
- *
- * Visual structure:
- * - Card container with rounded corners
- * - Top section: Rarity badge
- * - Middle section: Accessory image placeholder
- * - Bottom section: Name, category, price
- * - Action button area
- */
-function AccessoryCardSkeletonItem (): ReactNode {
+export function AccessoryCardSkeleton ({ count = 1 }: AccessoryCardSkeletonProps): ReactNode {
   return (
-    <div className='bg-white rounded-2xl p-4 sm:p-5 shadow-md ring-1 ring-chestnut-light/20 hover:shadow-lg transition-all duration-300'>
-      {/* Rarity Badge */}
-      <div className='flex items-center justify-between mb-3'>
-        <Skeleton width={90} height={24} borderRadius='9999px' />
-        <Skeleton circle width={32} height={32} />
-      </div>
+    <BaseSkeleton
+      count={count}
+      wrapperClassName='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'
+      renderItem={() => (
+        <SkeletonPatterns.Card>
+          {/* Rarity Badge */}
+          <div className='flex items-center justify-between mb-3'>
+            <Skeleton width={90} height={24} borderRadius='9999px' />
+            <SkeletonPatterns.Circle size={32} />
+          </div>
 
-      {/* Accessory Image Area */}
-      <div className='relative mb-4'>
-        <div className='aspect-square w-full flex items-center justify-center bg-gradient-to-br from-autumn-cream to-autumn-peach/30 rounded-xl'>
-          <Skeleton width='80%' height='80%' borderRadius='0.5rem' />
-        </div>
-      </div>
+          {/* Accessory Image Area */}
+          <SkeletonPatterns.ImageArea aspectRatio='square' />
 
-      {/* Accessory Info */}
-      <div className='space-y-2 mb-4'>
-        <Skeleton width='80%' height={24} />
-        <Skeleton width='50%' height={20} />
-      </div>
+          {/* Content: Name, Description, Price */}
+          <SkeletonPatterns.CardContent />
 
-      {/* Price Section */}
-      <div className='flex items-center justify-between pt-3 border-t border-chestnut-light/20 mb-3'>
-        <Skeleton width={80} height={28} />
-        <Skeleton width={60} height={20} />
-      </div>
+          {/* Price */}
+          <div className='flex items-center gap-2 mt-3'>
+            <Skeleton width={80} height={32} />
+            <Skeleton circle width={24} height={24} />
+          </div>
 
-      {/* Action Button */}
-      <Skeleton width='100%' height={44} borderRadius='0.75rem' />
-    </div>
-  )
-}
-
-export function AccessoryCardSkeleton ({
-  count = 1
-}: AccessoryCardSkeletonProps): ReactNode {
-  return (
-    <>
-      {Array.from({ length: count }, (_, index) => (
-        <AccessoryCardSkeletonItem key={index} />
-      ))}
-    </>
+          {/* Action Button */}
+          <div className='mt-4'>
+            <SkeletonPatterns.Button width='100%' height={40} />
+          </div>
+        </SkeletonPatterns.Card>
+      )}
+    />
   )
 }

@@ -7,3 +7,5 @@
  */
 
 export { PageLoader } from './PageLoader'
+export { default as ShopCard } from './ShopCard'
+export type { ShopCardProps } from './ShopCard'

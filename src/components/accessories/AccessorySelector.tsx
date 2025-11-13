@@ -14,9 +14,8 @@
 
 'use client'
 
-import { useState } from 'react'
 import { AccessoryPreview } from './AccessoryPreview'
-import { getAccessoryById, getAccessoryPrice } from '@/config/accessories.config'
+import { getAccessoryById } from '@/config/accessories.config'
 import type { AccessoryCategory, OwnedAccessory } from '@/types/accessory.types'
 
 interface AccessorySelectorProps {

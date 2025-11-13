@@ -8,23 +8,32 @@
  * - Client component (interactive panel)
  * - Single Responsibility: Orchestrate background management UI
  * - Dependency Inversion: Depends on actions interface, not implementation
+ * - Custom Hooks: Encapsulates complex logic for better reusability
  *
  * @module components/backgrounds
  */
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { type ReactNode } from 'react'
 import Image from 'next/image'
-import { getMyBackgrounds, getCreatureBackground, equipBackground, unequipBackground } from '@/actions/backgrounds.actions'
+import { useBackgroundManagement } from '@/hooks/use-background-management'
+import { useToggle } from '@/hooks/use-toggle'
 import { BACKGROUNDS_CATALOG } from '@/config/backgrounds.config'
-import type { BackgroundDB, Background } from '@/types/background.types'
+import type { Background } from '@/types/background.types'
 
 interface BackgroundPanelProps {
   /** Monster ID to manage background for */
   monsterId: string
   /** Callback when background changes (for parent refresh) */
   onBackgroundChange?: () => void
+}
+
+/**
+ * Get background info from catalog
+ */
+const getBackgroundInfo = (backgroundId: string): Background | undefined => {
+  return BACKGROUNDS_CATALOG.find(bg => bg.id === backgroundId)
 }
 
 /**
@@ -39,6 +48,7 @@ interface BackgroundPanelProps {
  * Design Principles:
  * - Single Responsibility: Only manages background UI interactions
  * - Dependency Inversion: Depends on actions abstractions
+ * - Custom Hooks: Separates state management from presentation
  *
  * @param props - Component props
  * @returns React component
@@ -54,102 +64,28 @@ interface BackgroundPanelProps {
 export function BackgroundPanel ({
   monsterId,
   onBackgroundChange
-}: BackgroundPanelProps): React.ReactNode {
-  const [isOpen, setIsOpen] = useState(false)
-  const [ownedBackgrounds, setOwnedBackgrounds] = useState<BackgroundDB[]>([])
-  const [equippedBackground, setEquippedBackground] = useState<BackgroundDB | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isOperating, setIsOperating] = useState(false)
+}: BackgroundPanelProps): ReactNode {
+  // Modal state management
+  const [isOpen, , openModal, closeModal] = useToggle(false)
+
+  // Background state management
+  const {
+    availableBackgrounds,
+    equippedBackground,
+    isLoading,
+    isOperating,
+    handleEquip,
+    handleUnequip
+  } = useBackgroundManagement({ monsterId, onBackgroundChange })
 
   /**
-   * Get available backgrounds (not equipped to any monster)
-   * Each background instance can only be used once
+   * Handle background equip with modal closure
    */
-  const availableBackgrounds = ownedBackgrounds.filter(bg => bg.equippedTo == null)
-
-  /**
-   * Fetch backgrounds on mount and when monsterId changes
-   */
-  useEffect(() => {
-    const fetchBackgrounds = async (): Promise<void> => {
-      try {
-        setIsLoading(true)
-        const [owned, equipped] = await Promise.all([
-          getMyBackgrounds(),
-          getCreatureBackground(monsterId)
-        ])
-        setOwnedBackgrounds(owned)
-        setEquippedBackground(equipped)
-      } catch (error) {
-        console.error('Failed to fetch backgrounds:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    void fetchBackgrounds()
-  }, [monsterId])
-
-  /**
-   * Handle equipping a background
-   */
-  const handleEquip = (backgroundDbId: string): void => {
+  const onEquip = (backgroundDbId: string): void => {
     void (async () => {
-      try {
-        setIsOperating(true)
-        const result = await equipBackground(backgroundDbId, monsterId)
-
-        if (result.success) {
-          // Refresh background
-          const newEquipped = await getCreatureBackground(monsterId)
-          setEquippedBackground(newEquipped)
-          setIsOpen(false)
-          onBackgroundChange?.()
-        } else {
-          console.error('Failed to equip background:', result.error)
-          alert(`❌ ${result.error ?? 'Erreur lors de l\'équipement'}`)
-        }
-      } catch (error) {
-        console.error('Error equipping background:', error)
-        alert('❌ Une erreur est survenue')
-      } finally {
-        setIsOperating(false)
-      }
+      await handleEquip(backgroundDbId)
+      closeModal()
     })()
-  }
-
-  /**
-   * Handle unequipping the current background
-   */
-  const handleUnequip = (): void => {
-    if (equippedBackground == null) return
-
-    void (async () => {
-      try {
-        setIsOperating(true)
-        const result = await unequipBackground(equippedBackground._id)
-
-        if (result.success) {
-          setEquippedBackground(null)
-          onBackgroundChange?.()
-        } else {
-          console.error('Failed to unequip background:', result.error)
-          alert(`❌ ${result.error ?? 'Erreur lors du retrait'}`)
-        }
-      } catch (error) {
-        console.error('Error unequipping background:', error)
-        alert('❌ Une erreur est survenue')
-      } finally {
-        setIsOperating(false)
-      }
-    })()
-  }
-
-  /**
-   * Get background info from catalog
-   */
-  const getBackgroundInfo = (backgroundId: string): Background | undefined => {
-    return BACKGROUNDS_CATALOG.find(bg => bg.id === backgroundId)
   }
 
   if (isLoading) {
@@ -184,7 +120,7 @@ export function BackgroundPanel ({
         <div className='flex items-center gap-2'>
           {equippedBackground != null && (
             <button
-              onClick={handleUnequip}
+              onClick={() => { void handleUnequip() }}
               disabled={isOperating}
               className='px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-maple-warm to-maple-deep rounded-lg hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
             >
@@ -192,7 +128,7 @@ export function BackgroundPanel ({
             </button>
           )}
           <button
-            onClick={() => { setIsOpen(true) }}
+            onClick={openModal}
             disabled={isOperating || availableBackgrounds.length === 0}
             className='px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-monster-purple to-pastel-lavender rounded-lg hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1'
           >
@@ -241,7 +177,7 @@ export function BackgroundPanel ({
           )
         : (
           <button
-            onClick={() => { setIsOpen(true) }}
+            onClick={openModal}
             disabled={isOperating}
             className='w-full p-4 bg-white/50 rounded-xl border-2 border-dashed border-pastel-lavender/50 hover:border-monster-purple hover:bg-white/70 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group'
           >
@@ -274,7 +210,7 @@ export function BackgroundPanel ({
                   </p>
                 </div>
                 <button
-                  onClick={() => { setIsOpen(false) }}
+                  onClick={closeModal}
                   className='text-white hover:bg-white/20 rounded-full p-2 transition-colors'
                   disabled={isOperating}
                 >
@@ -328,7 +264,7 @@ export function BackgroundPanel ({
                         return (
                           <button
                             key={bg._id}
-                            onClick={() => { handleEquip(bg._id) }}
+                            onClick={() => { onEquip(bg._id) }}
                             disabled={isOperating}
                             className='relative group rounded-xl overflow-hidden border-2 transition-all duration-200 border-pastel-lavender/30 hover:border-monster-purple hover:shadow-lg hover:scale-105'
                           >

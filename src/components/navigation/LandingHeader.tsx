@@ -7,26 +7,17 @@ import type { ReactNode } from 'react'
 /**
  * Landing Page Header Component
  *
- * Main navigation header for the landing page with autumn/cozy styling.
+ * Main navigation header for public pages (landing page, gallery).
  * Provides navigation links and call-to-action button.
  *
- * Features:
- * - Fixed positioning with backdrop blur
- * - Responsive navigation menu
- * - Smooth hover animations
- * - Gradient branding
- *
- * Follows Single Responsibility Principle:
- * - Only handles landing page navigation
- * - Does not manage authentication state
+ * Design Principles:
+ * - Single Responsibility: Only handles public page navigation
+ * - Open/Closed: Extensible through navigation items
+ * - Clean separation from authenticated AppHeader
  *
  * @component
  */
-export default function Header (): ReactNode {
-  /**
-   * Handles navigation to sign-in page
-   * Uses client-side navigation for better UX
-   */
+export default function LandingHeader (): ReactNode {
   const handleSignin = (): void => {
     window.location.href = '/sign-in'
   }

@@ -7,8 +7,10 @@
  * @module components/skeletons
  */
 
-export { SkeletonThemeProvider } from './SkeletonThemeProvider'
+export { default as SkeletonThemeProvider } from './SkeletonThemeProvider'
 export { MonsterCardSkeleton } from './MonsterCardSkeleton'
 export { AccessoryCardSkeleton } from './AccessoryCardSkeleton'
 export { QuestCardSkeleton } from './QuestCardSkeleton'
 export { StatsCardSkeleton } from './StatsCardSkeleton'
+export { BaseSkeleton, SkeletonPatterns } from './BaseSkeleton'
+export type { BaseSkeletonProps } from './BaseSkeleton'

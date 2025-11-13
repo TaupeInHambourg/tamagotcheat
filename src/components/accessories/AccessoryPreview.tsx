@@ -16,7 +16,6 @@
 
 import { useEffect, useRef } from 'react'
 import { drawAccessoryCentered } from '@/utils/accessory-renderer'
-import { getRarityConfig } from '@/config/accessories.config'
 import type { AccessoryCategory, Rarity } from '@/types/accessory.types'
 
 interface AccessoryPreviewProps {
@@ -32,18 +31,6 @@ interface AccessoryPreviewProps {
 
 /**
  * Get rarity-based background gradient
- *
- * Creates a subtle gradient background based on rarity level.
- * Enhances visual hierarchy in the shop.
- *
- * @param rarity - Rarity level of the accessory
- * @returns Tailwind CSS classes for background
- */
-function getRarityBackground (rarity: Rarity): string {
-  const config = getRarityConfig(rarity)
-  return `bg-gradient-to-br ${config.color} bg-opacity-20`
-}
-
 /**
  * AccessoryPreview - Pixel art preview of accessories
  *

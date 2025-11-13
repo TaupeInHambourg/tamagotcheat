@@ -22,7 +22,7 @@
 import { getPublicMonsters } from '@/actions/monsters.actions'
 import { AppLayout } from '@/components/navigation'
 import { MonsterCard } from '@/components/monsters/monster-card'
-import Header from '@/components/Header'
+import LandingHeader from '@/components/navigation/LandingHeader'
 import { headers } from 'next/headers'
 
 interface Props { searchParams?: { source?: string } }
@@ -121,7 +121,7 @@ export default async function GalleryPage ({ searchParams }: Props): Promise<Rea
   // add top padding so content isn't hidden behind fixed header
   return (
     <>
-      <Header />
+      <LandingHeader />
       <div className='pt-28'>
         {content}
       </div>

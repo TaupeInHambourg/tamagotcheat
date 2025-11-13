@@ -29,7 +29,7 @@ interface SkeletonThemeProviderProps {
  * - Base color: autumn-cream (#FAF3E0)
  * - Highlight color: autumn-peach (#FFE5D9)
  */
-export function SkeletonThemeProvider ({
+export default function SkeletonThemeProvider ({
   children
 }: SkeletonThemeProviderProps): ReactNode {
   return (
