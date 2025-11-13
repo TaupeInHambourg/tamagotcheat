@@ -62,6 +62,12 @@ export function BackgroundPanel ({
   const [isOperating, setIsOperating] = useState(false)
 
   /**
+   * Get available backgrounds (not equipped to any monster)
+   * Each background instance can only be used once
+   */
+  const availableBackgrounds = ownedBackgrounds.filter(bg => bg.equippedTo == null)
+
+  /**
    * Fetch backgrounds on mount and when monsterId changes
    */
   useEffect(() => {
@@ -164,86 +170,92 @@ export function BackgroundPanel ({
     : null
 
   return (
-    <div className='rounded-2xl bg-gradient-to-br from-pastel-sky to-pastel-lavender/30 p-6 shadow-md border-2 border-pastel-lavender/30'>
-      {/* Header */}
-      <div className='mb-6 flex items-center gap-3'>
-        <span className='text-3xl'>🖼️</span>
-        <div>
-          <h3 className='text-xl font-bold text-chestnut-deep'>
+    <div className='rounded-2xl bg-gradient-to-br from-pastel-sky to-pastel-lavender/30 p-4 shadow-md border-2 border-pastel-lavender/30'>
+      {/* Compact Header */}
+      <div className='mb-3 flex items-center justify-between'>
+        <div className='flex items-center gap-2'>
+          <span className='text-2xl'>🖼️</span>
+          <h3 className='text-lg font-bold text-chestnut-deep'>
             Background
           </h3>
-          <p className='text-sm text-chestnut-dark'>
-            Personnalisez l'arrière-plan de votre créature
-          </p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className='flex items-center gap-2'>
+          {equippedBackground != null && (
+            <button
+              onClick={handleUnequip}
+              disabled={isOperating}
+              className='px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-maple-warm to-maple-deep rounded-lg hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
+            >
+              {isOperating ? '⏳' : '✖️'} Retirer
+            </button>
+          )}
+          <button
+            onClick={() => { setIsOpen(true) }}
+            disabled={isOperating || availableBackgrounds.length === 0}
+            className='px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-monster-purple to-pastel-lavender rounded-lg hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1'
+          >
+            {availableBackgrounds.length === 0
+              ? (
+                <>
+                  <span>🛍️</span>
+                  <span>Acheter</span>
+                </>
+                )
+              : (
+                <>
+                  <span>🎨</span>
+                  <span>Changer ({availableBackgrounds.length})</span>
+                </>
+                )}
+          </button>
         </div>
       </div>
 
-      {/* Current Background Display */}
-      <div className='mb-4'>
-        {equippedBackground != null && equippedInfo != null
-          ? (
-            <div className='relative group'>
-              {/* Background Preview */}
-              <div className='relative w-full aspect-square rounded-xl overflow-hidden shadow-inner border-2 border-pastel-lavender/50'>
-                <Image
-                  src={equippedInfo.assetPath}
-                  alt={equippedInfo.name}
-                  fill
-                  className='object-cover'
-                  sizes='(max-width: 768px) 100vw, 400px'
-                />
-              </div>
-
-              {/* Info Overlay */}
-              <div className='mt-3 flex items-center justify-between'>
-                <div>
-                  <p className='text-sm font-semibold text-chestnut-deep'>
-                    {equippedInfo.name}
-                  </p>
-                  <p className='text-xs text-chestnut-medium'>
-                    {equippedInfo.description}
-                  </p>
-                </div>
-                <button
-                  onClick={handleUnequip}
-                  disabled={isOperating}
-                  className='px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-maple-warm to-maple-deep rounded-lg hover:shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed'
-                >
-                  {isOperating ? '⏳' : '✖️'} Retirer
-                </button>
-              </div>
+      {/* Compact Background Display */}
+      {equippedBackground != null && equippedInfo != null
+        ? (
+          <div className='flex items-center gap-3 p-3 bg-white/50 rounded-xl border border-pastel-lavender/30'>
+            {/* Small Preview */}
+            <div className='relative w-16 h-16 rounded-lg overflow-hidden shadow-sm border-2 border-pastel-lavender/50 flex-shrink-0'>
+              <Image
+                src={equippedInfo.assetPath}
+                alt={equippedInfo.name}
+                fill
+                className='object-cover'
+                sizes='64px'
+              />
             </div>
-            )
-          : (
-            <div className='w-full aspect-square rounded-xl bg-white/50 border-2 border-dashed border-pastel-lavender/50 flex items-center justify-center'>
-              <div className='text-center'>
-                <span className='text-4xl mb-2 block'>🖼️</span>
-                <p className='text-sm text-chestnut-medium'>Aucun background équipé</p>
-              </div>
-            </div>
-            )}
-      </div>
 
-      {/* Equip Button */}
-      <button
-        onClick={() => { setIsOpen(true) }}
-        disabled={isOperating || ownedBackgrounds.length === 0}
-        className='w-full py-3 px-4 text-sm font-semibold text-white bg-gradient-to-r from-monster-purple to-pastel-lavender rounded-xl hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
-      >
-        {ownedBackgrounds.length === 0
-          ? (
-            <>
-              <span>🛍️</span>
-              <span>Acheter des backgrounds</span>
-            </>
-            )
-          : (
-            <>
-              <span>🎨</span>
-              <span>Choisir un background ({ownedBackgrounds.length})</span>
-            </>
-            )}
-      </button>
+            {/* Info */}
+            <div className='flex-1 min-w-0'>
+              <p className='text-sm font-semibold text-chestnut-deep truncate'>
+                {equippedInfo.name}
+              </p>
+              <p className='text-xs text-chestnut-medium truncate'>
+                {equippedInfo.description}
+              </p>
+            </div>
+          </div>
+          )
+        : (
+          <button
+            onClick={() => { setIsOpen(true) }}
+            disabled={isOperating}
+            className='w-full p-4 bg-white/50 rounded-xl border-2 border-dashed border-pastel-lavender/50 hover:border-monster-purple hover:bg-white/70 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group'
+          >
+            <div className='flex flex-col items-center justify-center gap-2'>
+              <span className='text-3xl group-hover:scale-110 transition-transform duration-200'>🖼️</span>
+              <p className='text-xs text-chestnut-medium font-medium'>Aucun background équipé</p>
+              <p className='text-xs text-monster-purple font-semibold'>
+                {availableBackgrounds.length > 0
+                  ? `Cliquez pour choisir (${availableBackgrounds.length} disponible${availableBackgrounds.length > 1 ? 's' : ''})`
+                  : 'Cliquez pour acheter'}
+              </p>
+            </div>
+          </button>
+          )}
 
       {/* Background Selector Modal */}
       {isOpen && (
@@ -258,7 +270,7 @@ export function BackgroundPanel ({
                     <span>Choisir un background</span>
                   </h3>
                   <p className='text-sm text-white/80 mt-1'>
-                    {ownedBackgrounds.length} background{ownedBackgrounds.length > 1 ? 's' : ''} disponible{ownedBackgrounds.length > 1 ? 's' : ''}
+                    {availableBackgrounds.length} background{availableBackgrounds.length > 1 ? 's' : ''} disponible{availableBackgrounds.length > 1 ? 's' : ''}
                   </p>
                 </div>
                 <button
@@ -275,78 +287,73 @@ export function BackgroundPanel ({
 
             {/* Modal Content */}
             <div className='p-6 overflow-y-auto max-h-[calc(90vh-180px)]'>
-              {ownedBackgrounds.length === 0
+              {availableBackgrounds.length === 0
                 ? (
                   <div className='text-center py-12'>
                     <span className='text-6xl mb-4 block'>🛍️</span>
                     <p className='text-xl font-bold text-chestnut-deep mb-2'>
-                      Aucun background possédé
+                      Aucun background disponible
                     </p>
                     <p className='text-sm text-chestnut-medium mb-6'>
-                      Visitez la boutique pour acheter des backgrounds
+                      Tous vos backgrounds sont équipés ou vous n'en possédez pas encore
                     </p>
                     <a
                       href='/shop'
                       className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-monster-purple to-pastel-lavender text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200'
                     >
-                      <span>🛒</span>
+                      <span>🛍️</span>
                       <span>Aller à la boutique</span>
                     </a>
                   </div>
                   )
                 : (
-                  <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
-                    {ownedBackgrounds.map(bg => {
-                      const info = getBackgroundInfo(bg.backgroundId)
-                      if (info == null) return null
+                  <>
+                    {/* Shop Button */}
+                    <div className='mb-4'>
+                      <a
+                        href='/shop'
+                        className='inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-pastel-lavender/30 text-chestnut-deep font-semibold rounded-lg hover:border-monster-purple hover:shadow-md transition-all duration-200'
+                      >
+                        <span>🛍️</span>
+                        <span>Acheter plus de backgrounds</span>
+                      </a>
+                    </div>
 
-                      const isEquipped = equippedBackground?._id === bg._id
+                    {/* Backgrounds Grid */}
+                    <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
+                      {availableBackgrounds.map(bg => {
+                        const info = getBackgroundInfo(bg.backgroundId)
+                        if (info == null) return null
 
-                      return (
-                        <button
-                          key={bg._id}
-                          onClick={() => { handleEquip(bg._id) }}
-                          disabled={isOperating || isEquipped}
-                          className={`
-                            relative group rounded-xl overflow-hidden border-2 transition-all duration-200
-                            ${isEquipped
-                              ? 'border-moss-medium bg-moss-soft/20 cursor-default'
-                              : 'border-pastel-lavender/30 hover:border-monster-purple hover:shadow-lg hover:scale-105'
-                            }
-                            ${isOperating ? 'opacity-50 cursor-wait' : ''}
-                          `}
-                        >
-                          {/* Preview */}
-                          <div className='relative aspect-square'>
-                            <Image
-                              src={info.assetPath}
-                              alt={info.name}
-                              fill
-                              className='object-cover'
-                              sizes='200px'
-                            />
-                            {isEquipped && (
-                              <div className='absolute inset-0 bg-moss-medium/20 flex items-center justify-center'>
-                                <span className='text-4xl'>✓</span>
-                              </div>
-                            )}
-                          </div>
+                        return (
+                          <button
+                            key={bg._id}
+                            onClick={() => { handleEquip(bg._id) }}
+                            disabled={isOperating}
+                            className='relative group rounded-xl overflow-hidden border-2 transition-all duration-200 border-pastel-lavender/30 hover:border-monster-purple hover:shadow-lg hover:scale-105'
+                          >
+                            {/* Preview */}
+                            <div className='relative aspect-square'>
+                              <Image
+                                src={info.assetPath}
+                                alt={info.name}
+                                fill
+                                className='object-cover'
+                                sizes='200px'
+                              />
+                            </div>
 
-                          {/* Name */}
-                          <div className='p-3 bg-white'>
-                            <p className='text-sm font-semibold text-chestnut-deep truncate'>
-                              {info.name}
-                            </p>
-                            {isEquipped && (
-                              <p className='text-xs text-moss-medium font-medium mt-1'>
-                                Équipé
+                            {/* Name */}
+                            <div className='p-3 bg-white'>
+                              <p className='text-sm font-semibold text-chestnut-deep truncate'>
+                                {info.name}
                               </p>
-                            )}
-                          </div>
-                        </button>
-                      )
-                    })}
-                  </div>
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </>
                   )}
             </div>
           </div>

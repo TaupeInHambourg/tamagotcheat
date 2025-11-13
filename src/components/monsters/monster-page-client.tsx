@@ -89,6 +89,30 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const [isUpdatingVisibility, setIsUpdatingVisibility] = useState(false)
   const [giftsBalance, setGiftsBalance] = useState(0)
   const [isGivingGift, setIsGivingGift] = useState(false)
+  const [monsterSize, setMonsterSize] = useState(400)
+
+  // Adjust monster size based on window width
+  useEffect(() => {
+    const updateMonsterSize = (): void => {
+      const width = window.innerWidth
+      if (width < 640) { // mobile
+        setMonsterSize(280)
+      } else if (width < 768) { // sm
+        setMonsterSize(350)
+      } else if (width < 1024) { // md
+        setMonsterSize(400)
+      } else { // lg and above
+        setMonsterSize(500)
+      }
+    }
+
+    updateMonsterSize()
+    window.addEventListener('resize', updateMonsterSize)
+
+    return () => {
+      window.removeEventListener('resize', updateMonsterSize)
+    }
+  }, [])
 
   // Load gifts balance
   useEffect(() => {
@@ -341,13 +365,13 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
 
       <div className='bg-white rounded-3xl shadow-md overflow-hidden'>
         {/* En-tête avec créature et accessoires */}
-        <div className='relative h-64 sm:h-96 w-full bg-monsters-pink/5 flex items-center justify-center overflow-hidden'>
+        <div className='relative h-64 sm:h-80 md:h-96 lg:h-[28rem] w-full bg-monsters-pink/5 flex items-center justify-center overflow-hidden'>
           <div className='w-full h-full'>
             <MonsterWithAccessories
               monsterId={getMonsterId(monster)}
               imageSrc={currentAsset}
               state={monster.state}
-              size={400}
+              size={monsterSize}
               refreshTrigger={accessoryRefreshTrigger}
             />
           </div>

@@ -83,15 +83,8 @@ export async function purchaseBackground (
 ): Promise<BackgroundDB> {
   const collection = await getBackgroundsCollection()
 
-  // Check if user already owns this background
-  const existing = await collection.findOne({
-    userId,
-    backgroundId
-  })
-
-  if (existing != null) {
-    throw new Error('Background déjà possédé')
-  }
+  // Users can now purchase the same background multiple times
+  // Each purchase creates a unique owned instance
 
   // Create new background
   const newBackground: Omit<BackgroundDB, '_id'> = {
@@ -166,11 +159,12 @@ export async function deleteBackground (backgroundDbId: string): Promise<void> {
 }
 
 /**
- * Check if a user owns a specific background
+ * Check if a user owns at least one unequipped instance of a specific background
+ * Used to determine if a background can be equipped (must have an available instance)
  *
  * @param userId - The user's unique identifier
  * @param backgroundId - The catalog background ID
- * @returns True if the user owns the background
+ * @returns True if the user owns at least one unequipped instance
  */
 export async function userOwnsBackground (
   userId: string,
@@ -179,7 +173,8 @@ export async function userOwnsBackground (
   const collection = await getBackgroundsCollection()
   const doc = await collection.findOne({
     userId,
-    backgroundId
+    backgroundId,
+    equippedTo: null // Only count unequipped backgrounds as available
   })
   return doc != null
 }

@@ -74,12 +74,8 @@ export async function purchaseBackground (
     // 3. Calculate price
     const price = getBackgroundPrice(background)
 
-    // 4. Check if user already owns this background
-    const alreadyOwned = await userOwnsBackground(session.user.id, backgroundId)
-
-    if (alreadyOwned) {
-      return { success: false, error: 'Background déjà possédé' }
-    }
+    // 4. Users can now purchase the same background multiple times
+    // Each purchase creates a unique instance that can be equipped separately
 
     // 5. Debit Koins from user wallet
     const walletResult = await subtractKoins(session.user.id, price)
