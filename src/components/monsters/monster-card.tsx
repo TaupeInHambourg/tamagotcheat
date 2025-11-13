@@ -111,8 +111,8 @@ export function MonsterCard ({
   const currentAsset = getMonsterAssetPath(folderPath, state)
 
   const cardContent = (
-    <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-4 sm:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50'>
-      <div className='relative flex flex-col gap-4 sm:gap-6'>
+    <article className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-autumn-peach/30 p-4 sm:p-6 transition-all duration-300 hover:shadow-xl hover:scale-105 hover:border-autumn-coral/50 h-full w-full flex flex-col'>
+      <div className='relative flex flex-col gap-4 sm:gap-6 flex-1'>
         {/* Monster visual with accessories */}
         <div className='relative flex items-center justify-center overflow-hidden rounded-2xl bg-autumn-cream/50 border border-autumn-peach/30'>
           {/* Container with fixed dimensions for the monster */}
@@ -172,7 +172,7 @@ export function MonsterCard ({
   }
 
   return (
-    <Link href={monsterHref} className='block group'>
+    <Link href={monsterHref} className='block group h-full w-full'>
       {cardContent}
     </Link>
   )

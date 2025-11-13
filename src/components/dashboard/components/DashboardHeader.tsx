@@ -27,7 +27,7 @@ export function DashboardHeader ({ displayName, onCreateMonster, onLogout }: Das
         </h1>
 
         {/* Description avec émojis animés */}
-        <p className='relative text-base text-slate-600 sm:text-lg'>
+        <p className='relative text-base sm:text-lg'>
           <span className='absolute -left-6 top-0 animate-float-slow text-xl'>🌟</span>
           Dompte des créatures adorables, surveille leur humeur et transforme chaque journée en mini-aventure numérique.
           <span className='absolute -right-6 bottom-0 animate-bounce-slow text-xl'>🎮</span>

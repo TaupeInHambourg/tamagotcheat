@@ -1,0 +1,201 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+  <defs>
+    <!-- Dégradé du fond -->
+    <linearGradient id="heroBgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFF5F0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFE5E5;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Dégradé pour l'écran du device -->
+    <linearGradient id="screenGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8F4FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fond doux -->
+  <rect width="500" height="500" fill="url(#heroBgGradient)"/>
+  
+  <!-- Éléments décoratifs flottants - Étoiles -->
+  <g opacity="0.6">
+    <path d="M 80 100 L 82 102 L 80 104 L 78 102 Z" fill="#FFB5E8"/>
+    <circle cx="80" cy="102" r="1" fill="#FFB5E8"/>
+  </g>
+  
+  <g opacity="0.5">
+    <path d="M 420 140 L 422 142 L 420 144 L 418 142 Z" fill="#E5B8FF"/>
+    <circle cx="420" cy="142" r="1" fill="#E5B8FF"/>
+  </g>
+  
+  <g opacity="0.6">
+    <path d="M 120 380 L 122 382 L 120 384 L 118 382 Z" fill="#B5E8FF"/>
+    <circle cx="120" cy="382" r="1" fill="#B5E8FF"/>
+  </g>
+  
+  <g opacity="0.5">
+    <path d="M 400 350 L 402 352 L 400 354 L 398 352 Z" fill="#FFD4B5"/>
+    <circle cx="400" cy="352" r="1" fill="#FFD4B5"/>
+  </g>
+  
+  <!-- Petit nuage décoratif gauche -->
+  <g opacity="0.4">
+    <ellipse cx="100" cy="80" rx="30" ry="15" fill="#FFFFFF"/>
+    <ellipse cx="115" cy="78" rx="25" ry="13" fill="#FFFFFF"/>
+    <ellipse cx="85" cy="79" rx="20" ry="12" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- Petit nuage décoratif droite -->
+  <g opacity="0.3">
+    <ellipse cx="430" cy="120" rx="35" ry="18" fill="#FFFFFF"/>
+    <ellipse cx="448" cy="118" rx="28" ry="15" fill="#FFFFFF"/>
+    <ellipse cx="412" cy="119" rx="22" ry="13" fill="#FFFFFF"/>
+  </g>
+  
+  <!-- Grand appareil Tamagotchi central -->
+  <g transform="translate(250, 280)">
+    <!-- Ombre du device -->
+    <ellipse cx="0" cy="140" rx="100" ry="15" fill="#D4B5A8" opacity="0.2"/>
+    
+    <!-- Corps principal de l'appareil -->
+    <ellipse cx="0" cy="0" rx="90" ry="110" fill="#FFB5E8"/>
+    <ellipse cx="0" cy="-5" rx="90" ry="110" fill="#FFB5E8"/>
+    <ellipse cx="0" cy="-5" rx="85" ry="105" fill="#FF9ED8" opacity="0.3"/>
+    
+    <!-- Antenne avec boule -->
+    <rect x="-5" y="-120" width="10" height="5" rx="2" fill="#FFB5E8"/>
+    <circle cx="0" cy="-125" r="8" fill="#FFD700"/>
+    <circle cx="0" cy="-125" r="5" fill="#FFFFFF" opacity="0.6"/>
+    
+    <!-- Écran principal -->
+    <rect x="-65" y="-70" width="130" height="90" rx="8" fill="#E8F4FF"/>
+    <rect x="-62" y="-67" width="124" height="84" rx="6" fill="url(#screenGlow)"/>
+    
+    <!-- Effet de brillance sur l'écran -->
+    <rect x="-60" y="-65" width="50" height="30" rx="5" fill="#FFFFFF" opacity="0.4"/>
+    
+    <!-- Trois petits monstres sur l'écran -->
+    <!-- Monstre 1 - Rose -->
+    <g transform="translate(-40, -30)">
+      <ellipse cx="0" cy="0" rx="15" ry="13" fill="#FFB5E8"/>
+      <!-- Oreilles -->
+      <ellipse cx="-8" cy="-8" rx="4" ry="6" fill="#FFB5E8"/>
+      <ellipse cx="8" cy="-8" rx="4" ry="6" fill="#FFB5E8"/>
+      <!-- Yeux -->
+      <circle cx="-5" cy="-2" r="3" fill="#FFFFFF"/>
+      <circle cx="5" cy="-2" r="3" fill="#FFFFFF"/>
+      <circle cx="-4.5" cy="-1.5" r="2" fill="#4A4A4A"/>
+      <circle cx="5.5" cy="-1.5" r="2" fill="#4A4A4A"/>
+      <circle cx="-4.5" cy="-2" r="1" fill="#FFFFFF"/>
+      <circle cx="5.5" cy="-2" r="1" fill="#FFFFFF"/>
+      <!-- Bouche -->
+      <path d="M -3 3 Q 0 5 3 3" stroke="#FF69B4" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Joues -->
+      <circle cx="-9" cy="2" r="2" fill="#FFC9E3" opacity="0.6"/>
+      <circle cx="9" cy="2" r="2" fill="#FFC9E3" opacity="0.6"/>
+    </g>
+    
+    <!-- Monstre 2 - Bleu -->
+    <g transform="translate(0, -25)">
+      <ellipse cx="0" cy="0" rx="14" ry="12" fill="#B5E8FF"/>
+      <!-- Oreilles -->
+      <ellipse cx="-7" cy="-7" rx="3" ry="5" fill="#B5E8FF"/>
+      <ellipse cx="7" cy="-7" rx="3" ry="5" fill="#B5E8FF"/>
+      <!-- Yeux -->
+      <circle cx="-4" cy="-1" r="2.5" fill="#FFFFFF"/>
+      <circle cx="4" cy="-1" r="2.5" fill="#FFFFFF"/>
+      <circle cx="-3.8" cy="-0.8" r="1.8" fill="#4A4A4A"/>
+      <circle cx="4.2" cy="-0.8" r="1.8" fill="#4A4A4A"/>
+      <circle cx="-3.8" cy="-1.2" r="0.8" fill="#FFFFFF"/>
+      <circle cx="4.2" cy="-1.2" r="0.8" fill="#FFFFFF"/>
+      <!-- Bouche -->
+      <path d="M -2.5 3 Q 0 4.5 2.5 3" stroke="#5AB8FF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Joues -->
+      <circle cx="-8" cy="2" r="1.8" fill="#D4F0FF" opacity="0.6"/>
+      <circle cx="8" cy="2" r="1.8" fill="#D4F0FF" opacity="0.6"/>
+    </g>
+    
+    <!-- Monstre 3 - Lavande -->
+    <g transform="translate(40, -30)">
+      <ellipse cx="0" cy="0" rx="15" ry="13" fill="#D4B5FF"/>
+      <!-- Oreilles -->
+      <ellipse cx="-8" cy="-8" rx="4" ry="6" fill="#D4B5FF"/>
+      <ellipse cx="8" cy="-8" rx="4" ry="6" fill="#D4B5FF"/>
+      <!-- Yeux -->
+      <circle cx="-5" cy="-2" r="3" fill="#FFFFFF"/>
+      <circle cx="5" cy="-2" r="3" fill="#FFFFFF"/>
+      <circle cx="-4.5" cy="-1.5" r="2" fill="#4A4A4A"/>
+      <circle cx="5.5" cy="-1.5" r="2" fill="#4A4A4A"/>
+      <circle cx="-4.5" cy="-2" r="1" fill="#FFFFFF"/>
+      <circle cx="5.5" cy="-2" r="1" fill="#FFFFFF"/>
+      <!-- Bouche -->
+      <path d="M -3 3 Q 0 5 3 3" stroke="#9B7AFF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Joues -->
+      <circle cx="-9" cy="2" r="2" fill="#E8D4FF" opacity="0.6"/>
+      <circle cx="9" cy="2" r="2" fill="#E8D4FF" opacity="0.6"/>
+    </g>
+    
+    <!-- Cœurs flottants sur l'écran -->
+    <g opacity="0.7">
+      <path d="M -50 -50 Q -50 -53 -48 -53 Q -46 -53 -46 -50 Q -46 -53 -44 -53 Q -42 -53 -42 -50 Q -42 -47 -46 -44 Q -50 -47 -50 -50 Z" 
+            fill="#FF69B4"/>
+    </g>
+    <g opacity="0.6">
+      <path d="M 48 -45 Q 48 -47 49.5 -47 Q 51 -47 51 -45 Q 51 -47 52.5 -47 Q 54 -47 54 -45 Q 54 -43 51 -41 Q 48 -43 48 -45 Z" 
+            fill="#FFB5E8"/>
+    </g>
+    
+    <!-- Indicateurs de statut (mini pixels) -->
+    <circle cx="-55" cy="30" r="2.5" fill="#FF69B4"/>
+    <circle cx="-45" cy="30" r="2.5" fill="#FFD700"/>
+    <circle cx="-35" cy="30" r="2.5" fill="#5AB8FF"/>
+    
+    <!-- Boutons du device -->
+    <g opacity="0.9">
+      <!-- Bouton gauche -->
+      <circle cx="-45" cy="70" r="10" fill="#FF8FA3"/>
+      <circle cx="-45" cy="68" r="9" fill="#FF69B4"/>
+      
+      <!-- Bouton central (plus grand) -->
+      <circle cx="0" cy="78" r="12" fill="#FFD9A8"/>
+      <circle cx="0" cy="76" r="11" fill="#FFD700"/>
+      
+      <!-- Bouton droit -->
+      <circle cx="45" cy="70" r="10" fill="#A8D9FF"/>
+      <circle cx="45" cy="68" r="9" fill="#5AB8FF"/>
+    </g>
+    
+    <!-- Détails décoratifs sur le device -->
+    <circle cx="-70" cy="0" r="3" fill="#FFFFFF" opacity="0.4"/>
+    <circle cx="70" cy="0" r="3" fill="#FFFFFF" opacity="0.4"/>
+  </g>
+  
+  <!-- Petites étoiles scintillantes autour -->
+  <g opacity="0.8">
+    <circle cx="140" cy="200" r="2" fill="#FFD700"/>
+    <line x1="140" y1="195" x2="140" y2="205" stroke="#FFD700" stroke-width="1"/>
+    <line x1="135" y1="200" x2="145" y2="200" stroke="#FFD700" stroke-width="1"/>
+  </g>
+  
+  <g opacity="0.7">
+    <circle cx="360" cy="220" r="2" fill="#FFB5E8"/>
+    <line x1="360" y1="216" x2="360" y2="224" stroke="#FFB5E8" stroke-width="1"/>
+    <line x1="356" y1="220" x2="364" y2="220" stroke="#FFB5E8" stroke-width="1"/>
+  </g>
+  
+  <g opacity="0.8">
+    <circle cx="200" cy="400" r="2" fill="#B5E8FF"/>
+    <line x1="200" y1="396" x2="200" y2="404" stroke="#B5E8FF" stroke-width="1"/>
+    <line x1="196" y1="400" x2="204" y2="400" stroke="#B5E8FF" stroke-width="1"/>
+  </g>
+  
+  <!-- Confettis décoratifs -->
+  <rect x="160" y="150" width="4" height="8" rx="1" fill="#FFB5E8" opacity="0.6" transform="rotate(20 162 154)"/>
+  <rect x="340" y="280" width="4" height="8" rx="1" fill="#E5B8FF" opacity="0.6" transform="rotate(-25 342 284)"/>
+  <rect x="180" y="420" width="4" height="8" rx="1" fill="#B5E8FF" opacity="0.6" transform="rotate(15 182 424)"/>
+  
+  <circle cx="320" cy="170" r="3" fill="#FFD4B5" opacity="0.6"/>
+  <circle cx="170" cy="330" r="3" fill="#D4F5E9" opacity="0.6"/>
+  
+  <!-- Bordure décorative en bas -->
+  <path d="M 0 480 Q 125 470 250 480 T 500 480 L 500 500 L 0 500 Z" fill="#FFD9E8" opacity="0.3"/>
+</svg>

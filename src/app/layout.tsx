@@ -1,16 +1,21 @@
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist_Mono, Sour_Gummy, Nunito } from 'next/font/google'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { SkeletonThemeProvider } from '@/components/skeletons'
 import './globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const nunito = Nunito({
+  variable: '--font-nunito',
   subsets: ['latin']
 })
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
+  subsets: ['latin']
+})
+
+const sourGummy = Sour_Gummy({
+  variable: '--font-sour-gummy',
   subsets: ['latin']
 })
 
@@ -21,8 +26,9 @@ export default async function RootLayout ({
 }>): Promise<React.JSX.Element> {
   return (
     <html lang='fr'>
+      <meta name='apple-mobile-web-app-title' content='Tamago' />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${nunito.variable} ${geistMono.variable} ${sourGummy.variable} antialiased`}
       >
         <SkeletonThemeProvider>
           {children}

@@ -58,9 +58,9 @@ export default function MonstersShowcase (): React.ReactNode {
           </p>
         </div>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 auto-rows-fr'>
           {monsters.map((monster) => (
-            <div key={monster.name}>
+            <div key={monster.name} className='flex w-full'>
               <MonsterCard initialMonster={monster} autoRefresh={false} />
             </div>
           ))}
