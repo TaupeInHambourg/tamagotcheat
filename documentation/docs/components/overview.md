@@ -4,28 +4,31 @@ sidebar_position: 1
 
 # Components Overview
 
-Tamagotcheat follows a component-driven architecture with reusable, well-documented UI components.
+TamagoTcheat uses a modular component architecture with reusable, composable components following SOLID principles.
 
 ## Component Principles
 
 ### 🎯 Single Responsibility
-Each component has one clear purpose.
+Each component has one clear purpose and reason to change.
 
 ### 🔧 Composability
-Components can be combined to create complex UIs.
+Components use composition patterns (render props, children) for flexibility.
 
-### 📝 Documentation
-All components have comprehensive JSDoc comments.
+### 📝 Type Safety
+All components have comprehensive TypeScript interfaces.
 
-### 🎨 Theming
-Components follow the autumn/cozy design system.
+### 🎨 Consistent Design
+Components follow the autumn/cozy design system with TailwindCSS.
 
-## Component Categories
+### ♻️ Reusability
+Generic components (ShopCard, BaseSkeleton) reduce code duplication.
 
-### Core UI Components
+## Core Components
 
-#### [Button](./button)
-Primary interaction component with multiple variants and sizes.
+### Button
+**Location**: `src/components/Button.tsx`
+
+Versatile button with multiple variants and sizes.
 
 ```tsx
 <Button variant="primary" size="md" onClick={handleClick}>
@@ -33,119 +36,432 @@ Primary interaction component with multiple variants and sizes.
 </Button>
 ```
 
-#### [Input](./input)
-Form input with label, error handling, and validation.
+**Variants**: primary, secondary, ghost, link, outline  
+**Sizes**: sm, md, lg, xl
+
+### Input
+**Location**: `src/components/Input.tsx`
+
+Styled input field with label support.
 
 ```tsx
-<InputField
+<Input
   label="Monster Name"
   value={name}
-  onChange={(e) => setName(e.target.value)}
-  error={error}
+  onChange={setName}
   required
 />
 ```
 
-### Form Components
+### ShopCard (Generic)
+**Location**: `src/components/common/ShopCard.tsx`
 
-#### [CreateMonsterForm](./create-monster-form)
-Complete form for creating new monsters with validation.
+Reusable card for all shop items using render props pattern.
 
 ```tsx
-<CreateMonsterForm
-  onSubmit={handleSubmit}
-  onCancel={handleCancel}
+<ShopCard
+  item={accessory}
+  renderPreview={() => <AccessoryPreview />}
+  onPurchase={handlePurchase}
+  isOwned={isOwned}
 />
 ```
 
-### Layout Components
+**Features**:
+- Dual currency display (Koins/Gifts)
+- Ownership indicators
+- Purchase feedback
+- Flexible preview rendering
 
-#### [Header](./header)
-Landing page header with navigation and CTA.
+## Monster Components
 
-#### [Footer](./footer)
-Site footer with links and information.
-
-### Modal Components
-
-#### [CreateMonsterModal](./modal)
-Modal dialog for monster creation.
+### MonsterCard
+Display a single monster with details and actions.
 
 ```tsx
-<CreateMonsterModal
+<MonsterCard
+  monster={monster}
+  onSelect={handleSelect}
+  showActions={true}
+/>
+```
+
+### MonsterGrid
+Responsive grid for displaying multiple monsters.
+
+```tsx
+<MonsterGrid
+  monsters={monsters}
+  onMonsterSelect={handleSelect}
+  emptyMessage="No monsters yet"
+/>
+```
+
+### MonsterPreview
+Large preview with accessories and background layering.
+
+```tsx
+<MonsterPreview
+  monster={monster}
+  accessories={equippedAccessories}
+  background={selectedBackground}
+  size="large"
+/>
+```
+
+## Accessory Components
+
+### AccessoryCard
+Display accessory with purchase/equip options.
+
+```tsx
+<AccessoryCard
+  accessory={accessory}
+  onPurchase={handlePurchase}
+  onEquip={handleEquip}
+  isOwned={isOwned}
+/>
+```
+
+### AccessorySlot
+Equipment slot for managing monster accessories.
+
+```tsx
+<AccessorySlot
+  category="hats"
+  equipped={currentHat}
+  available={availableHats}
+  onEquip={handleEquip}
+/>
+```
+
+## Quest Components
+
+### QuestCard
+Display quest with progress and rewards.
+
+```tsx
+<QuestCard
+  quest={quest}
+  progress={userProgress}
+  onClaim={handleClaim}
+  canClaim={isClaimable}
+/>
+```
+
+### QuestList
+Tabbed list of daily and weekly quests.
+
+```tsx
+<QuestList
+  dailyQuests={dailyQuests}
+  weeklyQuests={weeklyQuests}
+  userProgress={progress}
+/>
+```
+
+## Loading Components
+
+### BaseSkeleton
+Base skeleton with reusable patterns.
+
+```tsx
+<BaseSkeleton
+  count={3}
+  renderItem={(index) => (
+    <div key={index}>
+      {SkeletonPatterns.ImageArea}
+      {SkeletonPatterns.Button}
+    </div>
+  )}
+/>
+```
+
+**Available Patterns**:
+- `Card`: Full card skeleton
+- `ImageArea`: Image placeholder
+- `Button`: Button skeleton
+- `Circle`: Circular skeleton
+- `Text`: Text line skeleton
+
+### Specialized Skeletons
+- `MonsterCardSkeleton`
+- `AccessoryCardSkeleton`
+- `QuestCardSkeleton`
+- `StatsCardSkeleton`
+
+## Navigation Components
+
+### AppHeader
+Main application header with navigation and wallet.
+
+```tsx
+<AppHeader
+  user={currentUser}
+  walletBalance={balance}
+/>
+```
+
+### LandingHeader
+Header for landing page.
+
+```tsx
+<LandingHeader />
+```
+
+### MobileNav
+Bottom navigation bar for mobile devices.
+
+```tsx
+<MobileNav activeRoute={pathname} />
+```
+
+## Modal Components
+
+### Modal
+Base modal component.
+
+```tsx
+<Modal
   isOpen={isOpen}
   onClose={handleClose}
-  onSubmit={handleSubmit}
+  title="Confirm Action"
+>
+  <p>Modal content</p>
+</Modal>
+```
+
+### ConfirmModal
+Confirmation dialog with actions.
+
+```tsx
+<ConfirmModal
+  isOpen={isOpen}
+  onConfirm={handleConfirm}
+  onClose={handleClose}
+  title="Delete Monster"
+  message="This action cannot be undone"
 />
 ```
+
+## Component Best Practices
+
+### Type Safety
+```tsx
+interface ComponentProps {
+  /** Required prop with description */
+  title: string;
+  /** Optional prop with default */
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export function Component({ title, size = 'md' }: ComponentProps) {
+  // Implementation
+}
+```
+
+### Composition Pattern
+```tsx
+// ✅ Good: Use composition
+<ShopCard renderPreview={() => <CustomPreview />} />
+
+// ❌ Bad: Inheritance
+class CustomCard extends ShopCard { }
+```
+
+### Naming Conventions
+- Components: PascalCase (`MonsterCard`)
+- Props: PascalCase + "Props" (`MonsterCardProps`)
+- Handlers: camelCase + "handle" (`handleClick`)
+- Hooks: camelCase + "use" (`useMonsterState`)
 
 ## Component Structure
 
-### Standard Component Template
+### Standard Template
 
 ```tsx
-/**
- * Component Name
- *
- * Brief description of what the component does.
- *
- * Features:
- * - Feature 1
- * - Feature 2
- *
- * @component
- */
+'use client' // Only for client components
 
-'use client' // If client component
+import { type ReactNode } from 'react'
 
-import { useState } from 'react'
-
-/**
- * Props for the Component
- */
 interface ComponentProps {
-  /** Prop description */
-  propName: string
-  /** Optional prop */
-  optionalProp?: boolean
+  children: ReactNode;
+  title: string;
 }
 
-export default function Component({
-  propName,
-  optionalProp = false
-}: ComponentProps): React.ReactNode {
-  // Implementation
-  return <div>{/* JSX */}</div>
+export function Component({ children, title }: ComponentProps) {
+  // 1. Hooks
+  const [state, setState] = useState()
+  
+  // 2. Handlers
+  const handleAction = () => {
+    setState(newState)
+  }
+  
+  // 3. Render
+  return (
+    <div>
+      <h2>{title}</h2>
+      {children}
+    </div>
+  )
 }
 ```
 
 ## Styling Approach
 
 ### TailwindCSS Utilities
-
-We use TailwindCSS 4 with custom color system:
+TailwindCSS 4 with custom autumn/cozy color palette:
 
 ```tsx
-<button className='
+<button className="
   bg-gradient-to-r
   from-autumn-coral
   to-autumn-cinnamon
   text-white
-  rounded-xl
   px-6 py-3
-  hover:shadow-lg
+  rounded-lg
+  hover:opacity-90
   transition-all
-'>
+">
   Button
 </button>
 ```
 
-### Design Tokens
+### Custom Color System
+- **autumn-coral**: #FF6B6B
+- **autumn-cinnamon**: #CD5C5C
+- **autumn-amber**: #FFA500
+- **autumn-sage**: #8B9467
+- **autumn-cream**: #FFFACD
 
-```css
-/* Autumn Colors */
---color-autumn-cream: #fef9f5
---color-autumn-peach: #ffd4b8
+### Responsive Design
+```tsx
+<div className="
+  grid
+  grid-cols-1
+  sm:grid-cols-2
+  md:grid-cols-3
+  lg:grid-cols-4
+  gap-4
+">
+  {items.map(item => <Card key={item.id} />)}
+</div>
+```
+
+### Animation Classes
+```tsx
+<div className="
+  animate-pulse        // Loading state
+  animate-bounce       // Attention grabber
+  transition-all       // Smooth transitions
+  hover:scale-105      // Hover effect
+">
+```
+
+## Performance Optimization
+
+### Server Components by Default
+```tsx
+// Server Component (default)
+export default async function MonsterList() {
+  const monsters = await getMonsters()
+  return <MonsterGrid monsters={monsters} />
+}
+```
+
+### Client Components When Needed
+```tsx
+'use client'
+
+// Only for interactivity
+export function MonsterCard({ onClick }) {
+  return <div onClick={onClick}>...</div>
+}
+```
+
+### Image Optimization
+```tsx
+import Image from 'next/image'
+
+<Image
+  src="/monster.svg"
+  alt="Monster"
+  width={200}
+  height={200}
+  priority={false}
+/>
+```
+
+### Lazy Loading
+```tsx
+const HeavyComponent = lazy(() => import('./HeavyComponent'))
+
+<Suspense fallback={<MonsterCardSkeleton />}>
+  <HeavyComponent />
+</Suspense>
+```
+
+## Testing Components
+
+### Component Tests
+```tsx
+import { render, screen } from '@testing-library/react'
+import { Button } from './Button'
+
+test('renders button with text', () => {
+  render(<Button>Click me</Button>)
+  expect(screen.getByText('Click me')).toBeInTheDocument()
+})
+```
+
+### Integration Tests
+```tsx
+test('purchases accessory on click', async () => {
+  const handlePurchase = jest.fn()
+  render(<AccessoryCard onPurchase={handlePurchase} />)
+  
+  fireEvent.click(screen.getByText('Buy'))
+  expect(handlePurchase).toHaveBeenCalled()
+})
+```
+
+## Accessibility
+
+### Semantic HTML
+```tsx
+<nav aria-label="Main navigation">
+  <button aria-expanded={isOpen}>Menu</button>
+</nav>
+```
+
+### Keyboard Navigation
+```tsx
+<button
+  onClick={handleClick}
+  onKeyDown={(e) => e.key === 'Enter' && handleClick()}
+  tabIndex={0}
+>
+```
+
+### Screen Reader Support
+```tsx
+<img
+  src="/monster.svg"
+  alt="Happy green monster with a hat"
+/>
+
+<button aria-label="Close modal">
+  <Icon name="close" aria-hidden="true" />
+</button>
+```
+
+## Related Documentation
+
+- [Architecture](../architecture/clean-architecture.md)
+- [Shop System](../features/shop-system.md)
+- [Quest System](../features/quest-system.md)
+- [Local Development](./local-development.md)
 --color-autumn-coral: #ffb499
 
 /* Nature Greens */

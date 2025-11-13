@@ -501,7 +501,7 @@ if (monster.nextStateChangeAt == null) {
 
 - [Lazy State System Architecture](../architecture/lazy-state-system.md)
 - [useMonsterPolling Hook](./use-monster-polling.md)
-- [Monster Service](./monster-service.md)
+- [Monster Service](./monsters.md)
 - [SOLID Principles](../architecture/solid-principles.md)
 
 ## Changelog

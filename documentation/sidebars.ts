@@ -20,10 +20,23 @@ const sidebars: SidebarsConfig = {
       label: 'Architecture',
       collapsed: false,
       items: [
+        'architecture/clean-architecture',
         'architecture/overview',
         'architecture/solid-principles',
         'architecture/lazy-state-system',
         'architecture/database-layer'
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Features',
+      collapsed: false,
+      items: [
+        'features/overview',
+        'features/shop-system',
+        'features/quest-system',
+        'features/monster-interactions',
+        'features/dynamic-monster-assets'
       ]
     },
     {
@@ -37,6 +50,16 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'Guides',
+      collapsed: false,
+      items: [
+        'guides/local-development',
+        'guides/setup',
+        'guides/toast-notifications'
+      ]
+    },
+    {
+      type: 'category',
       label: 'API Reference',
       collapsed: false,
       items: [
@@ -44,24 +67,6 @@ const sidebars: SidebarsConfig = {
         'api/monsters',
         'api/use-monster-polling',
         'api/monster-state-decay'
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Guides',
-      collapsed: false,
-      items: [
-        'guides/setup',
-        'guides/migration-to-lazy-state',
-        'guides/toast-notifications'
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Features',
-      collapsed: false,
-      items: [
-        'features/dynamic-monster-assets'
       ]
     }
   ]

@@ -296,7 +296,7 @@ describe('MonsterService.getMonsterById', () => {
 
 ## Migration from Old System
 
-See [Migration Guide](../guides/migration-to-lazy-state.md) for detailed steps.
+See [Migration Guide](../guides/local-development.md) for detailed steps.
 
 ## Best Practices
 
@@ -318,32 +318,32 @@ See [Migration Guide](../guides/migration-to-lazy-state.md) for detailed steps.
 
 ### Key Metrics to Track
 
-1. **Average polling frequency** (requests/second per active user)
-2. **State change rate** (changes/minute)
-3. **Database write ratio** (writes caused by state changes vs total reads)
-4. **API response time** for `/api/monsters/[id]`
+- **Average polling frequency** (requests/second per active user)
+- **State change rate** (changes/minute)
+- **Database write ratio** (writes caused by state changes vs total reads)
+- **API response time** for `/api/monsters/[id]`
 
 ### Expected Values
 
 - Polling frequency: 0.3-0.5 req/s per active user (with 2s interval)
 - State change rate: ~10-30 changes/min for 100 active monsters
 - Write ratio: ~1-2% (98% of reads don't trigger writes)
-- API response time: <100ms
+- API response time: less than 100ms
 
 ## Troubleshooting
 
 ### State not changing
 
-1. Check `nextStateChangeAt` is in the past
-2. Verify polling is enabled
-3. Check backend logs for computation errors
-4. Ensure `computeCurrentState` is called in service
+- Check `nextStateChangeAt` is in the past
+- Verify polling is enabled
+- Check backend logs for computation errors
+- Ensure `computeCurrentState` is called in service
 
 ### Too many database writes
 
-1. Check polling interval (should be ≥2 seconds)
-2. Verify only active monsters are being polled
-3. Check for duplicate polling (multiple hooks for same monster)
+- Check polling interval (should be ≥2 seconds)
+- Verify only active monsters are being polled
+- Check for duplicate polling (multiple hooks for same monster)
 
 ### Memory leaks
 
