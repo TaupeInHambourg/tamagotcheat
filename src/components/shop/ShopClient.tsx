@@ -257,7 +257,7 @@ export default function ShopClient ({
             <span>Accessoires</span>
             <span className='px-2 py-0.5 rounded-full bg-white/20 text-xs'>{ACCESSORIES_CATALOG.length}</span>
           </button>
-          
+
           <button
             onClick={() => { setActiveTab('backgrounds') }}
             className={`
@@ -461,7 +461,7 @@ export default function ShopClient ({
               <p className='text-sm sm:text-base text-chestnut-medium mb-6'>
                 Achète des packs de Koins pour débloquer plus d'accessoires et backgrounds !
               </p>
-              
+
               <Link
                 href='/wallet'
                 className='inline-flex items-center gap-2 px-6 py-3 sm:px-8 sm:py-4 bg-gradient-to-r from-autumn-coral to-autumn-cinnamon text-white font-bold text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300'

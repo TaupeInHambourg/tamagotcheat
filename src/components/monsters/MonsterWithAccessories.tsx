@@ -75,7 +75,7 @@ export function MonsterWithAccessories ({
     const fetchEquipment = async (): Promise<void> => {
       try {
         setLoading(true)
-        
+
         // Fetch accessories
         const equipment = await getCreatureEquipment(monsterId)
 

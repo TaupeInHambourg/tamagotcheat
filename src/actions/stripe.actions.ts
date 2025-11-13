@@ -61,7 +61,7 @@ export async function createCheckoutSession (packageId: string): Promise<string 
   }
 
   // Get base URL for redirects
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const baseUrl = process.env.BETTER_AUTH_URL ?? 'http://localhost:3000'
 
   try {
     // Create Stripe checkout session

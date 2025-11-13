@@ -62,7 +62,7 @@ export async function getUserBackgrounds (userId: string): Promise<BackgroundDB[
 export async function getMonsterBackground (monsterId: string): Promise<BackgroundDB | null> {
   const collection = await getBackgroundsCollection()
   const doc = await collection.findOne({ equippedTo: monsterId })
-  
+
   return doc != null ? serializeBackground(doc) : null
 }
 
