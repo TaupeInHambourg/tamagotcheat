@@ -43,11 +43,15 @@ export default function BottomNav (): React.ReactNode {
     { href: '/wallet', label: 'Koins', icon: '💰' }
   ]
 
+  const externalLinks = [
+    { href: 'https://documentation-tamagotcheat.vercel.app/', label: 'Docs', icon: '📚' }
+  ]
+
   return (
     <>
       {/* Barre de navigation fixée en bas - Visible sur tous les écrans */}
       <nav className='fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg z-50 border-t-2 border-autumn-peach/50 shadow-lg'>
-        <div className='grid grid-cols-5 gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 pb-safe max-w-7xl mx-auto'>
+        <div className='grid grid-cols-6 gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 pb-safe max-w-7xl mx-auto'>
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -61,6 +65,18 @@ export default function BottomNav (): React.ReactNode {
               <span className='text-xl sm:text-2xl'>{item.icon}</span>
               <span className='text-[10px] sm:text-xs leading-tight'>{item.label}</span>
             </Link>
+          ))}
+          {externalLinks.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex flex-col items-center justify-center gap-1 py-2 sm:py-3 px-1 sm:px-2 rounded-xl font-semibold transition-all duration-200 touch-manipulation active:scale-95 text-chestnut-medium active:bg-autumn-cream/50 hover:bg-autumn-cream/30'
+            >
+              <span className='text-xl sm:text-2xl'>{item.icon}</span>
+              <span className='text-[10px] sm:text-xs leading-tight'>{item.label}</span>
+            </a>
           ))}
 
         </div>

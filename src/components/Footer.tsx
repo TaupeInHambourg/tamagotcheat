@@ -49,6 +49,17 @@ export default function Footer (): ReactNode {
             <h3 className='text-base sm:text-lg font-semibold text-chestnut-deep'>Ressources</h3>
             <ul className='space-y-2 sm:space-y-3'>
               <li>
+                <a
+                  href='https://documentation-tamagotcheat.vercel.app/'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200 flex items-center gap-2'
+                >
+                  <span>📚</span>
+                  <span>Documentation</span>
+                </a>
+              </li>
+              <li>
                 <Link href='/blog' className='text-chestnut-medium hover:text-autumn-cinnamon text-sm transition-colors duration-200'>
                   Blog
                 </Link>

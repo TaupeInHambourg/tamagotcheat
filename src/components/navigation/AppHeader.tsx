@@ -40,10 +40,21 @@ export default function AppHeader (): React.ReactNode {
             </Link>
           </div>
 
-          {/* Actions utilisateur - Wallet et Déconnexion uniquement */}
+          {/* Actions utilisateur - Wallet, Documentation et Déconnexion */}
           <div className='flex items-center space-x-3'>
             {/* Wallet display - always visible */}
             <WalletDisplay />
+
+            {/* Documentation link */}
+            <a
+              href='https://documentation-tamagotcheat.vercel.app/'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-chestnut-medium hover:text-autumn-cinnamon hover:bg-autumn-cream/30 transition-all duration-200'
+            >
+              <span className='text-xl'>📚</span>
+              <span>Documentation</span>
+            </a>
 
             {/* Logout button */}
             <Button

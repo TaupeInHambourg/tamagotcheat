@@ -17,6 +17,17 @@ TamagoTcheat is a full-stack web application that brings the nostalgic Tamagotch
 - **💰 Dual Currency**: Koins (earned through quests) and Gifts (premium currency)
 - **📱 Responsive Design**: Optimized for mobile and desktop with adaptive navigation
 
+## 📚 Documentation
+
+Complete technical documentation is available at: **[https://documentation-tamagotcheat.vercel.app/](https://documentation-tamagotcheat.vercel.app/)**
+
+The documentation includes:
+- Architecture and design principles
+- Component library with examples
+- API reference
+- Development guides
+- Contributing guidelines
+
 ## 🏗️ Architecture
 
 The project follows **Clean Architecture** and **SOLID principles**:
