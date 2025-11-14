@@ -20,8 +20,11 @@ interface MonsterActionsProps {
   isInteracting: boolean
   isGivingGift: boolean
   giftsBalance: number
+  isPlaying: boolean
+  remainingPlays: number
   onInteraction: (action: string, label: string) => void
   onGiveGift: () => void
+  onPlay: () => void
 }
 
 /**
@@ -30,8 +33,8 @@ interface MonsterActionsProps {
 const INTERACTION_BUTTONS = [
   { action: 'feed', label: 'Nourrir', emoji: '🍪' },
   { action: 'sleep', label: 'Mettre au lit', emoji: '💤' },
-  { action: 'play', label: 'Jouer', emoji: '🎮' },
-  { action: 'cuddle', label: 'Câliner', emoji: '💕' }
+  { action: 'play', label: 'Consoler', emoji: '🤗' },
+  { action: 'cuddle', label: 'Écouter', emoji: '👂' }
 ] as const
 
 /**
@@ -44,8 +47,11 @@ function MonsterActionsComponent ({
   isInteracting,
   isGivingGift,
   giftsBalance,
+  isPlaying,
+  remainingPlays,
   onInteraction,
-  onGiveGift
+  onGiveGift,
+  onPlay
 }: MonsterActionsProps): React.ReactNode {
   return (
     <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6 justify-center'>
@@ -59,6 +65,15 @@ function MonsterActionsComponent ({
           {emoji} {label}
         </Button>
       ))}
+      <Button
+        variant='secondary'
+        onClick={onPlay}
+        disabled={isPlaying || remainingPlays === 0}
+      >
+        {isPlaying
+          ? '🎮 En cours...'
+          : `🎮 Jouer (${remainingPlays}/3)`}
+      </Button>
       <Button
         variant='primary'
         onClick={onGiveGift}

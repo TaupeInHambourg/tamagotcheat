@@ -85,6 +85,10 @@ export interface Monster {
   nextStateChangeAt?: Date
   /** Whether this monster is visible in the public gallery */
   isPublic?: boolean
+  /** Number of times the monster has been played with today */
+  dailyPlayCount?: number
+  /** Last date when daily play count was reset (stored as ISO date string YYYY-MM-DD) */
+  lastPlayDate?: string
 }
 
 /**

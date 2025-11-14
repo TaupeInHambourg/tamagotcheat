@@ -312,6 +312,136 @@ export async function giveGiftToMonsterAction (
 }
 
 /**
+ * Play with monster action - Grants XP without changing state
+ * Limited to 3 times per day per monster
+ * @param monsterId - The monster's unique identifier
+ * @returns Result with success status, XP gained, and remaining plays
+ */
+export async function playWithMonsterAction (
+  monsterId: string
+): Promise<{ success: boolean, error?: string, xpGained?: number, remainingPlays?: number, newLevel?: number }> {
+  try {
+    // Get authenticated user
+    const user = await getAuthenticatedUser()
+
+    // Connect to database
+    await connectMongooseToDatabase()
+
+    // Get the monster directly from DB to ensure we have the latest dailyPlayCount
+    const monster = await MonsterModel.findOne({
+      _id: monsterId,
+      ownerId: user.id
+    }).lean()
+
+    if (monster == null) {
+      return {
+        success: false,
+        error: 'Monster not found'
+      }
+    }
+
+    // Get today's date as string (YYYY-MM-DD) in UTC
+    const now = new Date()
+    const today = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}-${String(now.getUTCDate()).padStart(2, '0')}`
+
+    // Check if we need to reset the daily counter
+    let dailyPlayCount: number = Number(monster.dailyPlayCount ?? 0)
+    const lastPlayDate = monster.lastPlayDate
+
+    console.log('Play check:', { today, lastPlayDate, dailyPlayCount, monsterName: monster.name })
+
+    if (lastPlayDate !== today) {
+      // New day, reset the counter
+      dailyPlayCount = 0
+    }
+
+    // Check if limit reached
+    if (dailyPlayCount >= 3) {
+      return {
+        success: false,
+        error: 'Limite quotidienne atteinte (3/3)',
+        remainingPlays: 0
+      }
+    }
+
+    // Calculate XP to add (play action gives 15 XP)
+    const XP_PER_PLAY = 15
+    const currentTotalXP = monster.totalExperience ?? 0
+    const xpResult = addXP(currentTotalXP, XP_PER_PLAY)
+
+    const newDailyPlayCount = dailyPlayCount + 1
+
+    // Update monster in database
+    await MonsterModel.findByIdAndUpdate(monsterId, {
+      totalExperience: xpResult.newTotalXP,
+      level: xpResult.newLevel,
+      experience: xpResult.newCurrentXP,
+      dailyPlayCount: newDailyPlayCount,
+      lastPlayDate: today
+    })
+
+    console.log('Play successful:', { newCount: newDailyPlayCount, today })
+
+    // Update quest progress (play quest)
+    await updateQuestProgress('play', 1)
+
+    // Revalidate pages
+    revalidatePath(`/creatures/${monsterId}`)
+    revalidatePath('/dashboard')
+
+    return {
+      success: true,
+      xpGained: XP_PER_PLAY,
+      remainingPlays: 2 - dailyPlayCount,
+      newLevel: xpResult.newLevel
+    }
+  } catch (error) {
+    console.error('Error in playWithMonsterAction:', error)
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to play with monster'
+    }
+  }
+}
+
+/**
+ * Get remaining plays for today
+ * @param monsterId - The monster's unique identifier
+ * @returns Number of remaining plays (0-3)
+ */
+export async function getRemainingPlays (monsterId: string): Promise<number> {
+  try {
+    const user = await getAuthenticatedUser()
+    await connectMongooseToDatabase()
+
+    // Get monster directly from DB to ensure we have latest data
+    const monster = await MonsterModel.findOne({
+      _id: monsterId,
+      ownerId: user.id
+    }).lean()
+
+    if (monster == null) {
+      return 3
+    }
+
+    // Get today's date as string (YYYY-MM-DD) in UTC
+    const now = new Date()
+    const today = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}-${String(now.getUTCDate()).padStart(2, '0')}`
+    const lastPlayDate = monster.lastPlayDate
+
+    if (lastPlayDate !== today) {
+      return 3
+    }
+
+    const dailyPlayCount = monster.dailyPlayCount ?? 0
+    return Math.max(0, 3 - dailyPlayCount)
+  } catch (error) {
+    console.error('Error in getRemainingPlays:', error)
+    return 3
+  }
+}
+
+/**
  * Retrieves navigation IDs for the current monster (previous and next monsters)
  * @param currentMonsterId - The current monster's unique identifier
  * @returns Object containing previousId and nextId (null if at boundaries)

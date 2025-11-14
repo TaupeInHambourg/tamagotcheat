@@ -1,12 +1,13 @@
 'use client'
 
-import { useMemo, useState, useCallback, useEffect } from 'react'
+import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { toast, Bounce } from 'react-toastify'
 import { type Monster } from '@/types/monster.types'
 import { useMonsterPolling } from '@/hooks/use-monster-polling'
 import { useMonsterSize } from '@/hooks/use-monster-size'
-import { interactWithMonster, updateMonsterVisibility, giveGiftToMonsterAction } from '@/actions/monsters.actions'
+import { useConfetti } from '@/hooks/use-confetti'
+import { interactWithMonster, updateMonsterVisibility, giveGiftToMonsterAction, playWithMonsterAction, getRemainingPlays } from '@/actions/monsters.actions'
 import { getUserGiftsBalance } from '@/actions/quests.actions'
 import Button from '@/components/Button'
 import { extractFolderPath, getMonsterAssetPath } from '@/utils/monster-asset-resolver'
@@ -38,19 +39,29 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const [isUpdatingVisibility, setIsUpdatingVisibility] = useState(false)
   const [giftsBalance, setGiftsBalance] = useState(0)
   const [isGivingGift, setIsGivingGift] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [remainingPlays, setRemainingPlays] = useState(3)
 
-  // Use custom hook for responsive monster size
+  // Use custom hooks
   const monsterSize = useMonsterSize()
+  const { celebrateLevelUp } = useConfetti()
 
-  // Load gifts balance
+  // Track previous level to detect level-ups
+  const previousLevelRef = useRef<number>(initialMonster.level ?? 1)
+
+  // Load gifts balance and remaining plays
   useEffect(() => {
-    const loadGifts = async (): Promise<void> => {
+    const loadData = async (): Promise<void> => {
       const balance = await getUserGiftsBalance()
       setGiftsBalance(balance)
+
+      const monsterId = getMonsterId(initialMonster)
+      const plays = await getRemainingPlays(monsterId)
+      setRemainingPlays(plays)
     }
 
-    void loadGifts()
-  }, [])
+    void loadData()
+  }, [initialMonster])
 
   /**
    * Callback to refresh monster accessories display
@@ -114,6 +125,33 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
   const currentAsset = useMemo(() => getMonsterAssetPath(folderPath, monster.state), [folderPath, monster.state])
   const monsterId = useMemo(() => getMonsterId(monster), [monster])
 
+  // Detect level-up and trigger confetti celebration
+  useEffect(() => {
+    const currentLevel = monster.level ?? 1
+    const previousLevel = previousLevelRef.current
+
+    if (currentLevel > previousLevel) {
+      // Level up detected!
+      console.log(`🎉 Level up! ${previousLevel} → ${currentLevel}`)
+
+      // Trigger confetti animation
+      celebrateLevelUp()
+
+      // Show toast notification
+      toast.success(
+        `🎊 Félicitations ! ${monster.name} a atteint le niveau ${currentLevel} ! 🎊`,
+        {
+          ...TOAST_SUCCESS_CONFIG,
+          transition: Bounce,
+          autoClose: 4000
+        }
+      )
+    }
+
+    // Update the ref for next comparison
+    previousLevelRef.current = currentLevel
+  }, [monster.level, monster.name, celebrateLevelUp])
+
   /**
    * Handles toggling the public visibility of the monster
    */
@@ -171,6 +209,34 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
       setIsGivingGift(false)
     }
   }, [monster.name, monsterId, isGivingGift, giftsBalance])
+
+  /**
+   * Handles playing with the monster (daily limited action)
+   */
+  const handlePlay = useCallback(async () => {
+    if (isPlaying || remainingPlays === 0) return
+
+    setIsPlaying(true)
+
+    try {
+      const result = await playWithMonsterAction(monsterId)
+
+      if (result.success) {
+        toast.success(
+          `🎮 Tu as joué avec ${monster.name} ! +${result.xpGained ?? 15} XP ! (${result.remainingPlays ?? 0}/3 restants)`,
+          { ...TOAST_SUCCESS_CONFIG, transition: Bounce }
+        )
+        setRemainingPlays(result.remainingPlays ?? 0)
+      } else {
+        toast.error(result.error ?? 'Impossible de jouer avec la créature', TOAST_ERROR_CONFIG)
+      }
+    } catch (error) {
+      console.error('Error playing with monster:', error)
+      toast.error('Une erreur est survenue lors du jeu', TOAST_ERROR_CONFIG)
+    } finally {
+      setIsPlaying(false)
+    }
+  }, [monster.name, monsterId, isPlaying, remainingPlays])
 
   return (
     <div className='w-full max-w-4xl mx-auto px-4 py-8'>
@@ -233,8 +299,11 @@ export default function MonsterPageClient ({ monster: initialMonster }: MonsterP
               isInteracting={isInteracting}
               isGivingGift={isGivingGift}
               giftsBalance={giftsBalance}
+              isPlaying={isPlaying}
+              remainingPlays={remainingPlays}
               onInteraction={(action, label) => { void handleInteraction(action, label) }}
               onGiveGift={() => { void handleGiveGift() }}
+              onPlay={() => { void handlePlay() }}
             />
 
             {/* Accessory Management Panel */}

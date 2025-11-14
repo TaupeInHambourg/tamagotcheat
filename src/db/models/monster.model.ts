@@ -70,6 +70,15 @@ const monsterSchema = new Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  dailyPlayCount: {
+    type: Number,
+    required: false,
+    default: 0
+  },
+  lastPlayDate: {
+    type: String,
+    required: false
   }
 }, {
   timestamps: true // Automatically adds createdAt and updatedAt fields
