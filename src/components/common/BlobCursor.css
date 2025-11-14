@@ -1,0 +1,69 @@
+.blob-cursor-main > div {
+  position: fixed;
+  will-change: transform;
+  border-radius: 50%;
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.25);
+  /* Remove global opacity so the color stays exact; use rgba in backgrounds if translucency needed */
+  opacity: 1;
+}
+
+.blob-cursor-main > div:nth-child(1) {
+  width: 40px;
+  height: 40px;
+}
+
+.blob-cursor-main > div:nth-child(2) {
+  width: 80px;
+  height: 80px;
+}
+
+.blob-cursor-main > div:nth-child(3) {
+  width: 50px;
+  height: 50px;
+}
+
+.blob-cursor-main > div::after {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  /* inner dot with gradient tones */
+  background: linear-gradient(135deg, rgba(255, 133, 133, 0.9) 0%, rgba(232, 155, 127, 0.9) 100%);
+}
+
+.blob-cursor-main > div:nth-child(2)::after {
+  top: 23px;
+  left: 23px;
+  width: 24px;
+  height: 24px;
+}
+
+.blob-cursor-main > div:nth-child(3)::after {
+  top: 17px;
+  left: 17px;
+  width: 16px;
+  height: 16px;
+}
+
+.blob-cursor-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  filter: url('#blob');
+  overflow: hidden;
+  background: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+  pointer-events: none;
+  z-index: 9999;
+}

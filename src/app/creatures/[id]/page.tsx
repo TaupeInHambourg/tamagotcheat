@@ -1,6 +1,7 @@
-import { getMonsterById } from '@/actions/monsters.actions'
+import { getMonsterById, getMonsterNavigationIds } from '@/actions/monsters.actions'
 import ErrorClient from '@/components/error-client'
 import MonsterPageClient from '@/components/monsters/monster-page-client'
+import { MonsterNavigation } from '@/components/monsters/MonsterNavigation'
 import { AppLayout } from '@/components/navigation'
 
 export default async function Page ({ params }: { params: Promise<{ id: string | string[] }> }): Promise<React.ReactNode> {
@@ -21,9 +22,13 @@ export default async function Page ({ params }: { params: Promise<{ id: string |
     )
   }
 
+  // Récupération des IDs de navigation (créature précédente et suivante)
+  const { previousId, nextId } = await getMonsterNavigationIds(id)
+
   // Affichage de la page de détail
   return (
     <AppLayout>
+      <MonsterNavigation previousId={previousId} nextId={nextId} />
       <MonsterPageClient monster={monster} />
     </AppLayout>
   )

@@ -310,3 +310,47 @@ export async function giveGiftToMonsterAction (
     }
   }
 }
+
+/**
+ * Retrieves navigation IDs for the current monster (previous and next monsters)
+ * @param currentMonsterId - The current monster's unique identifier
+ * @returns Object containing previousId and nextId (null if at boundaries)
+ */
+export async function getMonsterNavigationIds (currentMonsterId: string): Promise<{ previousId: string | null, nextId: string | null }> {
+  try {
+    // Get authenticated user
+    const user = await getAuthenticatedUser()
+
+    // Fetch all monsters via service
+    const monsterService = createMonsterService()
+    const result = await monsterService.getUserMonsters(user.id)
+
+    if (!result.success || result.data == null || result.data.length === 0) {
+      return { previousId: null, nextId: null }
+    }
+
+    const monsters = result.data
+
+    // Find current monster index
+    const currentIndex = monsters.findIndex(m => m._id?.toString() === currentMonsterId)
+
+    if (currentIndex === -1) {
+      return { previousId: null, nextId: null }
+    }
+
+    // Get previous and next IDs with wrapping
+    const previousIndex = currentIndex > 0 ? currentIndex - 1 : monsters.length - 1
+    const nextIndex = currentIndex < monsters.length - 1 ? currentIndex + 1 : 0
+
+    const previousId = monsters[previousIndex]?._id?.toString() ?? null
+    const nextId = monsters[nextIndex]?._id?.toString() ?? null
+
+    return {
+      previousId: monsters.length > 1 ? previousId : null,
+      nextId: monsters.length > 1 ? nextId : null
+    }
+  } catch (error) {
+    console.error('Error in getMonsterNavigationIds:', error)
+    return { previousId: null, nextId: null }
+  }
+}
