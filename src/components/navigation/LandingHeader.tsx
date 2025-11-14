@@ -35,19 +35,19 @@ export default function LandingHeader (): ReactNode {
 
           {/* Navigation */}
           <nav className='hidden md:flex space-x-8'>
-            <Link href='#features' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
+            <Link href='/#features' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
               Fonctionnalités
             </Link>
-            <Link href='#monsters' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
+            <Link href='/#monsters' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
               Monstres
             </Link>
             <Link href='/gallery?source=landing' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
               Galerie 🌍
             </Link>
-            <Link href='#actions' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
+            <Link href='/#actions' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
               Actions
             </Link>
-            <Link href='#newsletter' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
+            <Link href='/#newsletter' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
               Newsletter
             </Link>
           </nav>
