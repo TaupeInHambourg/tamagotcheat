@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect } from 'react'
-import confetti from 'canvas-confetti'
+import confetti, { type Options } from 'canvas-confetti'
 
 interface UseConfettiReturn {
   celebrateLevelUp: () => void
@@ -28,7 +28,7 @@ export function useConfetti (): UseConfettiReturn {
       zIndex: 10000
     }
 
-    function fire (particleRatio: number, opts: confetti.Options): void {
+    function fire (particleRatio: number, opts: Options): void {
       void confetti({
         ...defaults,
         ...opts,

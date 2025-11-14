@@ -328,17 +328,20 @@ export async function playWithMonsterAction (
     await connectMongooseToDatabase()
 
     // Get the monster directly from DB to ensure we have the latest dailyPlayCount
-    const monster = await MonsterModel.findOne({
+    const monsterDoc = await MonsterModel.findOne({
       _id: monsterId,
       ownerId: user.id
     }).lean()
 
-    if (monster == null) {
+    if (monsterDoc == null) {
       return {
         success: false,
         error: 'Monster not found'
       }
     }
+
+    // Cast to Monster type to access our custom fields
+    const monster = monsterDoc as unknown as Monster
 
     // Get today's date as string (YYYY-MM-DD) in UTC
     const now = new Date()
@@ -415,14 +418,17 @@ export async function getRemainingPlays (monsterId: string): Promise<number> {
     await connectMongooseToDatabase()
 
     // Get monster directly from DB to ensure we have latest data
-    const monster = await MonsterModel.findOne({
+    const monsterDoc = await MonsterModel.findOne({
       _id: monsterId,
       ownerId: user.id
     }).lean()
 
-    if (monster == null) {
+    if (monsterDoc == null) {
       return 3
     }
+
+    // Cast to Monster type to access our custom fields
+    const monster = monsterDoc as unknown as Monster
 
     // Get today's date as string (YYYY-MM-DD) in UTC
     const now = new Date()
