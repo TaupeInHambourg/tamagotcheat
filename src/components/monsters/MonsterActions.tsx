@@ -54,35 +54,41 @@ function MonsterActionsComponent ({
   onPlay
 }: MonsterActionsProps): React.ReactNode {
   return (
-    <div className='flex flex-wrap gap-3 border-t border-slate-200 pt-6 justify-center'>
-      {INTERACTION_BUTTONS.map(({ action, label, emoji }) => (
+    <div className='space-y-3 border-t border-slate-200 pt-6'>
+      {/* Interactions principales */}
+      <div className='flex flex-wrap gap-3 justify-center'>
+        {INTERACTION_BUTTONS.map(({ action, label, emoji }) => (
+          <Button
+            key={action}
+            variant='outline'
+            onClick={() => { onInteraction(action, label) }}
+            disabled={isInteracting}
+          >
+            {emoji} {label}
+          </Button>
+        ))}
+      </div>
+      {/* Actions spéciales (Jouer et Cadeau) */}
+      <div className='flex flex-wrap gap-3 justify-center'>
         <Button
-          key={action}
-          variant='outline'
-          onClick={() => { onInteraction(action, label) }}
-          disabled={isInteracting}
+          variant='secondary'
+          onClick={onPlay}
+          disabled={isPlaying || remainingPlays === 0}
         >
-          {emoji} {label}
+          {isPlaying
+            ? '🎮 En cours...'
+            : `🎮 Jouer (${remainingPlays}/3)`}
         </Button>
-      ))}
-      <Button
-        variant='secondary'
-        onClick={onPlay}
-        disabled={isPlaying || remainingPlays === 0}
-      >
-        {isPlaying
-          ? '🎮 En cours...'
-          : `🎮 Jouer (${remainingPlays}/3)`}
-      </Button>
-      <Button
-        variant='primary'
-        onClick={onGiveGift}
-        disabled={isGivingGift || giftsBalance === 0}
-      >
-        {isGivingGift
-          ? '🎁 En cours...'
-          : `🎁 Cadeau (${giftsBalance})`}
-      </Button>
+        <Button
+          variant='primary'
+          onClick={onGiveGift}
+          disabled={isGivingGift || giftsBalance === 0}
+        >
+          {isGivingGift
+            ? '🎁 En cours...'
+            : `🎁 Cadeau (${giftsBalance})`}
+        </Button>
+      </div>
     </div>
   )
 }

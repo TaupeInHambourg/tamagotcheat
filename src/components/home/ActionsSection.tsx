@@ -18,39 +18,45 @@ export default function ActionsSection (): React.ReactNode {
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
           {[
             {
-              icon: '🍎',
+              icon: '🍪',
               title: 'Nourrir',
-              description: 'Une alimentation équilibrée pour une croissance saine',
+              description: 'Donne-lui des friandises pour le garder en forme',
+              xp: 15,
+              color: 'autumn'
+            },
+            {
+              icon: '💤',
+              title: 'Mettre au lit',
+              description: 'Un bon sommeil pour recharger les batteries',
+              xp: 5,
+              color: 'moss'
+            },
+            {
+              icon: '🤗',
+              title: 'Consoler',
+              description: 'Réconforte-le quand il est triste',
+              xp: 10,
+              color: 'maple'
+            },
+            {
+              icon: '👂',
+              title: 'Écouter',
+              description: 'Sois attentif à ses besoins',
+              xp: 10,
               color: 'autumn'
             },
             {
               icon: '🎮',
               title: 'Jouer',
-              description: 'Développez votre lien à travers des mini-jeux amusants',
+              description: 'Amuse-toi avec lui grâce à des mini-jeux',
+              xp: 25,
               color: 'moss'
             },
             {
-              icon: '📚',
-              title: 'Éduquer',
-              description: 'Apprenez-lui de nouvelles compétences',
-              color: 'maple'
-            },
-            {
-              icon: '💊',
-              title: 'Soigner',
-              description: 'Gardez votre monstre en pleine forme',
-              color: 'autumn'
-            },
-            {
-              icon: '🎨',
-              title: 'Décorer',
-              description: 'Personnalisez son environnement',
-              color: 'moss'
-            },
-            {
-              icon: '👋',
-              title: 'Socialiser',
-              description: "Rencontrez d'autres monstres",
+              icon: '🎁',
+              title: 'Cadeau',
+              description: 'Offre-lui un cadeau spécial pour booster son XP',
+              xp: 50,
               color: 'maple'
             }
           ].map((action, index) => (
@@ -69,7 +75,7 @@ export default function ActionsSection (): React.ReactNode {
                       : 'bg-maple-light text-maple-deep'
                 }`}
               >
-                ✨ Découvrir
+                +{action.xp} XP
               </span>
             </div>
           ))}

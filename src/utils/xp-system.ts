@@ -17,7 +17,7 @@
  * Each interaction grants a specific amount of experience
  */
 export const XP_PER_ACTION = {
-  play: 10,
+  play: 25,
   feed: 15,
   sleep: 5,
   cuddle: 10
