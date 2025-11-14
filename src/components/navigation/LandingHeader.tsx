@@ -2,6 +2,7 @@
 
 import Button from '@/components/Button'
 import Link from 'next/link'
+import MobileMenu from '@/components/home/MobileMenu'
 import type { ReactNode } from 'react'
 
 /**
@@ -9,11 +10,13 @@ import type { ReactNode } from 'react'
  *
  * Main navigation header for public pages (landing page, gallery).
  * Provides navigation links and call-to-action button.
+ * Includes mobile menu for tablet and phone screens.
  *
  * Design Principles:
  * - Single Responsibility: Only handles public page navigation
  * - Open/Closed: Extensible through navigation items
  * - Clean separation from authenticated AppHeader
+ * - Responsive: Desktop nav + Mobile burger menu
  *
  * @component
  */
@@ -24,16 +27,16 @@ export default function LandingHeader (): ReactNode {
 
   return (
     <header className='fixed w-full top-0 z-50 bg-white/90 backdrop-blur-lg border-b-2 border-autumn-peach/50 shadow-lg'>
-      <div className='max-w-7xl mx-auto px-6 lg:px-8'>
+      <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-20'>
           {/* Logo */}
           <div className='flex-shrink-0'>
-            <Link href='/' className='text-2xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent hover:scale-105 transition-transform duration-200 inline-block'>
+            <Link href='/' className='text-xl sm:text-2xl font-bold bg-gradient-to-r from-autumn-cinnamon via-autumn-terracotta to-maple-warm bg-clip-text text-transparent hover:scale-105 transition-transform duration-200 inline-block'>
               TamagoTcheat 🍂
             </Link>
           </div>
 
-          {/* Navigation */}
+          {/* Desktop Navigation */}
           <nav className='hidden md:flex space-x-8'>
             <Link href='/#features' className='text-chestnut-medium hover:text-autumn-cinnamon font-semibold transition-colors duration-200'>
               Fonctionnalités
@@ -52,8 +55,8 @@ export default function LandingHeader (): ReactNode {
             </Link>
           </nav>
 
-          {/* CTA Button */}
-          <div className='flex items-center'>
+          {/* Desktop CTA Button */}
+          <div className='hidden md:flex items-center'>
             <Button
               variant='primary'
               size='md'
@@ -64,6 +67,20 @@ export default function LandingHeader (): ReactNode {
                 <span>✨</span>
               </span>
             </Button>
+          </div>
+
+          {/* Mobile: CTA Button + Burger Menu */}
+          <div className='flex md:hidden items-center gap-2'>
+            <Button
+              variant='primary'
+              size='sm'
+              onClick={handleSignin}
+              className='flex items-center gap-1 text-sm'
+            >
+              <span>Créer</span>
+              <span>✨</span>
+            </Button>
+            <MobileMenu onSignin={handleSignin} />
           </div>
         </div>
       </div>

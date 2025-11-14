@@ -11,7 +11,8 @@ export default function HeroSection (): React.ReactNode {
     <section className='py-12 sm:py-16 lg:py-20 xl:py-28 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-7xl mx-auto'>
         <div className='flex gap-8 sm:gap-12 lg:gap-16 items-center'>
-          <div className='w-3/5 space-y-6 sm:space-y-8'>
+          {/* Content: Full width on mobile/tablet, 3/5 on desktop */}
+          <div className='w-full lg:w-3/5 space-y-6 sm:space-y-8 text-left'>
             <div>
               <span className='inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold bg-autumn-peach text-autumn-brown mb-4 sm:mb-6'>
                 🍂 Nouvelle aventure
@@ -25,7 +26,7 @@ export default function HeroSection (): React.ReactNode {
               Créez, élevez et choyez votre petit monstre dans un univers magique et coloré.
               Une expérience cosy qui ravira petits et grands ! ✨
             </p>
-            <div className='flex gap-3 sm:gap-4 flex-wrap pt-2 sm:pt-4'>
+            <div className='flex gap-3 sm:gap-4 flex-wrap pt-2 sm:pt-4 justify-start'>
               <Button
                 variant='primary'
                 size='lg'
@@ -47,7 +48,8 @@ export default function HeroSection (): React.ReactNode {
               </Button>
             </div>
           </div>
-          <div className='w-2/5 relative h-[300px] sm:h-[350px] lg:h-[450px] xl:h-[500px]'>
+          {/* Image: Hidden on mobile/tablet, visible on desktop */}
+          <div className='hidden lg:block lg:w-2/5 relative h-[300px] sm:h-[350px] lg:h-[450px] xl:h-[500px]'>
             <div className='absolute inset-0 bg-gradient-to-br from-autumn-coral/20 to-moss-soft/20 rounded-3xl blur-3xl' />
             <Image
               src='/assets/hero_illustration.svg'

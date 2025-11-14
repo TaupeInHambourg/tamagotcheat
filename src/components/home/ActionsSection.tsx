@@ -1,9 +1,57 @@
+import ActionsCarousel from './ActionsCarousel'
+
 /**
  * ActionsSection - Section des actions
  *
  * Responsabilité unique : Afficher les actions possibles avec les créatures
+ * Utilise un carousel sur mobile/tablette et une grille sur desktop
  */
 export default function ActionsSection (): React.ReactNode {
+  const actions = [
+    {
+      icon: '🍪',
+      title: 'Nourrir',
+      description: 'Donne-lui des friandises pour le garder en forme',
+      xp: 15,
+      color: 'autumn' as const
+    },
+    {
+      icon: '💤',
+      title: 'Mettre au lit',
+      description: 'Un bon sommeil pour recharger les batteries',
+      xp: 5,
+      color: 'moss' as const
+    },
+    {
+      icon: '🤗',
+      title: 'Consoler',
+      description: 'Réconforte-le quand il est triste',
+      xp: 10,
+      color: 'maple' as const
+    },
+    {
+      icon: '👂',
+      title: 'Écouter',
+      description: 'Sois attentif à ses besoins',
+      xp: 10,
+      color: 'autumn' as const
+    },
+    {
+      icon: '🎮',
+      title: 'Jouer',
+      description: 'Amuse-toi avec lui grâce à des mini-jeux',
+      xp: 25,
+      color: 'moss' as const
+    },
+    {
+      icon: '🎁',
+      title: 'Cadeau',
+      description: 'Offre-lui un cadeau spécial pour booster son XP',
+      xp: 50,
+      color: 'maple' as const
+    }
+  ]
+
   return (
     <section id='actions' className='py-12 sm:py-16 lg:py-20 xl:py-28 px-4 sm:px-6 lg:px-8 bg-white/50'>
       <div className='max-w-7xl mx-auto'>
@@ -15,7 +63,12 @@ export default function ActionsSection (): React.ReactNode {
             Plein d'activités pour rendre ton monstre heureux
           </p>
         </div>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
+
+        {/* Carousel for mobile/tablet */}
+        <ActionsCarousel actions={actions} />
+
+        {/* Grid for desktop */}
+        <div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8'>
           {[
             {
               icon: '🍪',

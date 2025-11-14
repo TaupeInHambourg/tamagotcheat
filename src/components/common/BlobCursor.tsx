@@ -58,7 +58,8 @@ const BlobCursor = ({ blobType = 'circle', fillColor = 'linear-gradient(135deg, 
           />
         </filter>
       </svg>
-      <div className='blob-cursor-main'>
+      {/* Hide blob cursor on mobile and tablet (< lg breakpoint) */}
+      <div className='blob-cursor-main hidden lg:block'>
         {trail.map((props, index) => (
           <animated.div
             key={index}
