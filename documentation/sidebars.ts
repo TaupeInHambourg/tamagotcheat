@@ -17,14 +17,47 @@ const sidebars: SidebarsConfig = {
     'intro',
     {
       type: 'category',
+      label: 'Guides',
+      collapsed: false,
+      items: [
+        'guides/setup',
+        'guides/local-development',
+        'guides/contributing',
+        'guides/testing',
+        'guides/toast-notifications'
+      ]
+    },
+    {
+      type: 'category',
       label: 'Architecture',
       collapsed: false,
       items: [
-        'architecture/clean-architecture',
         'architecture/overview',
+        'architecture/clean-architecture',
         'architecture/solid-principles',
-        'architecture/lazy-state-system',
-        'architecture/database-layer'
+        'architecture/service-layer',
+        'architecture/database-layer',
+        'architecture/lazy-state-system'
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Components',
+      collapsed: false,
+      items: [
+        'components/overview',
+        'components/button',
+        'components/input',
+        'components/modal',
+        'components/create-monster-form'
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Design',
+      collapsed: false,
+      items: [
+        'design/colors'
       ]
     },
     {
@@ -41,29 +74,11 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'Components',
-      collapsed: false,
-      items: [
-        'components/overview',
-        'components/button'
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Guides',
-      collapsed: false,
-      items: [
-        'guides/local-development',
-        'guides/setup',
-        'guides/toast-notifications'
-      ]
-    },
-    {
-      type: 'category',
       label: 'API Reference',
       collapsed: false,
       items: [
         'api/overview',
+        'api/auth',
         'api/monsters',
         'api/use-monster-polling',
         'api/monster-state-decay'

@@ -569,6 +569,5 @@ export function MonsterManager() {
 ## Related Documentation
 
 - [API Overview](./overview) - Server Actions architecture
-- [Monster Types](../types/monsters) - Type definitions
 - [Service Layer](../architecture/service-layer) - Business logic
 - [Repository Layer](../architecture/database-layer) - Data access

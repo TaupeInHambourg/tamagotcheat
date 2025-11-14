@@ -8,7 +8,7 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   url: 'https://your-domain.com',
-  baseUrl: '/docs/', // Important pour le déploiement
+  baseUrl: '/', // Base URL for the site
 
   organizationName: 'TaupeInHambourg',
   projectName: 'tamagotcheat',
@@ -26,11 +26,13 @@ const config: Config = {
       'classic',
       {
         docs: {
+          routeBasePath: '/',
           sidebarPath: './sidebars.ts',
           editUrl: 'https://github.com/TaupeInHambourg/tamagotcheat/tree/main/documentation/'
         },
         blog: {
-          showReadingTime: true
+          showReadingTime: true,
+          routeBasePath: 'blog'
         },
         theme: {
           customCss: './src/css/custom.css'
@@ -68,7 +70,7 @@ const config: Config = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/intro'
+              to: '/intro'
             }
           ]
         }

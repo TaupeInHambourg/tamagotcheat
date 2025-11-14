@@ -461,7 +461,7 @@ test('purchases accessory on click', async () => {
 - [Architecture](../architecture/clean-architecture.md)
 - [Shop System](../features/shop-system.md)
 - [Quest System](../features/quest-system.md)
-- [Local Development](./local-development.md)
+- [Local Development](../guides/local-development)
 --color-autumn-coral: #ffb499
 
 /* Nature Greens */
