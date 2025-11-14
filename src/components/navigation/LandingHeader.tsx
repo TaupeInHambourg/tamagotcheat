@@ -63,7 +63,7 @@ export default function LandingHeader (): ReactNode {
               onClick={handleSignin}
             >
               <span className='flex items-center gap-2'>
-                <span>Créer mon monstre</span>
+                <span>Se connecter</span>
                 <span>✨</span>
               </span>
             </Button>

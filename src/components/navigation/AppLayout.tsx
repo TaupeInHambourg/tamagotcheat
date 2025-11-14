@@ -66,7 +66,7 @@ export default function AppLayout ({ children }: AppLayoutProps): React.ReactNod
 
   return (
     <WalletProvider userId={userId}>
-      <div className='min-h-screen flex flex-col bg-autumn-gradient bg-cozy-pattern'>
+      <div className='min-h-screen flex flex-col bg-autumn-gradient bg-cozy-pattern overflow-x-hidden'>
         {/* Header desktop (masqué sur mobile) */}
         <AppHeader />
 
@@ -74,7 +74,7 @@ export default function AppLayout ({ children }: AppLayoutProps): React.ReactNod
         <MobileHeader />
 
         {/* Contenu principal avec padding pour la barre mobile */}
-        <main className='flex-1 pb-20 pt-0'>
+        <main className='flex-1 pb-24 pt-0'>
           {children}
         </main>
 

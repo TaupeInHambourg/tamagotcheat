@@ -83,13 +83,10 @@ export default function QuestsSection (): React.ReactNode {
       <div className='card-cozy p-6 sm:p-8'>
         {/* Header with skeleton */}
         <div className='flex items-center justify-between mb-6'>
-          <div className='flex items-center gap-3'>
-            <div className='text-4xl'>🏆</div>
-            <div>
-              <h2 className='text-2xl font-bold text-chestnut-dark'>
-                Quêtes Quotidiennes
-              </h2>
-            </div>
+          <div>
+            <h2 className='text-lg sm:text-xl lg:text-2xl font-bold' style={{ color: '#a65d47' }}>
+              Quêtes Quotidiennes
+            </h2>
           </div>
         </div>
 
@@ -102,22 +99,19 @@ export default function QuestsSection (): React.ReactNode {
   }
 
   return (
-    <div className='card-cozy p-6 sm:p-8'>
-      {/* Header */}
-      <div className='flex items-center justify-between mb-6'>
-        <div className='flex items-center gap-3'>
-          <div className='text-4xl'>🏆</div>
-          <div>
-            <h2 className='text-2xl font-bold text-chestnut-dark'>
-              Quêtes Quotidiennes
-            </h2>
-            <p className='text-sm text-chestnut-medium'>
-              Complète les missions pour gagner des récompenses
-            </p>
-          </div>
+    <div className='card-cozy p-4 sm:p-6 lg:p-8'>
+      {/* Header - Plus compact sur mobile */}
+      <div className='flex items-center justify-between mb-4 sm:mb-6'>
+        <div>
+          <h2 className='text-lg sm:text-xl lg:text-2xl font-bold' style={{ color: '#a65d47' }}>
+            Quêtes Quotidiennes
+          </h2>
+          <p className='text-[11px] sm:text-xs lg:text-sm text-chestnut-medium mt-1'>
+            Complète les missions pour gagner des récompenses
+          </p>
         </div>
         <Link href='/quests'>
-          <Button variant='outline' size='sm'>
+          <Button variant='outline' size='sm' className='touch-manipulation active:scale-95 text-xs sm:text-sm'>
             Voir tout
           </Button>
         </Link>
@@ -146,35 +140,35 @@ export default function QuestsSection (): React.ReactNode {
                 return (
                   <div
                     key={quest.id}
-                    className='bg-autumn-cream/50 rounded-xl p-4 border-2 border-autumn-peach/30 hover:border-autumn-peach/60 transition-all duration-200'
+                    className='bg-autumn-cream/50 rounded-lg sm:rounded-xl p-3 sm:p-4 border-2 border-autumn-peach/30 hover:border-autumn-peach/60 transition-all duration-200 active:border-autumn-peach/80 touch-manipulation'
                   >
-                    <div className='flex items-start gap-3'>
-                      {/* Icon */}
-                      <div className='text-3xl flex-shrink-0'>
+                    <div className='flex items-start gap-2 sm:gap-3'>
+                      {/* Icon - Plus petit sur mobile */}
+                      <div className='text-2xl sm:text-3xl flex-shrink-0'>
                         {definition.icon}
                       </div>
 
                       {/* Content */}
                       <div className='flex-1 min-w-0'>
-                        <div className='flex items-start justify-between gap-2 mb-2'>
+                        <div className='flex items-start justify-between gap-1.5 sm:gap-2 mb-1.5 sm:mb-2'>
                           <div>
-                            <h3 className='font-bold text-base text-chestnut-dark'>
+                            <h3 className='font-bold text-sm sm:text-base text-chestnut-dark leading-snug'>
                               {definition.title}
                             </h3>
-                            <p className='text-xs text-chestnut-medium'>
+                            <p className='text-[11px] sm:text-xs text-chestnut-medium leading-relaxed'>
                               {definition.description}
                             </p>
                           </div>
                           {isClaimed && (
-                            <div className='text-green-600 text-xs font-bold'>
+                            <div className='text-green-600 text-xs sm:text-sm font-bold'>
                               ✓
                             </div>
                           )}
                         </div>
 
-                        {/* Progress Bar */}
-                        <div className='mb-3'>
-                          <div className='flex items-center justify-between text-xs mb-1'>
+                        {/* Progress Bar - Plus compact sur mobile */}
+                        <div className='mb-2 sm:mb-3'>
+                          <div className='flex items-center justify-between text-[10px] sm:text-xs mb-0.5 sm:mb-1'>
                             <span className='text-chestnut-medium'>
                               {quest.currentCount}/{quest.targetCount}
                             </span>
@@ -182,7 +176,7 @@ export default function QuestsSection (): React.ReactNode {
                               {Math.round(progress)}%
                             </span>
                           </div>
-                          <div className='w-full bg-white rounded-full h-2 overflow-hidden'>
+                          <div className='w-full bg-white rounded-full h-1.5 sm:h-2 overflow-hidden'>
                             <div
                               className='h-full bg-gradient-to-r from-autumn-terracotta to-maple-warm transition-all duration-500'
                               style={{ width: `${progress}%` }}
@@ -190,9 +184,9 @@ export default function QuestsSection (): React.ReactNode {
                           </div>
                         </div>
 
-                        {/* Reward and Action */}
-                        <div className='flex items-center justify-between'>
-                          <div className='text-xs'>
+                        {/* Reward and Action - Empiler sur mobile si nécessaire */}
+                        <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2'>
+                          <div className='text-[11px] sm:text-xs'>
                             <span className='font-semibold text-chestnut-dark'>
                               Récompense:{' '}
                             </span>
@@ -207,6 +201,7 @@ export default function QuestsSection (): React.ReactNode {
                               disabled={claimingId === quest.id}
                               size='sm'
                               variant='primary'
+                              className='touch-manipulation active:scale-95 w-full sm:w-auto text-xs'
                             >
                               {claimingId === quest.id ? '...' : 'Réclamer'}
                             </Button>

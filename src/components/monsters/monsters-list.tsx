@@ -2,6 +2,7 @@
 
 import { type Monster } from '@/types/monster.types'
 import { MonsterCard } from './monster-card'
+import { Carousel } from '@/components/common'
 
 // Type alias for better compatibility
 export type DashboardMonster = Monster
@@ -23,25 +24,39 @@ function MonstersList ({ monsters, className }: MonstersListProps): React.ReactN
     )
   }
 
+  // Prepare monster cards for rendering
+  const monsterCards = monsters.map((monster) => {
+    const cardKey = monster.id ?? monster._id ?? monster.name
+    return (
+      <MonsterCard
+        key={cardKey}
+        initialMonster={monster}
+        autoRefresh
+      />
+    )
+  })
+
   return (
     <section className={mergeClasses('mt-6 sm:mt-8 w-full space-y-4 sm:space-y-6 lg:space-y-8', className)}>
       <header className='space-y-2'>
-        <h2 className='text-xl sm:text-2xl lg:text-3xl font-bold text-chestnut-deep'>Tes compagnons animés</h2>
+        <h2 className='text-lg sm:text-xl lg:text-2xl font-bold' style={{ color: '#a65d47' }}>Tes compagnons animés</h2>
         <p className='text-sm sm:text-base lg:text-lg text-chestnut-medium'>Un coup d&apos;oeil rapide sur ta ménagerie digitale pour préparer la prochaine aventure.</p>
       </header>
 
-      <div className='grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'>
-        {monsters.map((monster) => {
-          const cardKey = monster.id ?? monster._id ?? monster.name
+      {/* Carousel for mobile/tablet */}
+      <Carousel
+        itemsPerViewTablet={2}
+        autoScroll={false}
+        showArrows
+        showDots
+        hideFrom='lg'
+      >
+        {monsterCards}
+      </Carousel>
 
-          return (
-            <MonsterCard
-              key={cardKey}
-              initialMonster={monster}
-              autoRefresh
-            />
-          )
-        })}
+      {/* Grid for desktop */}
+      <div className='hidden lg:grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'>
+        {monsterCards}
       </div>
     </section>
   )

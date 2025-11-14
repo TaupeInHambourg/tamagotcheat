@@ -107,18 +107,18 @@ function DashboardContent ({ session, monsters, accessories }: DashboardContentP
         <StatsCard monsters={monsters} />
       </div>
 
-      <section className='mt-8 sm:mt-10 lg:mt-12 space-y-6'>
+      <section className='mt-12 sm:mt-14 lg:mt-16 space-y-6'>
         <MonstersList monsters={monsters} className='mt-0' />
         <MoodTip favoriteMoodMessage={favoriteMoodMessage} />
       </section>
 
       {/* Quests Section */}
-      <section className='mt-8 sm:mt-10 lg:mt-12'>
+      <section className='mt-12 sm:mt-14 lg:mt-16'>
         <QuestsSection />
       </section>
 
       {/* Accessories Section */}
-      <section className='mt-8 sm:mt-10 lg:mt-12'>
+      <section className='mt-12 sm:mt-14 lg:mt-16'>
         <AccessoriesSection accessories={accessories} />
       </section>
 

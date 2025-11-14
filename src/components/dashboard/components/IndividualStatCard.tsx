@@ -48,18 +48,18 @@ export function IndividualStatCard ({
 }: IndividualStatCardProps): React.ReactNode {
   return (
     <div
-      className={`group rounded-3xl bg-gradient-to-br from-white to-autumn-cream p-6 shadow-md ring-1 ring-slate-200/50 transition-all duration-300 hover:shadow-lg hover:ring-autumn-coral/40 ${className}`}
+      className={`group rounded-2xl sm:rounded-3xl bg-gradient-to-br from-white to-autumn-cream p-4 sm:p-6 shadow-md ring-1 ring-slate-200/50 transition-all duration-300 hover:shadow-lg hover:ring-autumn-coral/40 active:scale-[0.98] touch-manipulation ${className}`}
     >
       {/* Header with integrated value in title */}
-      <div className='mb-6'>
-        <h3 className='flex flex-wrap items-baseline gap-2 text-lg font-bold text-chestnut-dark'>
+      <div className='mb-4 sm:mb-6'>
+        <h3 className='flex flex-wrap items-baseline gap-1.5 sm:gap-2 text-base sm:text-lg font-bold text-chestnut-dark leading-snug'>
           <span>{label}</span>
         </h3>
       </div>
 
       {/* Monster display if provided */}
       {monster !== undefined && monster !== null && (
-        <div className='pt-2'>
+        <div className='pt-1 sm:pt-2'>
           <MonsterDisplay monster={monster} size='lg' secondaryInfo={secondaryInfo} />
         </div>
       )}

@@ -124,7 +124,7 @@ export default function MobileMenu ({ onSignin }: MobileMenuProps): React.ReactN
               className='w-full'
             >
               <span className='flex items-center justify-center gap-2'>
-                <span>Créer mon monstre</span>
+                <span>Se connecter</span>
                 <span>✨</span>
               </span>
             </Button>
