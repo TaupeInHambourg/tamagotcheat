@@ -14,7 +14,7 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Button from '@/components/Button'
 
@@ -47,6 +47,20 @@ export default function MobileMenu ({ onSignin }: MobileMenuProps): React.ReactN
     setIsOpen(false)
   }
 
+  // Bloquer le scroll quand le menu est ouvert
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+
+    // Cleanup
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
+
   const handleSignin = (): void => {
     closeMenu()
     onSignin()
@@ -76,11 +90,31 @@ export default function MobileMenu ({ onSignin }: MobileMenuProps): React.ReactN
 
       {/* Mobile Menu Panel */}
       <div
-        className={`fixed top-20 right-0 w-80 max-w-[85vw] h-[calc(100vh-5rem)] bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed top-0 right-0 w-80 max-w-[85vw] h-screen bg-white/95 backdrop-blur-lg shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <nav className='flex flex-col h-full p-6'>
+          {/* Close Button */}
+          <div className='flex justify-end mb-4'>
+            <button
+              onClick={closeMenu}
+              className='p-2 rounded-lg hover:bg-autumn-cream/50 transition-colors duration-200'
+              aria-label='Fermer le menu'
+            >
+              <svg
+                className='w-6 h-6 text-chestnut-deep'
+                fill='none'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path d='M6 18L18 6M6 6l12 12' />
+              </svg>
+            </button>
+          </div>
           {/* CTA Button at top */}
           <div className='mb-6 pb-6 border-b-2 border-autumn-peach/30'>
             <Button

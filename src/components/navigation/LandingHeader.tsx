@@ -69,17 +69,8 @@ export default function LandingHeader (): ReactNode {
             </Button>
           </div>
 
-          {/* Mobile: CTA Button + Burger Menu */}
-          <div className='flex md:hidden items-center gap-2'>
-            <Button
-              variant='primary'
-              size='sm'
-              onClick={handleSignin}
-              className='flex items-center gap-1 text-sm'
-            >
-              <span>Créer</span>
-              <span>✨</span>
-            </Button>
+          {/* Mobile: Burger Menu only */}
+          <div className='md:hidden'>
             <MobileMenu onSignin={handleSignin} />
           </div>
         </div>
